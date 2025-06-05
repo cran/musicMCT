@@ -1,0 +1,1078 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Introduction to musicMCT</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to musicMCT</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(musicMCT)</span></code></pre></div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The goal of musicMCT is to provide computational tools for the study
+of musical scales. It includes functions that will probably be familiar
+to music theorists from pitch-class set theory in the vein of Allen
+Forte’s <em>The Structure of Atonal Music</em> (1973). For instance, we
+can calculate the <strong>i</strong>nterval-class
+<strong>vec</strong>tor of the diatonic scale (Forte’s
+<strong>s</strong>et <strong>c</strong>lass 7-35) as follows:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="fu">ivec</span>(<span class="fu">sc</span>(<span class="dv">7</span>,<span class="dv">35</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="co">#&gt; [1] 2 5 4 3 6 1</span></span></code></pre></div>
+<p>The top line of the block above is what you would input to R; the
+bottom line is the output of the function. Ignore the <code>[1]</code>,
+which just indicates that you’re seeing the beginning of the output. The
+ic-vector is 2 5 4 3 6 1 as we’d expect.</p>
+<p>The main purpose of the package, however, is not to reproduce
+traditional pc-set theory but to let us explore the geometry of musical
+scales described in “Modal Color Theory” (Sherrill 2025, <em>Journal of
+Music Theory</em> 69/1: 1-49). As that article explains, seven-note
+scales live in a 6-dimensional geometry populated by 1,824,229
+qualitatively distinct scalar structures. I’m happy to calculate an
+<code>ivec()</code> by hand, but we’re going to need computers to
+explore such a complicated space!</p>
+<p>This vignette will introduce many of the main functions of musicMCT
+that serve this purpose, especially as they relate to the concerns of
+the <em>Journal of Music Theory</em> article. The problem that we’ll
+discuss is not of deep significance, but I hope a toy example will teach
+you how to use this software and give you a sense of the kinds of
+questions that deeper study might get into.</p>
+</div>
+<div id="how-acoustic-is-the-acoustic-scale" class="section level1">
+<h1>How acoustic is the “acoustic scale”?</h1>
+<div id="introducing-the-main-characters" class="section level2">
+<h2>1. Introducing the main characters</h2>
+<p>A familiar object from the theory of 20th-century music is the scale
+(C, D, E, F-sharp, G, A, B-flat). This is the fourth mode of melodic
+minor. We can verify that fact by defining the melodic minor scale for R
+and then calling <code>sim()</code>, the package’s function for finding
+the modes of a scale:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>melodic_minor <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">sim</span>(melodic_minor)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7]</span></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co">#&gt; [1,]    0    0    0    0    0    0    0</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co">#&gt; [2,]    2    1    2    2    2    2    1</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; [3,]    3    3    4    4    4    3    3</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="co">#&gt; [4,]    5    5    6    6    5    5    4</span></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; [5,]    7    7    8    7    7    6    6</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="co">#&gt; [6,]    9    9    9    9    8    8    8</span></span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; [7,]   11   10   11   10   10   10   10</span></span></code></pre></div>
+<p>Note the top line’s syntax, which defines the melodic minor scale.
+We’ll be using it a lot! The arrow <code>&lt;-</code> assigns the value
+on the right side to the variable name on the left side. The
+<code>c( ... )</code> on the right side of this statement is the
+standard way to tell R to treat a bunch of things as a single
+collection. (See <code>c()</code>. musicMCT also has a couple functions
+that are meant to mimic <code>c()</code> while letting you enter
+intervals as just-intonation frequency ratios instead of pitch-space
+distances: see <code>j()</code> and <code>z()</code>.)</p>
+<p>Pitch-classes are represented by numbers: C=0, C-sharp = 1, and so
+on. For familiar sets in 12edo (12 <strong>e</strong>qual
+<strong>d</strong>ivisions of the <strong>o</strong>ctave), these are
+all integers. Later we’ll see that it’s easy to work with integers in
+any k edo. But the values that define our scales don’t have to be
+integers at all: Modal Color Theory works in continuous pitch-class
+space. For instance, here’s a common just tuning of the major scale
+(Ptolemy’s “intense” or “syntonic” diatonic):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="fu">j</span>(dia)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; [1]  0.000000  2.039100  3.863137  4.980450  7.019550  8.843587 10.882687</span></span></code></pre></div>
+<p>Getting back to melodic minor, the function <code>sim()</code> above
+computes the <strong>s</strong>calar <strong>i</strong>nterval
+<strong>m</strong>atrix of a set (as defined by <a href="https://doi.org/10.1111/j.1468-2249.2008.00257.x">Tymoczko
+2008</a>), which presents to us the modes of a scale as the columns of
+the matrix. Our input, the melodic minor scale, is in the first column,
+and the scale we want to study can be read from the fourth column of the
+SIM:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="fu">sim</span>(melodic_minor)[, <span class="dv">4</span>]</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="co">#&gt; [1]  0  2  4  6  7  9 10</span></span></code></pre></div>
+<p>Just to practice using R, let’s pretend that we’ve forgotten how to
+interpret pitch-class integers and that we therefore need to verify that
+those numbers do correspond to the notes (C, D, E, F-sharp, G, A,
+B-flat). We’ll do that by checking the <strong>v</strong>oice
+<strong>l</strong>eading from C major to this scale:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>c_major <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">minimize_vl</span>(c_major, <span class="fu">sim</span>(melodic_minor)[, <span class="dv">4</span>])</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; [1]  0  0  0  1  0  0 -1</span></span></code></pre></div>
+<p>As <a href="https://www.mtosmt.org/issues/mto.05.11.4/mto.05.11.4.tymoczko.pdf">Tymoczko
+2007</a> points out, key signatures are essentially just voice leadings
+from the C major scale to another heptachord, and here we’ve found a
+voice leading that raises the fourth step (F) a semitone while lowering
+the seventh step (B). So the numbers (0, 2, 4, 6, 7, 9, 10) do indeed
+correspond to the scale (C, D, E, F-sharp, G, A, B-flat).</p>
+<p>Now, this scale is sometimes called the “acoustic” scale because in
+some sense it is close to a seven-note chunk of the overtone series. Our
+task in this vignette is to use musicMCT to see how real that similarity
+is. Let’s agree to call these two scales the “acoustic” and “overtone”
+scales, respectively.</p>
+<p>The overtone scale is defined by treating the 7th through 13th
+harmonics of the overtone series as a scale (noting that the 14th
+harmonic is an octave above the 7th). We’ll convert that into semitone
+measurements as follows:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>overtones <span class="ot">&lt;-</span> <span class="dv">7</span><span class="sc">:</span><span class="dv">13</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>frequency_ratios <span class="ot">&lt;-</span> overtones <span class="sc">/</span> <span class="dv">7</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>semitone_values <span class="ot">&lt;-</span> <span class="dv">12</span> <span class="sc">*</span> <span class="fu">log2</span>(frequency_ratios)</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>overtone_scale <span class="ot">&lt;-</span> <span class="fu">sim</span>(semitone_values)[, <span class="dv">2</span>]</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="fu">print</span>(overtone_scale)</span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="co">#&gt; [1] 0.000000 2.039100 3.863137 5.513179 7.019550 8.405277 9.688259</span></span></code></pre></div>
+<p>Let’s find the voice leading from the overtone scale to the acoustic
+scale, since voice leading distance offers an approximate measure of
+musical similarity (as <a href="https://doi.org/10.1126/science.1153021">Callender, Quinn, and
+Tymoczko 2008</a> argue):</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>acoustic_scale <span class="ot">&lt;-</span> <span class="fu">sim</span>(melodic_minor)[, <span class="dv">4</span>]</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="fu">minimize_vl</span>(overtone_scale, acoustic_scale)</span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co">#&gt; [1]  0.00000000 -0.03910002  0.13686286  0.48682058 -0.01955001  0.59472338</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; [7]  0.31174094</span></span></code></pre></div>
+<p>Intuitions about voice leading distances can be tricky, but this
+initially doesn’t seem like a big distance between the two scales. The
+average amount that each voice has to move is about 23 cents (a quarter
+of a semitone). On the other hand, our voice leading from C major to C
+acoustic was also pretty small: the average distance an individual voice
+had to move there was about 29 cents (2/7 of a semitone). Thus, by one
+measure, the <code>acoustic_scale</code> is about as good of an
+approximation of <code>c_major</code> as it is of the
+<code>overtone_scale</code>!</p>
+<p>We need better tools than mere voice-leading distance to think about
+scale similarity. One is the idea of quantization, which we’ll address
+in the next section. We’ll see that it doesn’t tell the whole story
+either.</p>
+</div>
+<div id="a-few-supporting-characters" class="section level2">
+<h2>2. A few supporting characters</h2>
+<p>The normal justification for calling the <code>acoustic_scale</code>
+“acoustic” is that it’s what you get if you simply round the values of
+the <code>overtone_scale</code> to the nearest integer (in 12edo):</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="fu">round</span>(overtone_scale, <span class="at">digits=</span><span class="dv">0</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#&gt; [1]  0  2  4  6  7  8 10</span></span></code></pre></div>
+<p>Wait a second, that’s not even the acoustic scale! It has two
+consecutive semitones (6, 7, 8) and actually represents sc7-33, the
+“whole-tone plus one” scale. What’s going on here!?</p>
+<p><a href="https://doi.org/10.1080/17459737.2013.818724">Tymoczko
+(2013, 130)</a> explains that there’s really no such thing as
+<em>the</em> quantization of the <code>overtone_scale</code>. There are
+7 different quantizations. The rounding above unfairly privileges C
+(<code>0</code>) as a note that’s guaranteed not to move. If we treat
+all the degrees of the scale more equally, sometimes a different note
+gets to stay fixed. Let’s try it.</p>
+<p>If the scale’s tonic starts on a 12edo integer, it won’t change when
+we quantize the scale. Transposing the whole scale up 1 semitone by
+using <code>tn()</code>, we should expect to get essentially the same
+quantization, just with 1 added to every value:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">round</span>(overtone_scale, <span class="at">digits=</span><span class="dv">0</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#&gt; [1]  0  2  4  6  7  8 10</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">tn</span>(overtone_scale, <span class="dv">1</span>), <span class="at">digits=</span><span class="dv">0</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#&gt; [1]  1  3  5  7  8  9 11</span></span></code></pre></div>
+<p>To find the other possible quantizations, we need to explore the
+range of transpositions where the scale’s tonic is some value
+<code>0 &lt; x &lt; 1</code>. If we transpose the
+<code>overtone_scale</code> so that it starts on every cent (i.e.
+hundredth of a semitone) in that range, that should be a fine enough
+sampling to encounter every quantization:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>amounts_to_transpose <span class="ot">&lt;-</span> (<span class="dv">0</span><span class="sc">:</span><span class="dv">99</span>)<span class="sc">/</span><span class="dv">100</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>transposed_scales <span class="ot">&lt;-</span> <span class="fu">sapply</span>(amounts_to_transpose, tn, <span class="at">set=</span>overtone_scale)</span>
+<span id="cb11-3"><a href="#cb11-3" tabindex="-1"></a>quantized_scales <span class="ot">&lt;-</span> <span class="fu">apply</span>(transposed_scales, <span class="dv">2</span>, round, <span class="at">digits=</span><span class="dv">0</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" tabindex="-1"></a>unique_quantizations <span class="ot">&lt;-</span> <span class="fu">unique</span>(quantized_scales, <span class="at">MARGIN=</span><span class="dv">2</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" tabindex="-1"></a><span class="fu">print</span>(unique_quantizations)</span>
+<span id="cb11-6"><a href="#cb11-6" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]</span></span>
+<span id="cb11-7"><a href="#cb11-7" tabindex="-1"></a><span class="co">#&gt; [1,]    0    0    0    0    1    1    1    1</span></span>
+<span id="cb11-8"><a href="#cb11-8" tabindex="-1"></a><span class="co">#&gt; [2,]    2    2    3    3    3    3    3    3</span></span>
+<span id="cb11-9"><a href="#cb11-9" tabindex="-1"></a><span class="co">#&gt; [3,]    4    4    4    4    4    5    5    5</span></span>
+<span id="cb11-10"><a href="#cb11-10" tabindex="-1"></a><span class="co">#&gt; [4,]    6    6    6    6    6    6    6    7</span></span>
+<span id="cb11-11"><a href="#cb11-11" tabindex="-1"></a><span class="co">#&gt; [5,]    7    7    7    8    8    8    8    8</span></span>
+<span id="cb11-12"><a href="#cb11-12" tabindex="-1"></a><span class="co">#&gt; [6,]    8    9    9    9    9    9    9    9</span></span>
+<span id="cb11-13"><a href="#cb11-13" tabindex="-1"></a><span class="co">#&gt; [7,]   10   10   10   10   10   10   11   11</span></span></code></pre></div>
+<p>We’re almost there, but some of the scales start on 0 and some on 1.
+The eighth column is just <span class="math inline">\({T_1}\)</span> of
+the first. So let’s make them all start on zero to double-check that
+they’re truly unique:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a>unique_quantizations_from_0 <span class="ot">&lt;-</span> <span class="fu">apply</span>(unique_quantizations, <span class="dv">2</span>, startzero)</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>final_quantizations <span class="ot">&lt;-</span> <span class="fu">unique</span>(unique_quantizations_from_0, <span class="at">MARGIN=</span><span class="dv">2</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" tabindex="-1"></a><span class="fu">colnames</span>(final_quantizations) <span class="ot">&lt;-</span> <span class="fu">apply</span>(final_quantizations, <span class="dv">2</span>, fortenum)</span>
+<span id="cb12-4"><a href="#cb12-4" tabindex="-1"></a><span class="fu">print</span>(final_quantizations)</span>
+<span id="cb12-5"><a href="#cb12-5" tabindex="-1"></a><span class="co">#&gt;      7-33 7-34 7-31 7-28 7-29 7-27 7-34</span></span>
+<span id="cb12-6"><a href="#cb12-6" tabindex="-1"></a><span class="co">#&gt; [1,]    0    0    0    0    0    0    0</span></span>
+<span id="cb12-7"><a href="#cb12-7" tabindex="-1"></a><span class="co">#&gt; [2,]    2    2    3    3    2    2    2</span></span>
+<span id="cb12-8"><a href="#cb12-8" tabindex="-1"></a><span class="co">#&gt; [3,]    4    4    4    4    3    4    4</span></span>
+<span id="cb12-9"><a href="#cb12-9" tabindex="-1"></a><span class="co">#&gt; [4,]    6    6    6    6    5    5    5</span></span>
+<span id="cb12-10"><a href="#cb12-10" tabindex="-1"></a><span class="co">#&gt; [5,]    7    7    7    8    7    7    7</span></span>
+<span id="cb12-11"><a href="#cb12-11" tabindex="-1"></a><span class="co">#&gt; [6,]    8    9    9    9    8    8    8</span></span>
+<span id="cb12-12"><a href="#cb12-12" tabindex="-1"></a><span class="co">#&gt; [7,]   10   10   10   10    9    9   10</span></span></code></pre></div>
+<p>And thus we really do get exactly the seven quantizations that
+Tymoczko predicts. Of these seven, is there any reason to think that the
+<code>acoustic_scale</code> is a better quantization than the other
+possibilities? Tymoczko proposes one perspective: of the 100 scales in
+<code>transposed_scales</code>, how <em>many</em> of them quantize to
+each of the seven <code>final_quantizations</code>? This is easy to
+answer too (though here I’m going to gloss over the details of the code
+that gets these numbers):</p>
+<pre><code>#&gt; 7-33 7-34 7-31 7-28 7-29 7-27 7-34 
+#&gt;   11   37    2    2   13   18   17</code></pre>
+<p>That is, the WT-plus-1 scale that we first quantized to accounts for
+about 11% of the range of quantizations, whereas there are two distinct
+modes of melodic minor (sc7-34) which together account for 54% of the
+quantizations. The first mode, which is the <code>acoustic_scale</code>
+proper, accounts on its own for 37%–definitely the lion’s share of
+them.</p>
+<p>This lends credence to conventional view, suggesting that the
+<code>acoustic_scale</code> might be a preferable quantization of the
+<code>overtone_scale</code> even if it isn’t the <em>only</em>
+quantization.</p>
+</div>
+<div id="but-what-about-scale-structure" class="section level2">
+<h2>3. But what about scale structure?</h2>
+<p>So far we’ve used some of the tools of musicMCT but we haven’t really
+applied the concepts of Modal Color Theory. That’s because we’ve been
+treating the scales’ continuous voice-leading space as essentially
+undifferentiated, whereas the central argument of MCT is that there are
+discrete regions in the geometry that correspond to <em>qualitative</em>
+differences in scale structure.</p>
+<p>MCT models scale structure by comparing intervals that belong to the
+same generic size. For instance, a big part of the character of the
+familiar major scale lies in the fact that most of its steps have the
+same size, except for <span class="math inline">\(\hat{3}\)</span>-<span class="math inline">\(\hat{4}\)</span> and <span class="math inline">\(\hat{7}\)</span>-<span class="math inline">\(\hat{1}\)</span> which are smaller (but match each
+other). MCT breaks this down into individual comparisons: is the step
+<span class="math inline">\(\hat{1}\)</span>-<span class="math inline">\(\hat{2}\)</span> bigger or smaller than the step
+<span class="math inline">\(\hat{2}\)</span>-<span class="math inline">\(\hat{3}\)</span>? Is the skip <span class="math inline">\(\hat{1}\)</span>-<span class="math inline">\(\hat{3}\)</span> bigger or smaller than the skip
+<span class="math inline">\(\hat{3}\)</span>-<span class="math inline">\(\hat{5}\)</span>? And so on.</p>
+<p>How long before we have exhausted all the potential comparisons that
+we could make? Each comparison corresponds to a hyperplane in the
+geometry, and musicMCT offers a complete list of all the hyperplanes in
+a matrix called an <code>ineqmat</code> (for “inequality matrix”). The
+relevant matrix for four-note scales looks like this:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">getineqmat</span>(<span class="dv">4</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt; [1,]   -1    2   -1    0    0</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a><span class="co">#&gt; [2,]   -1    1    1   -1    0</span></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co">#&gt; [3,]    0   -1    2   -1    0</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="co">#&gt; [4,]   -2    1    0    1   -1</span></span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; [5,]   -1   -1    1    1   -1</span></span>
+<span id="cb14-8"><a href="#cb14-8" tabindex="-1"></a><span class="co">#&gt; [6,]   -1    0   -1    2   -1</span></span>
+<span id="cb14-9"><a href="#cb14-9" tabindex="-1"></a><span class="co">#&gt; [7,]   -2    0    2    0   -1</span></span>
+<span id="cb14-10"><a href="#cb14-10" tabindex="-1"></a><span class="co">#&gt; [8,]    0   -2    0    2   -1</span></span></code></pre></div>
+<p>Each row of the matrix represents a different pairwise interval
+comparison: for tetrachords, we apparently need to consider 8 different
+comparisons to have a complete accounting of a scale structure. Two
+scales have the same structure (or belong to the same “color”) if they
+answer all 8 comparisons in the same way. musicMCT summarizes this
+information in a scale’s <code>signvector()</code>. For instance, let’s
+consider set classes 4-6 (prime form 0127) and 4-24 (prime form 0248).
+Here are their sign vectors:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a><span class="fu">signvector</span>(<span class="fu">sc</span>(<span class="dv">4</span>, <span class="dv">6</span>))</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="co">#&gt; [1]  0 -1 -1 -1 -1  0 -1  0</span></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">signvector</span>(<span class="fu">sc</span>(<span class="dv">4</span>, <span class="dv">24</span>))</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt; [1]  0 -1 -1 -1 -1  0 -1  0</span></span></code></pre></div>
+<p>These vectors are the same, so MCT considers the tetrachords to have
+the same scalar structure. For instance, both start with two identical
+steps (0-1-2 and 0-2-4) and then have a larger leap (2-7 and 4-8).</p>
+<p>For heptachords, the relevant <code>ineqmat</code> has 42 rows, so
+the space of scale structures is considerably more complicated.
+Generally you wouldn’t learn a lot from trying to read sign vectors
+directly–musicMCT has more human-readable functions that will help you
+interpret them–but let’s take a gander at them for the acoustic and
+overtone scales:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">signvector</span>(acoustic_scale)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&gt;  [1]  0  0  0  1  1  1  0  0  0 -1  1  1  1  0  1  0  0  0 -1  0 -1  1  1  1  1</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="co">#&gt; [26]  1  0  1  1  0  0  0 -1 -1 -1  1  1  0  0  0 -1 -1</span></span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="fu">signvector</span>(overtone_scale)</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a><span class="co">#&gt;  [1]  1  1  1  1  1  1  1  1  1  1  1  1  1  1  1 -1 -1 -1 -1 -1 -1  1  1  1  1</span></span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a><span class="co">#&gt; [26]  1  1  1 -1 -1 -1 -1 -1 -1 -1  1  1  0 -1 -1 -1 -1</span></span></code></pre></div>
+<p>One visually apparent difference between these is that the
+<code>acoustic_scale</code> has many more values of <code>0</code> in
+its sign vector than the <code>overtone_scale</code> does. In fact, the
+latter has only a <em>single</em> <code>0</code>: all the rest of its
+values are <code>1</code> or <code>-1</code>. What does this tell us
+about the structure of the two scales?</p>
+<p>Each entry in a sign vector is a comparison between two intervals in
+a scale: both <code>1</code> and <code>-1</code> mean that one interval
+is bigger than the other, whereas a <code>0</code> means that the two
+intervals are identical. For instance, the first <code>0</code> in the
+sign vector for 0127 and 0248 is what encodes the fact that both of them
+have a first step that equals their second step.</p>
+<p>From this, we can see that the <code>acoustic_scale</code> is
+considerably more <em>regular</em> than the <code>overtone_scale</code>,
+in the sense that it has many specific interval sizes that repeat inside
+it (like the 5 whole tones that dominate its generic steps, and the 4
+perfect fifths that are the majority of its generic fifths). This
+contrast between the scales isn’t too surprising. The
+<code>acoustic_scale</code> is constrained to twelve-tone equal
+temperament, so there are only so many intervals that it could possibly
+be made up of. By contrast, the <code>overtone_scale</code> is defined
+in continuous pitch-class space and has a lot more variety to choose
+from. Moreover, given the logarithmic relationship between frequency
+ratios and pitch intervals, each successive step in the overtone series
+is smaller than the previous, so it makes sense that the
+<code>overtone_scale</code> would have a lot of intervallic variety. If
+anything, it’s surprising that it repeats <em>any</em> intervals.</p>
+<p>We can learn what interval it does repeat by putting together the
+information from the sign vector with the <code>ineqmat</code> for
+heptachords. We could manually count which entry of the sign vector is a
+0, but musicMCT also has a function for that:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">whichsvzeroes</span>(overtone_scale)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co">#&gt; [1] 38</span></span></code></pre></div>
+<p>We can now look at the row of the heptachordal <code>ineqmat</code>
+to see what interval comparison it defines:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a><span class="fu">getineqmat</span>(<span class="dv">7</span>)[<span class="fu">whichsvzeroes</span>(overtone_scale),]</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a><span class="co">#&gt; [1] -1 -1  0  0  2  0  0 -1</span></span></code></pre></div>
+<p>This tells us that the fourth above <span class="math inline">\(\hat{5}\)</span> equals the fourth below <span class="math inline">\(\hat{5}\)</span> in size. (See page 43 of “Modal
+Color Theory” for a discussion of how to read the rows of an
+<code>ineqmat</code> like this.) And, sure enough, this is true:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a><span class="fu">signed_interval_class</span>(overtone_scale[<span class="dv">5</span>]<span class="sc">-</span>overtone_scale[<span class="dv">1</span>])</span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a><span class="co">#&gt; [1] -4.98045</span></span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="fu">signed_interval_class</span>(overtone_scale[<span class="dv">5</span>]<span class="sc">-</span>overtone_scale[<span class="dv">2</span>])</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&gt; [1] 4.98045</span></span></code></pre></div>
+<p>If the <code>acoustic_scale</code> is to be an approximation of the
+<code>overtone_scale</code>, we might want it to retain this repeated
+interval, which it does: the perfect fourth from D to G matches the
+perfect fourth from G to C. We could also verify that by checking that
+the 38th entry of its sign vector is also 0:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">signvector</span>(acoustic_scale)[<span class="dv">38</span>]</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<p>In fact, why don’t we consider all seven of the distinct
+quantizations from the previous section?</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>all_signvectors <span class="ot">&lt;-</span> <span class="fu">apply</span>(final_quantizations, <span class="dv">2</span>, signvector)</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a>all_signvectors[<span class="dv">38</span>, ]</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="co">#&gt; 7-33 7-34 7-31 7-28 7-29 7-27 7-34 </span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co">#&gt;    0    0   -1    1    0    0    0</span></span></code></pre></div>
+<p>Most of them do match the <code>overtone_scale</code> on this point,
+except for sc7-31 and sc7-28. Note that these are also the scales that
+barely occurred at all as quantizations: each accounts for only about 2%
+of all the quantizations according to the table at the end of the
+previous section.</p>
+<p>We can do better than looking at <em>only</em> position
+<code>38</code> in the sign vector. Why don’t we compare the entire sign
+vectors at once? There are various ways to do this, but one that’s
+simple to calculate is to treat the sign vectors as if they were real
+vectors in a 42-dimensional space and compute their distances:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>signvectors_with_overtone_scale <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">signvector</span>(overtone_scale), <span class="fu">t</span>(all_signvectors))</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a><span class="fu">rownames</span>(signvectors_with_overtone_scale)[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="st">&quot;o.s.&quot;</span></span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a><span class="fu">dist</span>(signvectors_with_overtone_scale)</span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="co">#&gt;          o.s.     7-33     7-34     7-31     7-28     7-29     7-27</span></span>
+<span id="cb22-5"><a href="#cb22-5" tabindex="-1"></a><span class="co">#&gt; 7-33 4.795832                                                      </span></span>
+<span id="cb22-6"><a href="#cb22-6" tabindex="-1"></a><span class="co">#&gt; 7-34 5.000000 4.472136                                             </span></span>
+<span id="cb22-7"><a href="#cb22-7" tabindex="-1"></a><span class="co">#&gt; 7-31 5.385165 5.291503 4.000000                                    </span></span>
+<span id="cb22-8"><a href="#cb22-8" tabindex="-1"></a><span class="co">#&gt; 7-28 5.196152 5.656854 5.477226 4.472136                           </span></span>
+<span id="cb22-9"><a href="#cb22-9" tabindex="-1"></a><span class="co">#&gt; 7-29 5.099020 5.744563 6.403124 5.744563 4.358899                  </span></span>
+<span id="cb22-10"><a href="#cb22-10" tabindex="-1"></a><span class="co">#&gt; 7-27 3.605551 5.099020 5.830952 6.000000 5.291503 4.358899         </span></span>
+<span id="cb22-11"><a href="#cb22-11" tabindex="-1"></a><span class="co">#&gt; 7-34 5.385165 4.472136 6.480741 6.324555 5.830952 5.567764 3.464102</span></span></code></pre></div>
+<p>The first column above, labeled “o.s.” for
+<code>overtone_scale</code>, represents the distance between the
+<code>overtone_scale</code>’s sign vector and the 7 other sign vectors
+(as labeled on the rows of the matrix). The other columns represent
+distances among the various quantizations.</p>
+<p>In a surprise upset, the quantization with the closest sign vector to
+the <code>overtone_scale</code> is apparently sc7-27 as represented by
+its mode (0, 2, 4, 5, 7, 8, 9). This doesn’t mean that sc7-27 is a
+<em>better</em> quantization than the <code>acoustic_scale</code>, just
+that it’s one that better reflects the structure of the
+<code>overtone_scale</code>. (In particular, it comes closest to
+capturing the fact that the <code>overtone_scale</code>’s step sizes get
+smaller as you go up the scale. We’ll return to this consideration as we
+approach our final approximation at the end of the next section.) The
+modes of melodic minor simply have too much regularity–too many zeroes
+in their sign vectors–to be very structurally similar to the
+<code>overtone_scale</code>.</p>
+<p>Another scalar property that we might consider is how many degrees of
+freedom a scale has (“Modal Color Theory,” 26-27): how freely can you
+vary its individual scale degrees while maintaining the same overall
+structure? A minimally constrained heptachord has six degrees of
+freedom, and we know that the <code>overtone_scale</code> has one zero
+in its sign vector, which ought to make it lose a degree of freedom.
+(Our choices about <span class="math inline">\(\hat{1}\)</span> and
+<span class="math inline">\(\hat{5}\)</span> ought to determine where
+<span class="math inline">\(\hat{2}\)</span> goes.) Let’s compare the
+<code>overtone_scale</code>’s freedom to its seven quantizations:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">howfree</span>(overtone_scale)</span>
+<span id="cb23-2"><a href="#cb23-2" tabindex="-1"></a><span class="co">#&gt; [1] 5</span></span>
+<span id="cb23-3"><a href="#cb23-3" tabindex="-1"></a><span class="fu">apply</span>(final_quantizations, <span class="dv">2</span>, howfree)</span>
+<span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="co">#&gt; 7-33 7-34 7-31 7-28 7-29 7-27 7-34 </span></span>
+<span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="co">#&gt;    1    1    2    1    1    1    1</span></span></code></pre></div>
+<p>All of these are much less free to vary than the
+<code>overtone_scale</code>! All but sc7-31 can only vary along their
+line of saturation (“Modal Color Theory,” 20), and sc7-31 is only a
+little bit more flexible. This is a consequence of quantizing to
+twelve-tone equal temperament, which simply doesn’t have enough distinct
+notes to accommodate more flexible heptachords. We can check the degrees
+of freedom of all 38 heptachordal set classes in 12edo:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a>all_12edo_heptachords <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">38</span>, sc, <span class="at">card=</span><span class="dv">7</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a>heptachord_freedoms <span class="ot">&lt;-</span> <span class="fu">apply</span>(all_12edo_heptachords, <span class="dv">2</span>, howfree)</span>
+<span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="fu">table</span>(heptachord_freedoms)</span>
+<span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="co">#&gt; heptachord_freedoms</span></span>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a><span class="co">#&gt;  1  2 </span></span>
+<span id="cb24-6"><a href="#cb24-6" tabindex="-1"></a><span class="co">#&gt; 11 27</span></span></code></pre></div>
+<p>This table shows that there are 11 set classes with 1 degree of
+freedom and 27 set classes with 2 degrees of freedom. None are freer
+than that. If we were looking for an approximation of the
+<code>overtone_scale</code> with similar structural properties (like 5
+degrees of freedom), we unwittingly set ourselves up to fail by
+restricting our attention to the twelve-tone chromatic universe.</p>
+</div>
+<div id="looking-for-better-approximations-outside-of-12edo" class="section level2">
+<h2>4. Looking for better approximations outside of 12edo</h2>
+<p>If we are willing to quantize to other equal divisions of the octave,
+we can find much better structural approximations. In particular,
+musicMCT has a function that will find a quantized representative of any
+scalar color, in the lowest n-note equal division of the octave where
+such a quantization exists.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a>quantized_overtone_color <span class="ot">&lt;-</span> <span class="fu">quantize_color</span>(overtone_scale)</span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="fu">print</span>(quantized_overtone_color)</span>
+<span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="co">#&gt; $set</span></span>
+<span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="co">#&gt; [1]  0  6 11 15 18 20 21</span></span>
+<span id="cb25-5"><a href="#cb25-5" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb25-6"><a href="#cb25-6" tabindex="-1"></a><span class="co">#&gt; $edo</span></span>
+<span id="cb25-7"><a href="#cb25-7" tabindex="-1"></a><span class="co">#&gt; [1] 30</span></span></code></pre></div>
+<p>Note that this function returns a <code>list</code> object. The first
+entry of the list defines the scale itself: pitch class integers 0, 6,
+11, 15, 18, 20, 21. The second entry tells us interpret those integers
+in 30 equal divisions of the octave. If we want to use this as an input
+to other functions, usually we only want the pitch-class values
+themselves, which we can access as
+<code>quantized_overtone_color$set</code>. We’ll need to tell most
+functions to interpret that information in 30edo separately, usually by
+setting the function’s <code>edo</code> parameter explicitly.</p>
+<p>We should check this quantization in two ways. Let’s convert it to
+twelve-tone equal temperament to get a sense for how objectively close
+it is to the <code>overtone_scale</code>, and let’s verify that it
+belongs to the same “color” as the <code>overtone_scale</code> by
+verifying that it has the same sign vector as the scale it
+approximates:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">round</span>(overtone_scale, <span class="at">digits=</span><span class="dv">2</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="co">#&gt; [1] 0.00 2.04 3.86 5.51 7.02 8.41 9.69</span></span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="fu">convert</span>(quantized_overtone_color<span class="sc">$</span>set, <span class="dv">30</span>, <span class="dv">12</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="co">#&gt; [1] 0.0 2.4 4.4 6.0 7.2 8.0 8.4</span></span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a><span class="fu">isTRUE</span>(<span class="fu">all.equal</span>(<span class="fu">signvector</span>(overtone_scale), <span class="fu">signvector</span>(quantized_overtone_color<span class="sc">$</span>set, <span class="at">edo=</span><span class="dv">30</span>)))</span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>So this quantization does indeed have all the same structural
+properties as the <code>overtone_scale</code>, but its actual pitches
+place it rather farther away than the <code>acoustic_scale</code> was.
+This just reinforces the point that there’s no such thing as one single
+quantization of a given scale: there are only different quantizations
+that satisfy different equivalences we might choose to care about.</p>
+<p>In that spirit, there’s yet another way to approximate the
+<code>overtone_scale</code> which we haven’t yet considered. This form
+of approximation uses the notion of <em>adjacency</em> between colors in
+the hyperplane arrangement (“Modal Color Theory,” 31-34). If two scalar
+colors are adjacent, one is a simplification of the other that preserves
+some aspects of scalar structure while also enforcing a greater degree
+of regularity on the scale. For instance, the major triad (0, 4, 7) and
+the minor triad (0, 3, 7) are non-equivalent structures that are both
+adjacent to the “neutral” triad (0, 3.5, 7). The neutral triad has only
+two sizes of step (3.5 and 5) as opposed to the three step sizes for
+major and minor (3, 4, and 5). It has a similar structure to them, in
+that its last step (5 semitones from fifth to root) is larger than the
+others, but it is more regular than major and minor because it makes no
+distinction between its root-third and third-fifth intervals. Another
+color adjacency which may be familiar to music theorists is the
+relationship between the 5-limit just diatonic scale (Ptolemy’s “intense
+diatonic”) and the meantone diatonic scale represented by (0, 2, 4, 5,
+7, 9, 11) in 12edo. The just and meantone scales are similar in many
+ways, but the meantone scale elides distinctions that the just diatonic
+makes, such as the difference between major and minor whole tones. (The
+meantone diatonic is <em>named</em> for this particular elision of
+difference, since it averages out the sizes of the larger and smaller
+just whole tones.)</p>
+<p>With this in mind, let us ask: what more regular colors is the
+<code>overtone_scale</code> adjacent to? We might first compare it to
+the 12edo quantizations above. musicMCT lets us do this with the
+function <code>comparesignvecs()</code>, which returns <code>1</code> if
+two sign vectors represent adjacent colors, <code>0</code> if two sign
+vectors are identical, and <code>-1</code> if the colors are neither the
+same nor adjacent.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a>overtone_sv <span class="ot">&lt;-</span> <span class="fu">signvector</span>(overtone_scale)</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="fu">apply</span>(all_signvectors, <span class="dv">2</span>, comparesignvecs, <span class="at">signvecY=</span>overtone_sv)</span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="co">#&gt; 7-33 7-34 7-31 7-28 7-29 7-27 7-34 </span></span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="co">#&gt;   -1   -1   -1   -1   -1   -1   -1</span></span></code></pre></div>
+<p>Alas, none of our 12edo quantizations are adjacent colors to the
+<code>overtone_scale</code>! This isn’t surprising given the table of
+sign-vector distances near the end of the previous section, but it
+reinforces our conclusion that twelve-tone equal temperament isn’t the
+temperament you’d choose if your only goal were to approximate these 7
+overtones.</p>
+<p>How do we find colors that <em>are</em> adjacent to the
+<code>overtone_scale</code>? It isn’t as simple as making a minimal
+change to the sign vector and creating a scale to match, since most
+conceivable sign vectors don’t correspond to scales that can actually
+exist. We could try to solve this problem from scratch, but luckily we
+don’t have to: part of MCT is a map of all the colors that exist (for
+scale sizes up to heptachords) and their adjacency relationships.</p>
+<p>This map involves datasets that are too large to distribute with the
+musicMCT package. They can be downloaded from the <a href="https://github.com/satbq/modalcolortheory">GitHub repository
+modalcolortheory</a>:</p>
+<ul>
+<li><a href="https://github.com/satbq/modalcolortheory/blob/main/representative_scales.rds">representative_scales.rds</a>
+(~80 MB) contains a list of all scalar colors for scales of 2-7 notes,
+with one concrete scale to represent each color</li>
+<li><a href="https://github.com/satbq/modalcolortheory/blob/main/representative_signvectors.rds">representative_signvectors.rds</a>
+(~10 MB) contains a list of their corresponding sign vectors</li>
+<li><a href="https://github.com/satbq/modalcolortheory/blob/main/color_adjacencies.rds">color_adjacencies.rds</a>
+(~130 MB) contains information about the adjacency relationships between
+all these colors (in the form of an adjacency list)</li>
+</ul>
+<p>If you wish to work with this data, you should save the files in your
+working directory, which you can find by calling <code>getwd()</code> in
+R. Then import the files into your R session with the following
+commands:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>representative_scales <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;representative_scales.rds&quot;</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a>representative_signvectors <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;representative_signvectords.rds&quot;</span>)</span>
+<span id="cb28-3"><a href="#cb28-3" tabindex="-1"></a>color_adjacencies <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="st">&quot;color_adjacencies.rds&quot;</span>)</span></code></pre></div>
+<p>The file <code>representative_signvectors</code> is particularly
+useful because it enables us to assign a well-defined “color number” to
+identify each color in a MCT hyperplane arrangement (“Modal Color
+Theory,” 28). If you try to look up a scale’s color number without the
+<code>representative_signvectors</code> saved, you’ll probably get a
+<code>NULL</code> result:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a><span class="fu">colornum</span>(overtone_scale)</span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a><span class="co">#&gt; NULL</span></span></code></pre></div>
+<p>but if you do have the file, you’ll discover that the
+<code>overtone_scale</code> belongs to heptachord color
+<code>1824025</code>. From this, we can look up an accounting of all
+colors that are adjacent to it. <code>color_adjacencies</code> is
+structured as a <em>list</em> in R, whose top level organization
+reflects the size of the scales you are studying, so
+<code>color_adjacencies[[7]]</code> contains all the information about
+the geometry of seven-note scales. To find out which scales are adjacent
+to color <code>1824025</code>, we want the list element
+<code>color_adjacencies[[7]][[1824025]]</code>. The following code won’t
+work on your device unless you have <code>color_adjacencies</code> saved
+and loaded into R, but its objective is to find the most regular scale
+that the <code>overtone_scale</code> is structurally adjacent to:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>os_adjacent_colors <span class="ot">&lt;-</span> color_adjacencies[[<span class="dv">7</span>]][[<span class="fu">colornum</span>(overtone_scale)]]</span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>os_adjacent_scales <span class="ot">&lt;-</span> representative_scales[[<span class="dv">7</span>]][, os_adjacent_colors]</span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a>regularity <span class="ot">&lt;-</span> <span class="fu">apply</span>(os_adjacent_scales, <span class="dv">2</span>, countsvzeroes)</span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a>most_regular_approximation <span class="ot">&lt;-</span> os_adjacent_scales[, <span class="fu">which.max</span>(regularity)]</span>
+<span id="cb30-5"><a href="#cb30-5" tabindex="-1"></a><span class="fu">quantize_color</span>(most_regular_approximation)</span></code></pre></div>
+<p>If that code runs on your device, it should tell you that the most
+regular quantized approximation of the <code>overtone_scale</code> is
+the scale (0, 2, 4, 6, 8, 10, 11) in 14-tone equal temperament.
+Converted to familiar semitone measurements, this is the scale (0.00,
+1.71, 3.43, 5.14, 6.86, 8.57, 9.43). To understand better how this scale
+“regularizes” the <code>overtone_scale</code>, let’s consider the two
+scales in terms of their ranked step sizes:</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="fu">asword</span>(overtone_scale)</span>
+<span id="cb31-2"><a href="#cb31-2" tabindex="-1"></a><span class="co">#&gt; [1] 6 5 4 3 2 1 7</span></span>
+<span id="cb31-3"><a href="#cb31-3" tabindex="-1"></a>best_simple_approximation <span class="ot">&lt;-</span> <span class="fu">convert</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">8</span>, <span class="dv">10</span>, <span class="dv">11</span>), <span class="dv">14</span>, <span class="dv">12</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" tabindex="-1"></a><span class="fu">asword</span>(best_simple_approximation)</span>
+<span id="cb31-5"><a href="#cb31-5" tabindex="-1"></a><span class="co">#&gt; [1] 2 2 2 2 2 1 3</span></span></code></pre></div>
+<p>This tells us that the <code>overtone_scale</code> starts with its
+6th largest step and then ascends through progressively smaller step
+sizes, until its final step from <span class="math inline">\(\hat{7}\)</span> to <span class="math inline">\(\hat{1}\)</span> uses the scale’s largest step
+size.</p>
+<p>Our <code>best_simple_approximation</code> reduces most of that
+variety out of the step sizes: all the steps from its <span class="math inline">\(\hat{1}\)</span> up to <span class="math inline">\(\hat{6}\)</span> are equal. The only intervallic
+variety that this approximation retains is that <span class="math inline">\(\hat{6}\)</span> to <span class="math inline">\(\hat{7}\)</span> is still the smallest step in the
+scale, and <span class="math inline">\(\hat{7}\)</span> to <span class="math inline">\(\hat{1}\)</span> is still the largest step in the
+scale.</p>
+<p>By the logic of color adjacency, this is the most regular scale that
+simplifies the structure of the <code>overtone_scale</code> without
+contradicting any of its structure. By contrast, our original
+<code>acoustic_scale</code> does flatly contradict aspects of the
+<code>overtone_scale</code>’s structure. For instance, in the
+<code>acoustic_scale</code> the step from <span class="math inline">\(\hat{4}\)</span> to <span class="math inline">\(\hat{5}\)</span> is smaller than the step from
+<span class="math inline">\(\hat{5}\)</span> to <span class="math inline">\(\hat{6}\)</span>, but in the
+<code>overtone_scale</code> <span class="math inline">\(\hat{5}\)</span>
+to <span class="math inline">\(\hat{6}\)</span> is smaller (because all
+its step sizes get smaller until the last one). We can see that
+contradiction by comparing the 10th place of their respective sign
+vectors:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="fu">signvector</span>(overtone_scale)[<span class="dv">10</span>]</span>
+<span id="cb32-2"><a href="#cb32-2" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb32-3"><a href="#cb32-3" tabindex="-1"></a><span class="fu">signvector</span>(best_simple_approximation)[<span class="dv">10</span>]</span>
+<span id="cb32-4"><a href="#cb32-4" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span>
+<span id="cb32-5"><a href="#cb32-5" tabindex="-1"></a><span class="fu">signvector</span>(acoustic_scale)[<span class="dv">10</span>]</span>
+<span id="cb32-6"><a href="#cb32-6" tabindex="-1"></a><span class="co">#&gt; [1] -1</span></span></code></pre></div>
+<p>The <code>acoustic_scale</code> is the odd one out here. It’s also,
+in terms of voice-leading distance, not clearly closer to the
+<code>overtone_scale</code> than our
+<code>best_simple_approximation</code> is:</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">minimize_vl</span>(overtone_scale, acoustic_scale), <span class="dv">3</span>)</span>
+<span id="cb33-2"><a href="#cb33-2" tabindex="-1"></a><span class="co">#&gt; [1]  0.000 -0.039  0.137  0.487 -0.020  0.595  0.312</span></span>
+<span id="cb33-3"><a href="#cb33-3" tabindex="-1"></a><span class="fu">round</span>(<span class="fu">minimize_vl</span>(overtone_scale, best_simple_approximation), <span class="dv">3</span>)</span>
+<span id="cb33-4"><a href="#cb33-4" tabindex="-1"></a><span class="co">#&gt; [1]  0.000 -0.325 -0.435 -0.370 -0.162  0.166 -0.260</span></span></code></pre></div>
+<p>It’s not easy to eyeball which one of those is a <em>smaller</em>
+overall voice leading, partially because the answer to that question
+depends on what measure of distance you want to use. (For those who care
+about such things, the <code>acoustic_scale</code> is a closer
+approximation using the taxicab norm, but our
+<code>best_simple_approximation</code> is closer under the Euclidean and
+Chebyshev norms.)</p>
+</div>
+<div id="a-tempered-conclusion" class="section level2">
+<h2>5. A tempered conclusion</h2>
+<p>It would make for a tighter narrative to end with a conclusive
+declaration that our <code>best_simple_approximation</code> really is
+the best way to quantize the <code>overtone_scale</code>. But reality
+isn’t so simple! The best approximation for a scale depends on what
+you’re trying to approximate for. This needs to be underscored, because
+the attempt to justify certain scale structures as mathematically ideal
+is probably the oldest tradition of European music theory. By using math
+to talk about scales, Modal Color Theory may look like it contributes to
+that tradition, when my goal with the theory is to do just the opposite.
+The questions that MCT should be useful for are descriptive ones like
+“If you’re using this scale, what can you do with it?” and “If you want
+to do X, how can we find some scale Y to facilitate X?” <a href="https://mtosmt.org/issues/mto.24.30.4/mto.24.30.4.shumays.html">Sami
+Abu Shumays</a> is right to decry as a fallacy “the idea that the
+tunings of musical scales are the result of mathematical laws, rather
+than cultural choices that intersect with acoustical realities.” My hope
+for MCT is that its math lets us get deeper insight into the nature of
+that intersection between cultural choice and acoustical affordance.</p>
+<p>In the end, the <code>acoustic_scale</code> actually is a pretty
+decent approximation for many purposes, especially if you’re limited to
+the familiar 12 pitch-classes of the piano. Hopefully, though, this
+vignette shows how we might, when musicking with different priorities,
+come to make other choices–and how musicMCT can aid us in that
+process.</p>
+</div>
+</div>
+<div id="coda-brightness-graphs" class="section level1">
+<h1>Coda: Brightness graphs</h1>
+<p>Up to this point, we’ve done everything numerically, but “Modal Color
+Theory” also has some visualization tools. The one I want to introduce
+here is the “brightness graph,” which lets us visualize the
+voice-leading relationships between a scale’s modes (and thus to some
+degree the internal structure of the scale, as described in “Modal Color
+Theory,” 7-11). Using musicMCT we can make quick mock-ups of brightness
+graphs with <code>brightnessgraph()</code>. First let’s take a look at
+the <code>acoustic_scale</code>:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="fu">brightnessgraph</span>(acoustic_scale)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeAAAAHgCAMAAABKCk6nAAAA7VBMVEUAAIsAAJEAAJUAAJ8AALMAJpsAOscARJ8AZtomAIsmAJEmJpsmRJ8mX6Q6AIs6AJ86ALM6Osc6Zsc6Zto6kMc6kNo6kO1EAItEAJFEAJVEJptERJ9EealfJotfJpVfealfkalmAItmAJ9mALNmOsdmZtpmkO1mtv95RIt5RJF5RJV5qZ95qamQOouQOrOQZseQkJ+Qtv+Q29qQ2/+RX5GRX5WRqampeZWpeZupeZ+pkZupqZ+pqaSpqam2Zou2Zp+2ZrO2kJ+2/9q2///bkJ/bkLPb////trP/tsf/ttr/28f/2+3//9r//+3///8gEOrdAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAWVElEQVR4nO2da2PbthWGtSTNZVuzptviXZrNXpu62+x2W7K4swvVa7RoUyX8/58zAiBIAKREUiKBg8P3+RCZ1jV6DBIkcPAuJGDNIvUHANMCwcyBYOZAMHMgmDkQzBwIZg4EMweCmQPBzIFg5kAwcyCYORDMHAhmDgQzB4KZA8HMgWDmQDBzIJg5EMwcCGYOBDMHgpkDwcyBYOZAMHMgmDkQzBwIZg4EMweCmQPBzIFg5kAwcyCYORDMHAhmDgQzB4KZA8HMgWDmQDBzIJg5EMwcCGYOBDMHgpkDwcyBYOZAMHMgmDkQzBwIZg4EMweCmQPBzIFg5kAwcyCYORDMHAhmDgQzB4KZA8HMgWDmQDBzIJg5EMwcCGYOBDMHgpkDwcyBYOZAMHMgmDkQzBwIZg4EMweCmQPBzIFg5kAwcyCYORDcwe56sVhcSrleLB7/u/jx5Ur9U965/fx98e/68Yfi35V6mPkFJSC4k+XDN+pGadz8ovhR/6NZP1I6txdKcPHz9uLSuZMIENzJ5vmlulldykBw2Vzv/1YI3l1fln8Dn9BqwxDcye5atdDdNx9CwUu9p15frry2vXqa8sM2gOBu1mofvflSBoK3f1K329dSCdZ7a7WPptaEIbib3XXRKO+VNk+wOQIXv/cF63/oAME9WBUdqNfqB0/wSjnd/F3WgvXRenvx8uCLRQaCe1A4+4+W2hS8XGgu63sgOENWDz9Vp7ptu2hpWrDuRasfsIvOkfJMqa2TJUuvxSmSUYtOVo7oLpZc+VeyluW+eFVfyZI4TWJE1YS9XxK7WAnBJ9ByXZLYERiCT6PRXKm1XwhmDwQzB4KZA8HMgeChCJH6EwwCghX2IkXJ9sLflnZajtIrymc8cvrLy8XCu7yxrGf1aMyQcn0bEQiW1XQby+7r94VAz7CZlqP0CrPp6pXL4s6lY7j42RtyKP5g9NPtbUwgWNbTbUr++6YcA65R03KE1VuIcu4UxWNfes/XV6PX3p/Aqrx3BcEJCKbSGdwWKW8+e/vRu8qvXLryhNA73lXdYuux4QoITkk9G6NGt2ppdsri7vfCCDb3bS9+deEcgoXYPH+6/aI2Z6b4QDAZ2gRvXpQmlOC/XBnB9vGLF+9315Xh4gFrr8ulD9jrh+4eAYJT0rJLld9bPYW+2z8KLdh7/LruhYnv/vCD1+vaPF8sFjgGk6HlGLyqbQvxVTktx/4mbPHiq4+F7kk76I6X83oQnJB6uo1l/dJMp1Poo7BqwdW9ZnZs/QexPftMiGAcKTAJwUmpptvY7YWziy0Fu2bUdDunl717Vey/b9wHOEdog23fSwhOgrmStXn+qJqZoy5NqW3Vs1KCdfXCc6vNXLmqtnevFovCsd0uDsEvzW15v7oy9vBNfRsTCHb5b/Dtf3uu/q1PgMP77bZp5WLv/QmB4BrvApXaPiu32y5gedvG793ZE9F+f0IgeC/1sFH3AJKomPYzDQeC9+CpGiCYmmIIbmegJrJ+IbiV4Zqo+oXgFo6xRFQvBLdwlCUIzoUjJZV66RmGYI+j26BtveQMQ7DDKbtY4d3QAYJrRpFDzTAEW8bqIREzDMGGETvAtAxDsGZMKRBMjpHPX0kZhuAJio0oGYbgKWwQMjx3wdNcXYRgIkx28ZiO4VkLnlADGcMzFjzt2A8Vw7MVPPXQHgQnJcLILRHD8xQc5cunYXiOgmNNvCBheH6C482rgeAUxPzWKRiemeDI0+IIGJ6V4PizHtMbnpPgBN82BMcjzaTl5IbnIjjZnPTUhmciOOHXnNjwLAQnLSmB4CMJgpqrFWL1+hnumjepK4bSvn2+gv2gZmXUZM2ZlV+rO1PrlYkNcxCs5P74weQYVSu/lgFk6fXKtB+Cg2CbQLb5Zbnktl75VSWQEWi+Cgg+ijBD0KwfWq38uvnkioZemdQwA8Hravky/YNd+XV7RiiDLJ1hBoJXVcyr6lXvvjYrv4o7Ujm+yQxzEqw7WOqAvHz8ThALaobg4TSCmuXy0qwEu/1tc4Xv1KQyzEBwlfKqelm6F60DMogFNacynK9gP6hZrQCsl+rdXZc/EAtqTmU4X8E1WQQ1Q/AJ5BDULBMZZiE4h6BmRQrDPATnQgLDEBwTCOZOfMMQHJfohjkKJjJI2E7sz0ZTcP/A5voZTlLRWxWL4+bX7AtsXjVed3IgWA4IbDaIILBZ/T0s3CjmfYHNwfvEIbJhioJ7BjaXPwoR5tf8T40W3nxcrdC9L7A5fJ9IxDVMUXB3YPP6sgoBVA6Xj5qXNb4/r2IUbh5cqYzfRp5v6/tEIKphioIPBTZrtq9tyqNuo0Fgs3nIFx9qwT85F22BzW3vEwMIPhTYrLh/bwyV++AgsNm8hjrkCptI9tG7tsDmVIKjGiYreF9gszTBr6vH76pjbBjYXD3eNuHbZ62BzW3vE4eIhikKPhzYrE96FJ95gv2WaCZWOmlGbYHNqY7BMqZhioIPBzYrTOS6DcIIA5vLJ5gHloLbApub7xONeQvuFdjsCA4Dm6WzRzeP3r160BbYHL5PRKIZJin4QGCzLJ0pwbfP9gQ2l3tova0OwSqwWbQENqe4kmWJZZimYEt74HIdBNkVyFxsV+1c3RAIbK6IZJiy4L2BzPb0Z29gs7tdDz3cnVGahwfBBxiUFOg8jNQ4U5zPkqXgE5IgUytWs3rVcb/oNz5+Z37lVK/r3sbDf4w5oSxHwaLKgjzq2YkVL80lNTXIYc/ibfW6HQYb89w8Q8H6azklyjWt4vLSmbp0oz6HW73+P10d+XLUqoz8BNsUyFMspVRsJhvsvlEncsKvXtfoU/jxyjKyEywaPxz3MukU62GPzZfmY/jV67I6hR+tCWcmeMyIwVSK9dyF+1JgUL1uL7KOd4EtL8EjR9AlUlz0p7av65/LH8pZY+Yi63jFzVkJZpJBV9j7j+0m+9Xr1TDYPAVPoCNNI149/NQOYXnV67IaBpvlLnoaFykUO5MMvOp1WQ2DzbGTNZmIBIrva31e9brdQ8/xNGlKCylPi6euXs9E8OQ5ZekUT1y9nofgCF9/OsXTVq9nITjOd596FGIachAcL8mKoeIMBEeNsmKnmL7gyF85N8XkBcf/vuO9Y4w/JuqCU7SnU773jtL1eruck7J5rmf8Ok/vV7pubzuhLTjV/vLo9+0oXbdzc+o5ZauF+xfQu3Td3nZDWnDKtKOj3rurdP3HD0Lc/ea89lsNGxqqOTsl+0rXZf+SG8qC03Z3jlF8qHS9KnX8uTNjcN1SWuEUUrbUPzISnLw7O1zxodJ16/dnTlGVnkT71P+v2vEG/Xp6dg9Twcn9yuGKD5aum5qqxeKBFxZSOL70/q9r75CrVr9ulq5LBoIp+JVDFR8sXS+b8NvFx/6Til24aHu8QnWyW0rXZf6CifiVwxQfLl03gr97FQhee4LdPbSmrXRd5i6Y1uWk/p/mcOl62YS/Ctd0u3Rn8a/DyVhtpevNX++FpGBSehW9FR8oXS9ew/SyXvhmimO0K/h7vwseLi5Tlq7Xt11QFEzOr+z/mfaWrl+pF7kpL2PY+9UhVtUo1aXsTum6uf+llC2l61UJeycEBVP0O/ioEZSai29t6Xrb/f1K2Y+DnmCafuUgxUEpelWqXi8bE9x/1qeU/SiiCtZJOPuCnfWKsT98fhXzAw3k9JLk9hc4vha2m7gtODiNcIOdyxVjb5MsW9Wb4SL6PIOrYLc01uyFiv8ntcCykGEq+j2aq2CvNFatGGsG0CitlNJGfxk9H3n8ghQ9SCjYK42tV4yl3oRl/3bZ++V4CvZKY9eLF1fmpJ5iZlmDbh9D2jlTwV5p7FpdCdArxtLK/d3LYSNDfIlJDVMQrC6n1wNtmQg+JHGQrHrdvhE+U5P0u2hZBzvre7LYRRv2KBnYz2Yr2C+NrVaMzaCTVdEmZaAoVoKDK1l+aeyynD9K/jTJI9QyVJMQExtOeS06k2DnDrwrkceuvjfOR2kj6WBDJsHOXVitxzdBroJzCXbuRIjTZqGwFcyH0w6gEEwctGDW4BjMGvSiWXPqeXD5rDE+SjsjCh6a6tyjNNa75pEw1XkvbVeyxnmZsRhP8MBU56A0VjRLY4uf3bSrpKnO7bQ31yMacQ6Ch6U6y0Zp7L/UbDtnWr+u2PCbfMpU5xZGGk3STzjxoxxgNMGDUp31ZrCnVd+KM61f75BXpBIlPcYbD5Z5CB6Q6lzet/CPsUKIO7fwavP8aVCIlTb012PMGR0yX8Gtqc41ujS2Rogbr+5uHaZ6kxE88pysjAR3pjoHh04/MlT8+dz5UnZf/3DhG06c6mwZfVZlHoJ7pjr7Ytae4O3vnNUN9GjxstnJSn0MnmJedBaCu1OdW1rw2vO9fukMfZv5WZ83itsTpjrLqSobshB8ONXZEHrZ+KWy379xJjh8p3rR/ulQ+lTnk2uT9j3kmNftx+hXsvakOptHFIaC0tgg1VmI22cPrsqlDvQD6KQ6nzCW0PXMPARbhpa6hqWy3577M5SIpDpPOeCbk+Cu0taObXF39sTze0Jp7JicOiOu47rIaS9+CHKjSdPO8z+SMT7OodeYoeDUH8NlrE8jhBsP/W+nEP7OKYTXg2zjzU0jJ7hcZ5eO4TH/2IRw4qGdQvgHTiG8GWQb7UyfpmBJZqmOsfclt8+qeGinEP7KKYQvB9nGKvAgKdjcJv4civEPFbvrj96V8dDthfDVINtIFR70BFdmkxuepCewfvhGCB0P3VoIXw+yjdSECQquSGt4oo6engTxFzW7obUQXlaDbCNdrqMsOOWSldO9tYmHVsvNtBXCa/Qg20h10qQFJ2vEU/5l2XhocdtWCK9Zz0dwGsPTvqmNh978tKUQ3vxmLrtoRXzDUx8Y7GyF9kL46nYGnSxDZMMRjvv31XBbsxDeDrJxPk0KiWk4Sbdu0kL4DATzTx+dshA+B8GRvviEJ2UTFsJnIThGI6Y1gDUemQie2jBXvfkIntQwX70ZCZ7OMGe9OQmeyDBvvVkJnsTw2K8ZzukNgpwbVfHHBkT3njuck+DxW9voLxhWpwdBzvXEHMuRAdH9q+CzEjxyg5tivkajOt2r5qgm5li2v/ee3zcgekAVfGaCRzQ8xcG3rQIv1KAn5lhujguIHlCBl5vgsQxP07dqKV4+WI+lynMWwaBCn4DoAUXS2QkexfBUXeduwSu3IE/NLwyq4PsFRLMWfLrh6c6M9u1SXVZ1t9h8EL8KvldA9IAq+AwFn2h4yhPfPsfgOvC5nCAcVMH3CYjmfAxWnLLs56TXNVqq05u16uXEnKpAJ6yCDx7eFhA9oAo+S8HHrwk59WWrZnV6I8i57GVVFVjNKniXPQHR/avg8xR85IKBEa5K+lXwtmrdbtcTc0yVe3sVfI+AaKZXslxIrRfY5HDVe1nl3vvxrAKi+zLQV9RBhcNV7sJWufd8fD4B0eMyaCk5MmNGU+ckhWQpuM5f2h8nrrohdmITHb1eTlKUN8xSsD0PPN8bJ26uAZk7CemVruE475e1YFWI2Ronbpcu3nzynpZe6RiO83Z5C5bytrWKulq6+O2TRJ/wEBDcSS3YVnB5VdR26eKigVNMuoTgThzB6kAswypqvXTxOzFigcCICOcy1vTkL/iN/qa8Kmq1BOrbj3RTppc2Xa5AAsGH8ATr33hV1PXSxWQFR7uuxkWwX0Ut7FgLvV107E49F8GNKmojmFwnK/pJW5aC265k+XHiVjC1OPH4J+VZCm4jjzhxCD6eHOLEE1xV4yM4gzjxFFdNGQkmT5Kr4hAcDwjmTZphLQiORaJhS46CyQ0BK1J9JpqCO8LEu8qohRArr+CDQJg4BDt0hIl3lVFLeXf24MrZJBAmnmynQlFwV5h4s4zaDxMvBD5xR1wJhImnO2hQFNwdJh6UUYdh4suieTszn9KHiSfsFFAU3BkmHhT0hGHi24tfXSweXdXzF2+fPblLGiYOwR6dYeJ+GbXCK6NeL1683127hm/Shomn7NWTFXwgTFyxWgRTNZxduH7+enFZR9X+4a8pw8STnrVRFNwVJq4IyqK9MuqqZVrBX32cMkw87Vk5RcF9wsSrfIPqIe5qUzZXzPi9O/ssZZg4BDfoESYelE372+ok2eyyzR76Vcow8cSX1UgK7ggTr8uo94WJmytXxbbpaO0ShomnvmxKU7DlpDBxvW3Phc1Vj/hh4qn9khZ8Ypi42a4uaAmRIkwcgqfGKSFI8GUn98tfsPsdRx9HTO93BoI94iom4HdugiPHbEV8r33MTnDERkzB7wwFR1NMwu8sBcdRTMPvTAVHiVKb/B16MVfBkzdiIn7nK3hixVT8zlnwlBbI+J234OkaMQRTYRrFdPzOXvAkMgj5heApAvNGfr2TgGA5umIIpseYikn5hWDLaFpo+YXgipEaMTG/EOwwimIIpszpdqj5hWCfUxsxOb8QHHKSYnp+IbjJCYohOA+O9UTQLwS3clwjpugXgvdwhGKSfiF4L4N9QXBmDGzENP1C8CGGKCbqF4IP01sxVb8Q3EVPcxCcLb0aMVm/ENwD8XaxWPz62ix4uq6Te+pEamFuyYVESAjuhw6xXep1W+rleupEamHXw42y8OUwILgPm5+eV2vi2TXZnERqUa2HSy5pDYJ7ocPGzSriu2/KBlwnUpcHYL0yF7WoNQjuhVk270btozdfml/VidTvzC/MerjkmjAE98EcW3evnursaY2fSC2r7HFqYWsQ3Iey87R6cFUtLu8lUivMerjkAoshuA+l4MLeP8/LX3mJ1LLqe0FwllQ54w8//VB2qfxE6mo9XOyis8QKdlYP9xOpq/Vw0cnKkTqG+r7W5yZS2/VwcZrEiDwSqSH4eHJIpIbgU6CfSC0hmD0QzBwIZg4EMweCmQPBijBexwZIlzQCqZuptOQCqS0QLJtB0TZA2m42AqmLRwR/Ad7dBAKpKyC4NSjaC7xrBFJLef837y/gImivyQOpayC4PQwz1OAFUsv1pfeAZZh1mzqQ2gGCW3OEQ8F+VOL2tfcAE0jtON48f7pNGkjtAMF9BAeB1PfvvQeUgdTOA9ZpA6ldILg1KLqxi3YDqdXAvie4DKSufrH7+oeUgdQeENzvGOwGUi/16G8ttNEy1VBxukBqHwhuDYpuxkYHgdT+MfjSE6e30wVS+0CwbAuKXjZ60UEgteepDqTW6F50skDqAAhW+IHUNkB6XyC1foYbOF0HUpvt3XW6QOoQCHY5PZD68HYCILhmlEDqA9tJgGDmQDBzIJg5EMwcCGYOBDMHgpkDwcyBYOZAMHMgmDkQzBwIZg4EMweCmQPBzIFg5kAwcyCYORDMHAhmDgQzB4KZA8HMgWDmQDBzIJg5EMwcCGYOBDMHgpkDwcyBYOZAMHMgmDkQzBwIZg4EMweCmQPBzIFg5kAwcyCYORDMHAhmDgQzB4KZA8HMgWDmQDBzIJg5EMwcCGYOBDMHgpkDwcyBYOZAMHMgmDkQzBwIZg4EMweCmQPBzIFg5kAwcyCYORDMHAhmDgQzB4KZA8HMgWDmQDBzIJg5EMwcCGYOBDMHgpkDwcyBYOZAMHMgmDkQzBwIZg4EMweCmQPBzIFg5kAwcyCYORDMHAhmDgQzB4KZA8HMgWDmQDBzIJg5EMwcCGbO/wEADzohrazMNAAAAABJRU5ErkJggg==" /><!-- --></p>
+<p>The information in this graph is displayed in the same way as Figure
+2b of “Modal Color Theory” (p. 8), though you’ll notice a few
+differences if you compare the article’s figure to the one in this
+vignette. One difference is trivial: the mode at the bottom of our
+figure here is mode IV whereas it’s listed as mode VII in the
+<em>Journal of Music Theory</em> article. That’s just because the
+article treats melodic minor as mode I whereas we’ve asked for the modes
+of the <code>acoustic_scale</code>. (If you replace
+<code>acoustic_scale</code> with <code>melodic_minor</code> in the
+command above, you should get an identical graph with the roman numeral
+labels shifted around.) Either way, the precise pitch values for all the
+nodes are the same: the bottom mode in both graphs is (0, 1, 3, 4, 6, 8,
+10).</p>
+<p>The less trivial difference between the article and graph vignettes
+is their overall shape. The function <code>brightnessgraph()</code>
+determines the vertical position of graph nodes exactly as “Modal Color
+Theory” describes, but it has less guidance for how to make decisions
+about left-right placement of nodes. It produces graphs that are usually
+legible but which may not clarify the underlying structure: I tend to
+use the function as a first draft and then construct my own (ideally
+more revealing) graphs by hand. For instance, the Figure 2b of “Modal
+Color Theory” represents all <span class="math inline">\(T_2\)</span>
+relationships as vertical arrows, resulting in a graph whose overall
+shape is a trapezoid. <code>brightnessgraph()</code> obscures the
+predominance of <span class="math inline">\(T_2\)</span> in the
+structure of the scale by making the chain of whole steps bow out to the
+left at the middle, giving the graph a diamond-like shape.</p>
+<p>Let’s now take a look at the brightness graph for the
+<code>overtone_scale</code>:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a><span class="fu">brightnessgraph</span>(overtone_scale, <span class="at">numdigits=</span><span class="dv">1</span>, <span class="at">show_sums=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>This looks pretty messy! The graph is less connected (i.e. there are
+fewer arrows) and the vertical placement of its nodes seems haphazard.
+This reflects the fact that the overtone scale has less regularity as
+measured by its degrees of freedom or the number of zeroes in its
+<code>signvector()</code>. Nevertheless, the graph still has some useful
+information. Since the height of a mode corresponds to its sum
+brightness, we can see those comparisons at a glance. We can also use
+sum brightness relationships as a proxy for the relative height of
+individual pitches in the scale: if a pitch serves as the tonic of a
+very bright mode, the pitch itself is very low (“dark”) in relation to
+the scale. Thus, since mode VII is at the top of our graph here, <span class="math inline">\(\hat{7}\)</span> must be the darkest (relatively
+lowest) pitch of the scale. Conversely, since mode III is at the bottom
+of the graph, <span class="math inline">\(\hat{3}\)</span> is the
+brightest individual note of the scale.</p>
+<p>Recall that one of the approximations we tested above was a
+quantization of the <code>overtone_scale</code> to a division of the
+octave into 30 steps. Let’s see what the brightness graph of that
+approximation looks like:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">brightnessgraph</span>(quantized_overtone_color<span class="sc">$</span>set, <span class="at">edo=</span><span class="dv">30</span>, <span class="at">show_sums=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>That’s impressively close to the graph for the actual
+<code>overtone_scale</code>! (In truth, we got a little lucky here: many
+colors offer enough room for variation that
+<code>brightnessgraph()</code> doesn’t always preserve such visually
+obvious similarity.) Aside from a check that
+<code>quantize_color()</code> works as intended, one other thing to note
+from this example is that <code>brightnessgraph()</code>, like almost
+all functions in musicMCT makes it convenient to work in other
+“chromatic cardinalities” (i.e. number of unit steps to the octave)
+besides 12edo. Just be careful not to make direct comparisons between
+absolute values reckoned in different systems: note, for instance, that
+the sum brightnesses for our 30edo quantization are all around 90
+whereas they were about 36 in the brightness graph of the original
+<code>overtone_scale</code>. That’s because we’ve changed our unit of
+measurement to be 2.5 times smaller, so values like distances and sums
+scale correspondingly.</p>
+<p>You might find it instructive to explore the brightness graphs of the
+remaining <code>final_quantizations</code> from above, which show
+considerable variety from one to the next. This gives a glimpse of the
+range of possible structures for seven note scales. Simply change the
+number <code>4</code> in the line of code below to any value from
+<code>1</code> to <code>7</code> to check the different scales:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a><span class="fu">brightnessgraph</span>(final_quantizations[, <span class="dv">4</span>])</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeAAAAHgCAMAAABKCk6nAAAA21BMVEUAAIsAAJEAAJUAAJ8AALMAJpsAOscARJ8AZtomAIsmAJEmJpsmRJ8mX6Q6AIs6AJ86ALM6Osc6Zsc6Zto6kMc6kNo6kO1EAItEAJVEJptEealfJotfJpVfkalmAItmAJ9mALNmOsdmZtpmkO1mtv95RIt5qZ95qamQOouQOrOQZseQkJ+Qtv+Q29qQ2/+RX5GRqampeZWpeZupkZupkaSpqZ+pqaSpqam2Zou2Zp+2ZrO2kJ+2/9q2///bkJ/bkLPb////trP/tsf/ttr/28f/2+3//9r//+3////uqZ0WAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAayklEQVR4nO2da4PUuJWGa6EZajILG2YnkIXQYTJN6EwSBoZtVJDpGjzp7fb//0Vr3ayLZVuyj2z51Hk/0OWyrSr0lC6Wjl7tahJq7db+AqS8IsDIRYCRiwAjFwFGLgKMXAQYuQgwchFg5CLAyEWAkYsAIxcBRi4CjFwEGLkIMHIRYOQiwMhFgJGLACMXAUYuAoxcBBi5CDByEWDkIsDIRYCRiwAjFwFGLgKMXAQYuQgwchFg5CLAyEWAkYsAIxcBRi4CjFwEGLkIMHIRYOQiwMhFgJGLACMXAUYuAoxcBBi5CDByEWDkIsDIRYCRiwAjFwFGLgKMXAQYuQgwchFg5CLAyEWAkYsAIxcBRi4CjFwEGLkIMHIRYOQiwMhFgJGLACMXAUYuAoxcBBi5CDByEWDkIsDIRYCRiwAjFwFGLgKMXAQYuQgwchFg5CLAyEWAkYsAIxcBRi4CPKK7y91ud1HX1W731b+al0+P/B918vbVdfNv9dWX5uU5v0y+UZII8KgO99/yPxzjzX81L8U/QtUZx3l73py5+9t1fWwIm5OFiACP6ubxBf9zvKg9wKq4fv57A/i3t7yw75uzvy+rDBPgUd1d8ir47scvPuCDqKmriyM/L97YN/8c96t8yz4R4HFVvI6++aH2AN/+mf+9/UutAd9d8qJeWBEmwOMSVe9njs0BLFvg5n0N+OYJ/3t7frHWFw2JAEfoeHbdFNTaA3zkgG/+UbeAP4n3b8+f9qWzhghwhBpmvwp4XcCHnRAvtMcLffFqXzQgAhyj4/1vRSENVNG1LsHVU1meqYreoNSTUqiTVSvAFS/IotKmTtYGJbpY9dEdyTqoupgDPoqael/TYxIitUXYebOwwUoCPEOBccnCWmACPE+d4lpa+SXA6EWAkYsAIxcBRi4CjFwE+ChHkrVk6I2lm8dyAMPop92Z1Vc+eKfl9HEn3fZ9/XchnTzg6uzafnbVoTdGx51L6uqZjbc+NLjERL9S8wORQ9Nuuu37+u9SOnXAYpK+Mlneht5oyXlCo6tne/vw7sVT5/5aDU376dZmVvFIgBeUF0YnZZfIyim/jL12yi+7e/HgS310JggFwEC6BHgNiTk/b3xRht7o1zvTxjLGrs6/O7eaYMY+fP3w9nuHmJxc6qZLgNdQCLAMvWnVMOanmVC1e3J9d2kRrt87Xa6aAJclAUJP9yp98qcQXj9kSvL6ytTa7OOf/ur2uizAbroEeA2F2kqHNsf63gNslUz2+mnTLnc7U9QGFyLR3jpZrkNvtDjg55qvZGuBu3rWnLv6o12ETS/6SL3o9dU8yjhNZRt6o9X0o755p/nKUDurl8170ez9g3dWigf5HOylq983f5fRyQNWI043j8/aqBzebdbHfBzrwTveWb73Rl4vR670+frjC3HBB33MR8LEYiY33fb99vxCIsBav73tO5bF9+fwed06M//+vnQXFgGWuj3f9x5zfFfPHobPK7z++b50FxcBHhWrTQscOGu07NeKFAEeE+c2gI+xshET4GEpaJGAC0RMgAelgfWTY4UTJsBDYoFX/iVl8yXAA4rCVTZeAjygOFyF8yXAvYrEZeElwBtSdHG0Si8B3o7iWdmVc4mECXBICaQk3HIJE+CuJvSWCPCGNIlSsYQJsK9pjAjwVjQREfP+FqPtAu6x9ZWRFFNX2k8frCiV8HYBh2199Zqgaba+M+gQYHAFbX3bNUFT7KpmwSmUMAbAtq2viUdO9quaOZbMOi+KEALAjq2vCUxPLcJzuRBgaAVtfQ3gRMeq+VjKJIwAsGPra9YEJbm+Qkz1RUQHrCAsgLWtr2mDUwDDECmyCCMA7Nj6mjVBCVU0EJAiizACwJ6tr14TFN3JAovEIMCgCtv6Gneb2MckQBglEt4uYKNZtr6QKFjw5brCAHiOrS8siAKLMArAk219oQMhCyzCOABPFDgE1vN6RZ0y4AwIyivCpws4S5x6eUX4ZAFnyv7iivCpAs6V+8UV4TIBj1n8+j6f/I4hi9+Die4R+vgibPk7X6z3YCUVCdiz4uXPPEfXTU6G51iH1mnGfIvf5rUz9XDVY/kLodKKcImAfSve//vSGa0S4TmtPKeTjy8eOfeLUenK9pfstfydr9KKcImAQxa/N/9tH1m7bnMdHHjcnOwdsyx+Xd9I0XvusxsEUGGESwQccGp1DWCtXbfFoWXxK/DdfP3w6n+M+ZzcwVsBllne5wgLIAI8qm7GH113QWvXbXG9svg1y8Cq3b03ZkG2aLAraS+n3lsK8PqEiwXsWfwerW6wvet2e321u5CAGd944ZdzQVgx5n6E8hei87vP8hdCZRXhEgGH2sa7SwPY2nVbSJdE7XgkJogPD97Z3grifjN4lbENLqwIlwg4YMXbAHMLmtsGS4tfDVgGVb56Y7tn8OuZd3vwc+aLDR4urRIBB6x4fZt9l4u0+NUVMvvIdyaqvrJKsDDht3O6z/IXREUV4SIBe1a83MJZVKmPTU9LrGJoj8XIFfvwtWxnG8LiBm4BzPF+eNw04A39jrVvhpEsrqKKcJmAtfotfgPHTFn6tn0rxn5+6RqkLGTtWxLhkgEPWfwGjpnas6rtPd8+e+jwXczalwBnkSm4mnBrYLVwFvsftyZhPICZC5iZ95bP34IIIwTsEa6XL8EEOINYB7AovBr00t9m5Hg54QLs1NFO63uyrTAWwCwI2Kqbl62mOx+2GmFkgO3Os+//epqEkQBmAcCdQrtkHhNgWDl1cqj4qqsW/EajbywjdICZHvEIZuhyuRz4eS322bZwAHa7VaoUh69c7Cut99GO8AFun3uJMBcOwFLMe9VDeKF8JsDgagc1mHvcd11mlUEYIWC/IPdemFmBT1mBMD7AzH8jdOUSOU2AoSV7z/47/dfmVhGEkQGOH7taIKtDH7E4YVyAU4aPFqimSyjCqAAn9luzZ3YJRRgR4GCRXJXwyqOlQngAhzeHHM7O3NV0AUUYDeC+4LqR/Myb3QUUYSSAp88fLU+YAKdrcOx57N6cGb5+EUYBeHDseTw7M2b4yjNaNQrAY5GT5REmwCkanVuIyM581fTqRXjzgCPmFmKyM1eWT//RAWnjgJ2iN2t2cFnCBDhObOAo5oRzUZ5MX7sIbxpw7NxRZG4uSZgAR8jPpNmzv1lyfeUivF3A3Sp1/vR+jlxfOTJss4DT5lqjCWfI9nWL8FYBpw7yRmcnfL6vW4S3CThc0EAAYyO8ScBTKr0EwtAZT4ATNSnDUnITOOfnPr7N0vYA9xewkeiNlM9IuDYlubtLaaJa7XZf/WtnNpK4fXWt96Xge27u7v8zcufFcW0O8OSuchI02GraSuwgbav5RgKtfarYO0LtS8E5cx9GMBPcrQGe0ZFKY5aJsLKnPkp/XHmCw9X7Uvybl9zqacL2xyPaFuDhggUbfgVJ2KR1dymMjH/8YgHW+x+3+1J8Ekape5CP3hTgmQRTCcMhtlKSG0j8UCsrcmY2lGkdk2+/5y+AivCWAM8FmAwsB+G7y73YdMJ4zasNf8y+FJUo0UBO1hsCPJrd8y+YfUNEQk1X6vYv/IUG3O75pfelEDW0u5XXdG0GcESFCQ8Yrpo26TTgfhUEO4DVvhSyhj41wDBhNxNwARG2i/D9bwVBr4qu9b4UsoY+sSoaKOpmCi0YwlYqeiMfDbjdtU/1sj6pPtcJdbIiK8qY8Ml8nx7/yZ91p0q1ufwxSe9L0dbQp/SYBDhdP40VBOGBNLyNN9WbQIOVGwAMOpVbJOHAuCTYdj/FA06oIPMBhiA8lESnuEKV3/IBg88BTSU8G/FicZSuCgecNgUEniLIjWAJTFLRgBOLDVhfG/hGoPunqWTAqTkSef10wjMRrUK4YMC5Ro5n5PM8RATY0YSB42wpQ9wauHkJR8VSAU/5vy8AePR7+fuZygn+9oN15JVMisk7rN3rZUSW9VR82O2cOQednpPukAoFPIkB6IjItJt5dJU9RNEAtQHryKu61lt23Z5beNuIrPaNw96dVdLpuekOqUzAmcebsjWlYk/xysl6Zyfr/1WRV60zvbchahuRpSQmHCr7J9CmF7tzeYmApzZNsGNeA3f33i7GHN2BRwcEv/HmP60tuw5n153EPpnbBVs9++SmVx5gMXti/lHvWhHB4pqzX169mfoJSwHuv18AcYeRbRCc64dv3hm+t+ffPduduaOSejZJpCcCuDYC2Pp5m9+4FRGs26MPkyOCE7BlIjwIWHD9abcT+86r63dP3txduoQrp8lt7q7uh2qEbQC2I4Jle9T81yfPdC8IuKeaHqhSa0W4Qfyovbk6e8Mayk6/+5ON8+bxbrfbShscAOxEBDftkcz4qVPd4BMTySkMt8ES8McXj9pbq3tv/BJv19BCKlLLT28TgJ2I4KY9Opc/1qlFeFnAoSREL/rY24uWhF8/b++8ffbc/0FUfqidR3JTgJ2I4Gr3jWqPpk52w089jSTRTaN5RPK+/cEH3PSyzBs/Nf/f5lnX0ie3B+K30G16hy0AdiKCq3v8mY+3R1MDRpcGHEpEjmTdPFb/M/6E0PSR1DF737SoD94xdcxxH3a7vXW9XtWgjpsm+Gldd9Nr/46rDMC8nXnfFt5FAOcirPTb286x3nKetcfWBouB6wePo1VCFV2LiGDBVpxZpIqGCocNJuMNUPFja2tjed7eoTxw/eBxgoroZMle1lG3R0t0stIvn5eMvqpl6m9Bn0vrjmS5EcGyPVrmMSn98jnpGJCa6VJ8Vx6Lho0IzhQBMj8d5rxmLV78gGEjgtcCPLYu3TvL3A3pM2vt2STIiOBcMT7zUgrEcZwSYEjlC/KZnlKIIQGeqDUBp5jvWY0w3Of36bQBgwY6dtPqA8jquibA6VoZsJ/YoGMba6OyMuvEAQMTdp+Hhj6Uda7PJEDAXsSoHSGq5Iaj8cnsfXvE/7NOBGk77qE1GjG6OmArubQnp4yCA+xFjN797boB5hAWAShGx53zC2BXz5yZMT4fZs+kjUeM5o21TUpuJNUtAvYjRvn0h/CEMvr8d5uM9BKyjp89tP/fIpAhHIHaN9ddAmA1ZxRx0UICAxyIVqnduezqwiFTeTX44eyN3bEUFfExKVolczR1dILjKW4RcCCgUJZqrabE2mSEs+7eOs0jdkTAofrP3zzee/FJ2wAc0TcO72WdR1kBt+6LXJ+vfTINY3N5tXtyfXcpCUu9391zRy3zAAbObPmMO3rNYoRhAbsRo0580c0/AmSsKlzcX+2et3w//umv52480gYAs5hOFgP+0EHlbIOPNu3DTsh9cKr25qWqAVrArx8xL7IsE+Ass0pDaTLQDx0RbC/a7UU9leXWqEOmMrzbiB3F94pHlLpTS6UDdtIZ23lgc4A7EaM8UmMXrmO1nDa6jdjR8eF81YZzw1jE6OQ8g4m/81PpnWCC+8wIgY9k6QhPsZS56SabiFAJ2IoIFQMW5ryOIFUdLd7Ntq6PiBhdFXBoWnDwwoUIZxiLTo0A7Ry/dOfSoiNGp2fZ7MzumSwMvbt1wKkRoKFjRZeFzg9oPcAj7W34nWUIFzmbZEIP026b8YnTbx3+mt2AHZjPjFaRgE2WJWXCSoCH7/UniWE+M16FAjavErIhH6WhG9MmFiJnjOFUJmBb8YhXABz15fpKLQFWis2IeQ1pxptY58X0j0zVFgADWvqD3p1Qt4SHqJcgvAnAkVmxMOD0DmDsWBekNgI4qrTMzK/EZ7LETwtOIS1AeCuAYzJjScBTKvShUY9s2g7giAeSuR8QfyVQl4wAuxrJ18UAT/ugUKBOfsKbAhwRKZEvdXPV9MiR6ClFOG0McNq4b3LiM79AROKLE94a4KEsmZ9ZOTtyKz0Kbw9wfxnKD3hGPLMZzVp2uHKDgHvzGSCz8vXi1hqQ3iTgnmzJDHjWcgR1Lw9k+sOljC6tREiSjGpwXLN5dNvJbG3Xp6A1AkS6E86kpCsCiw//8ZK/liGFzHPNlmv0Au4007RVwLmGDXrbd6CBbhk+/viCvyHjxpnrmq3X6AHtD71hwJkeKvM07y5gvrCO1Xc/quhfxzW7XaN3QhtE9yrHI0cokdmLAc39surlLv3sww/yLcc126zRO6Ut3nuV45GjO+UDOYAiAYuF05/V7iOOa7ZZowe0RfS2Abu5nwcwbN9cdZ6a/lRTVOX7jmu2WaM31VTZ09YB27kH9Ejp1grAz14KcEPvV91NdlyzzRo9Aqw1LcZ2IL2e1yAJtl7o97/VC6wc12xxjqpoT+Fh3rnJwRRf72tpwNZKatc1u66pk9UVC4Y8TU/O+QOUmpCxyv5s8Lmu2RowPSY5CoY8zUkMzChlPBlY12xPWABzHnDj9gy+OhgSqGu2JzSA4YpcHQ6Qm5pUzEWQrtmeEAGGIwzpErpAXN2gUAGG6/YuW4BzChdgkKgO0B45AQYUSOc33yPSOkIHeB5ia4Ojud8GMJU5Qgh4RrbOn7lwTbOZb5o9aqIdMM12hqS1Wfaxk06PUAKeurRk/uSjZ5r90TPNtgJz2rdcE+1b177xsHcnHbRZtvc5A8IJeBIegPABzzSb+abZVmCOlmei7XoKifHo6qxj9+ebcw8IK+D05Z3dif70b+AadqoE3A2gVWCOlmeifXCLd8DhVVweNOcOCy3gNEBAQZqup7JMwDHN9uwbfRNts829Su/+2yDgkHdzjxADnm3fkk7YyXh1u0v06Pp3eiba0jTbXCAa6MoxbiTAzjtRjIb2r0qTU6Wq2z95FenR6hb7JtrKNNuA446eu24bHDLn7hFuwFGQAGPd7bZRr2XwKYjdRpR8E+3wvgjdjSuoDbbeHKEEuh7VNs2WN3dNs3VgjpbbBl90wHkezKYX3Web7Qo94BFMwwyTCRvTbMW3a5rttskep9Y0W8tukYWkWbZvzt2vEwA8ZL4+VryTv0Nrmv1GHTmm2Towp89E25hmt6baT+VfzzT71EeyIs+M85s86PnzXNPskeNonQbgnn2a56U5oNvzh97xHvQ4QScCuIszrz3i+rNIWicD2B/JBEoU9K4cOiHA9mRvPIBp81JTbsqjUwI8LVxjCiwCnEUxo1YseZ5p/sTjqjoxwFNiAdJxEeA8inrsSV8AscAvIqNODPCkwMu8l2fWSQGeuJKYABeihHmjtEKcvdedUacDeE5AD9y3WFynAjgQU5dAIs+li+hEAE+KBYhKecali+gkAM83IM48dJ1RpwA4cRoxMYmJFy6lbQK+cxx5hW5fXV+phT9yAZBeJA+zkwf0D2ExbRNwXR9ksHC7fIMv1vmjXPhzpxYEyeC1+Ifj4avivhYBhpIKCtZBqcKR951c+NMuCLr5/TVc1Abkz2BJbRWwXEbZ48hbqwVBPz0M3BkQ2L55BBhOctlO0JG3VoHDLN4sLgIx1I9gYW0WsHTkVQBdR95akG6YpZhNjbfVAGmsoM0CVo687Wv1Qi38+fSWZ3aSYev8rRFL5LthwL2OvPz4OVOXpKQ4lzABhlW/I2/1SC4ISvUDnPfIXCTfLQPudeRtFwSlO/IOIwZeyLSINgy4z5FXLwia5sg7OCU19cYVtWXAlgAdeSeuJy2ULxbAoI68yYvYRk6tKiyAQR15B9abJp9YW2gAwyp55pEAb0yJxizF8iXAvQojJsCIFE+4XL4EeEjR/ncEOFG+xYg20VUaM+UVQx22P5y0NummN2plEke4YL5lAvbNcrWJrtKdZ9Jbe6a8nP/OvoNbD9nmRAmmvFEepQQ4TQGzXMdMyjfprT1T3n/zB+DKTCSJKaZAenGmvOOES+ZbJOCAUV/X1c2xC/NMebksi0hRIR8nGwJ27Fs6F4wksKpKBBxwbOzwc0x6PVNe8db31vHN471znOrZ6iGescppeW0VsGMI6JnyijScAlt5doLJprxM7CqptpaUwQSvrlVfj8kqAm6zMlAVCzhgg23LNun1TXn9802v7Bd3K4RkU96afXCNZHn/TG7AwHSfLc79dWmVCDiiDXZMen1T3tqrocVs8aHbyUow5W2u+50NWMRhyw0YWPv1gHb8hVWJgANmuR7grklv4IJWohZ2a9BUU17O9iVrfw3MxGEz69OBtvwFVYmAA2a5bvkLmPR6nNwamjeR7uNQqimvLLyynq67cdjq00sswkUCNqa8jomuPvZNesV7jimvrKHbY75WzT6fbsqr6/PfSbB+HLYCDLbpL6DKBKwFbcI72ZS3bbBfyirZi8NuASeF6S6ikgFDm/DOMOW1emSiU+XHYRPgzcvpcntx2FRFI5AD2I3DbvuA1MnaruyRrNqNw7b6bPs1v2JYBHiSAOOwM4sATxNkHHZWEeCJgozDzikCjFwEGLkIMHIRYOQiwMhFgLVSY7H53s17LwVrCjMUm73GSDUBVhqJxVbxOdYNRz+IxIkK6sZm79eZiyDAUmOx2Co+x7zRWjjpY3eqyo/NFsPU1dnyj8oEWComFrv1SeSqvBr7EIBnxZWkBPiBigBLRYTqOpG6wtB4b45vz78792Nz7cg/6bxIgFfTOOCjHwbWMDaXV7sn1/527Hbkn1g8Vd2fHlEyVQRYKiYW++h3g63lM+L+yq21ncg/3un2i/gSIsBSMW2wis8xqvbmZbcG8FbLBO5fQgRYajwWu9bxOUaVORZs3R9I5eOMDcEGFQFWGovFrr1eln/MH5KdFY9uDc1/QitU0ATYaDgWW8fn6GPepNrH2kWgLza7uX6diEsC7KugWGwIEWBXRcViQ4gAIxcBRi4CjFwEGLkIMHIRYOQiwMhFgJGLACMXAUYuAoxcBBi5CDByEWDkIsDIRYCRiwAjFwFGLgKMXAQYuQgwchFg5CLAyEWAkYsAIxcBRi4CjFwEGLkIMHIRYOQiwMhFgJGLACMXAUYuAoxcBBi5CDByEWDkIsDIRYCRiwAjFwFGLgKMXAQYuQgwchFg5CLAyEWAkYsAIxcBRi4CjFwEGLkIMHIRYOQiwMhFgJGLACMXAUYuAoxcBBi5CDByEWDkIsDIRYCRiwAjFwFGLgKMXAQYuQgwchFg5CLAyEWAkYsAIxcBRi4CjFwEGLkIMHIRYOQiwMhFgJGLACMXAUYuAoxcBBi5CDByEWDkIsDIRYCRiwAjFwFGLgKMXAQYuQgwchFg5CLAyEWAkYsAIxcBRi4CjFwEGLkIMHL9P1BhMG8lY2+NAAAAAElFTkSuQmCC" /><!-- --></p>
+<p>Finally, let’s take a look at the brightness graph for our
+<code>best_simple_approximation</code>. I’m going to suppress its
+listing of the pitch-classes in each mode, since without manual tweaking
+they overlap to the point of illegibility:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="fu">brightnessgraph</span>(best_simple_approximation, <span class="at">show_pitches=</span><span class="cn">FALSE</span>, <span class="at">show_sums=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img role="img" src="data:image/png;base64,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" /><!-- --></p>
+<p>This feels right to me. At a glance, it’s a lot like the graph for
+the <code>overtone_scale</code> but without all the mess. All the modes
+beneath VII are now neatly lined up on a single row at the bottom.
+That’s the visual equivalent of our search for regularity and color
+adjacency in the previous section. This is something I like about
+brightness graphs: they summarize, in a picture or two, ideas that one
+could spend several thousand words developing.</p>
+<hr />
+<p><strong>Last updated:</strong> 28 May 2025</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
