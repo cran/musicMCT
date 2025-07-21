@@ -34,9 +34,9 @@ be one of three options:
 
 \item{ineqmat}{Specifies which hyperplane arrangement to consider. By default (or by
 explicitly entering "mct") it supplies the standard "Modal Color Theory" arrangements
-of \code{\link[=getineqmat]{getineqmat()}}, but can be set to "white," "roth", "pastel," or "rosy", giving the
-\code{ineqmat}s of \code{\link[=make_white_ineqmat]{make_white_ineqmat()}}, \code{\link[=make_roth_ineqmat]{make_roth_ineqmat()}}, \code{\link[=make_pastel_ineqmat]{make_pastel_ineqmat()}},
-and \code{\link[=make_rosy_ineqmat]{make_rosy_ineqmat()}}. For other
+of \code{\link[=getineqmat]{getineqmat()}}, but can be set to "white," "black", "gray", "roth", "pastel," or "rosy",
+giving the \code{ineqmat}s of \code{\link[=make_white_ineqmat]{make_white_ineqmat()}}, \code{\link[=make_black_ineqmat]{make_black_ineqmat()}}, \code{\link[=make_gray_ineqmat]{make_gray_ineqmat()}},
+\code{\link[=make_roth_ineqmat]{make_roth_ineqmat()}}, \code{\link[=make_pastel_ineqmat]{make_pastel_ineqmat()}}, and \code{\link[=make_rosy_ineqmat]{make_rosy_ineqmat()}}. For other
 arrangements, the desired inequality matrix can be entered directly.}
 
 \item{edo}{Number of unit steps in an octave. Defaults to \code{12}.}
@@ -51,7 +51,7 @@ Although every real color should have a rational representation in some mod k un
 that k must be very high. Increasing nmax makes the function run longer but might be necessary
 if small chromatic universes don't produce a result. Defaults to \code{12}.}
 
-\item{reconvert}{Boolean. Should the scale be converted to 12edo? Defaults to \code{FALSE}.}
+\item{reconvert}{Boolean. Should the scale be converted to the input edo? Defaults to \code{FALSE}.}
 }
 \value{
 A numeric vector representing a scale for \code{primary_hue()}; a
