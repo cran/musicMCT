@@ -1,6 +1,6 @@
 #' Evaluate potentially minimal voice-leading options
 #'
-#' Following Tymoczko 2008 <https://doi.org/10.1111/j.1468-2249.2008.00257.x>,
+#' Following Tymoczko (2008, \doi{doi:10.1111/j.1468-2249.2008.00257.x}),
 #' considers the strongly crossing-free voice leadings from `source` to the 
 #' modes of `goal`. 
 #'
@@ -39,8 +39,19 @@ crossingfree_vls <- function(source,
 
 #' Smallest voice leading between two sets
 #'
-#' Given a `source` set and a `goal` to move to, find the "strongly
-#' crossing-free" voice leading from `source` to `goal` with smallest size.
+#' Given a `source` set and a `goal` to move to, find the voice leading from `source` 
+#' to `goal` with smallest size. 
+#'
+#' Unless method="hamming", it is assumed that the minimal voice leading should be
+#' strongly crossing-free, so you might get strange results if your `source` and `goal`
+#' are not both in ascending order.
+#' 
+#' Using method="hamming" in principle should only care about preserving common tones, with
+#' no other restrictions on how voices move. This gives a profusion of tied voice leadings,
+#' which is not generally useful. This function therefore eliminates many of the options by
+#' requiring that the voices which aren't common tones make a minimal voice leading by the 
+#' taxicab metric. Nevertheless, for multisets, method="hamming" can still return many tied
+#' possibilities.
 #' 
 #' @param source Numeric vector, the pitch-class set at the start of your voice leading
 #' @param goal Numeric vector, the pitch-class set at the end of your voice leading
@@ -70,6 +81,10 @@ crossingfree_vls <- function(source,
 #'
 #' minimize_vl(c(0, 4, 7, 10), c(7, 7, 11, 2), method="euclidean")
 #' minimize_vl(c(0, 4, 7, 10), c(7, 7, 11, 2), method="euclidean", no_ties=TRUE)
+#'
+#' natural_hexachord <- c(0, 2, 4, 5, 7, 9)
+#' hard_hexachord <- c(7, 9, 11, 0, 2, 4)
+#' minimize_vl(natural_hexachord, hard_hexachord, method="hamming")
 #' @export
 minimize_vl<- function(source, 
                        goal, 
@@ -77,6 +92,47 @@ minimize_vl<- function(source,
                        no_ties=FALSE, 
                        edo=12,
                        rounder=10) {
+  is_hamming <- match.arg(method) == "hamming"
+  if (is_hamming) {  
+    notes_to_move <- multiset_diff(source, goal)
+    goal_of_motion <- multiset_diff(goal, source)
+    if (length(notes_to_move) != length(goal_of_motion)) {
+      stop("Error detecting common tones.")
+    }
+    res <- rep(0, length(source))
+    if (length(notes_to_move) == 0) {
+      return(res)
+    }
+    moving_vl <- minimize_vl(notes_to_move, goal_of_motion, edo=edo, rounder=rounder, no_ties=TRUE)
+    moving_index <- source %in% notes_to_move
+    if (sum(moving_index) == length(notes_to_move)) {
+      res[moving_index] <- moving_vl
+      return(res)
+    } else {
+      match_val <- function(val, set) which(abs(set - val) < 10^(-1*rounder))
+      positions <- lapply(notes_to_move, match_val, source)
+      position_combos <- expand.grid(positions)
+      if (inherits(position_combos, "matrix")) {
+        duplicate_test <- colSums(apply(position_combos, 1, duplicated))
+        no_duplicates <- which(duplicate_test==0)
+        position_combos <- position_combos[no_duplicates, ]
+      }
+      set_from_combo <- function(combo) {
+        new_set <- res
+        new_set[combo] <- moving_vl
+        new_set
+      }
+      all_possible_vls <- t(apply(position_combos, 1, set_from_combo))
+      colnames(all_possible_vls) <- NULL
+      rownames(all_possible_vls) <- NULL
+
+      if (no_ties) {
+        return(all_possible_vls[1, ])
+      } else {
+        return(all_possible_vls)
+      }
+    }
+  }
 
   vl_data <- crossingfree_vls(source=source, goal=goal, method=method, edo=edo, rounder=rounder)
 
@@ -84,6 +140,41 @@ minimize_vl<- function(source,
   if (no_ties) index <- index[1]
 
   vl_data$"vls"[index,]
+}
+
+
+#' minimize_vl with an explicit tiebreaker
+#'
+#' Essentially minimize_vl with parameter no_ties=TRUE but more 
+#' deterministic about how the ties are broken
+#'
+#' @inheritParams minimize_vl
+#' @param tiebreak_method What method (from the same list as param method)
+#'   should be used for tiebreaking?
+#'
+#' @returns Same as minimize_vl with no_ties=TRUE
+#'
+#' @noRd
+mvl_tiebreak <- function(source,
+                         goal,
+                         method=c("taxicab", "euclidean", "chebyshev", "hamming"),
+                         tiebreak_method="hamming",
+                         edo=12,
+                         rounder=10) {
+  res <- minimize_vl(source=source,
+                     goal=goal,
+                     method=method,
+                     no_ties=FALSE,
+                     edo=edo,
+                     rounder=rounder)
+
+  if (inherits(res, "matrix")) {
+    tiebreak_scores <- apply(res, 1, dist_func, method=tiebreak_method, rounder=rounder)
+    minimum_index <- which.min(tiebreak_scores)[1]
+    res <- res[minimum_index, ]
+  }  
+
+  res
 }
 
 #' Smallest crossing-free voice leading between two pitch-class sets

@@ -49,6 +49,25 @@ test_that("tn works", {
   expect_equal(tn(tetra, -6), c(0, 6, 8, 9))
   expect_equal(tn(tetra, 8, sorted=FALSE), c(8, 10, 11, 2))
   expect_equal(tn(tetra, 8, edo=31), c(8, 10, 11, 14))
+
+  c_maj <- c(0, 4, 7)
+  expect_equal(tn(c_maj, -10), c(2, 6, 9))
+  expect_equal(tn(c_maj, -10, octave_equivalence=FALSE), c(-10, -6, -3))
+  expect_equal(tn(c_maj, -10, optic="p"), c(-10, -6, -3))
+  expect_equal(tn(c_maj, -10, optic=""), c(-10, -6, -3))
+  expect_warning(tn(c_maj, 5, optic="opti"))
+  expect_warning(tn(c_maj, 5, optic="q"))
+  
+  satb_cmaj <- c(0, 4, 7, 12)
+  expect_equal(tn(satb_cmaj, 5), c(0, 5, 5, 9))
+  expect_equal(tn(satb_cmaj, 5, optic=""), c(5, 9, 12, 17))
+  expect_equal(tn(satb_cmaj, 5, optic="o"), c(5, 9, 0, 5))
+  expect_equal(tn(satb_cmaj, 5, optic="p"), c(5, 9, 12, 17))
+  expect_equal(tn(satb_cmaj, 5, optic="c"), c(5, 9, 12, 17))
+  expect_equal(tn(satb_cmaj, 5, optic="op"), c(0, 5, 5, 9))
+  expect_equal(tn(satb_cmaj, 5, optic="oc"), c(5, 9, 0, 5))
+  expect_equal(tn(satb_cmaj, 5, optic="pc"), c(5, 9, 12, 17))
+  expect_equal(tn(satb_cmaj, 5, optic="opc"), c(0, 5, 9))  
 })
 
 test_that("tni works", {
@@ -58,6 +77,25 @@ test_that("tni works", {
   expect_equal(tni(tetra, -11), c(1, 7, 10, 11))
   expect_equal(tni(tetra, 8, sorted=FALSE), c(8, 6, 5, 2))
   expect_equal(tni(tetra, 3, edo=19), c(0, 1, 3, 16))
+
+  test_multiset <- c(0, 1, 0)
+  expect_equal(tni(test_multiset, 0), c(0, 0, 11)) 
+  expect_equal(tni(test_multiset, 0, optic=""), c(0, -1, 0)) 
+  expect_equal(tni(test_multiset, 0, optic="o"), c(0, 11, 0))  
+  expect_equal(tni(test_multiset, 0, optic="opc"), c(0, 11)) 
+
+  expect_equal(tni(test_multiset, 0, edo=53), c(0, 0, 52)) 
+  expect_equal(tni(test_multiset, 0, optic="", edo=53), c(0, -1, 0)) 
+  expect_equal(tni(test_multiset, 0, optic="o", edo=53), c(0, 52, 0)) 
+  expect_equal(tni(test_multiset, 0, optic="opc", edo=53), c(0, 52)) 
+
+  expect_equal(tni(c(0, 4, 7)), c(0, 3, 7))
+  expect_equal(tni(c(0, 3, 7)), c(0, 4, 7))
+  expect_equal(tni(c(1, 5, 8)), c(1, 4, 8))
+  expect_equal(tni(c(0, 11, 7)), c(0, 7, 8))
+  expect_equal(tni(c(0, 11, 7), optic="p"), c(-4, 0, 7))
+  expect_equal(tni(c(0, 11, 7), optic="c"), c(7, -4, 0))
+  expect_equal(tni(c(0, 11, 7), optic="o"), c(7, 8, 0))
 })
 
 test_that("startzero works", {
@@ -71,6 +109,67 @@ test_that("charm works", {
   expect_equal(charm(c(2, 6, 9)), c(0, 3, 7))
   expect_equal(charm(c(1, 3, 6, 9)), c(0, 3, 6, 8))
   expect_equal(charm(c(0, 6, 11), edo=19), c(0, 5, 11))
+})
+
+test_that("hook_optimize works", {
+  test_set <- c(1.2, -.7, -1.7, -1, 1)
+  expect_equal(hook_optimize(test_set), 1)
+  expect_equal(hook_optimize(test_set, octave_equivalence=FALSE), -0.7)
+  expect_equal(hook_optimize(test_set, edo=.71), 0.01)
+})
+
+test_that("normal_form works", {
+  expect_equal(normal_form(c(-1, 1), optic="ti"), c(0, 2))
+  expect_equal(normal_form(c(-2, 1), optic="pi"), c(-1, 2))
+  expect_equal(normal_form(c(0, 6), edo=7, optic="op"), c(6, 0))
+
+  two_as <- c(-3, -3)
+  expect_equal(normal_form(two_as, optic="t"), c(0, 0))
+  expect_equal(normal_form(two_as, optic="tc"), 0)
+  expect_equal(normal_form(two_as, optic="i"), c(3, 3))
+  expect_equal(normal_form(two_as, optic="ic"), 3)
+  expect_equal(normal_form(two_as, optic="oc"), 9)
+  expect_equal(normal_form(two_as, optic="c"), -3)
+  expect_equal(normal_form(two_as, optic="o"), c(9, 9))
+  expect_equal(normal_form(two_as, optic="pc"), -3)
+
+  alpha <- c(-5, -11, 14, 9, 14, 14, 2)
+  expect_equal(normal_form(alpha, optic="optic"), c(0, 1, 5, 7))
+
+  expect_equal(normal_form(alpha, optic=""), alpha)
+  expect_equal(normal_form(alpha, optic="o"), c(7, 1, 2, 9, 2, 2, 2))
+  expect_equal(normal_form(alpha, optic="p"), c(-11, -5, 2, 9, 14, 14, 14))
+  expect_equal(normal_form(alpha, optic="op"), c(7, 9, 1, 2, 2, 2, 2))
+  expect_equal(normal_form(alpha, optic="oc"), c(7, 1, 2, 9, 2))
+  expect_equal(normal_form(alpha, optic="pc"), c(-11, -5, 2, 9, 14))
+  expect_equal(normal_form(alpha, optic="opc"), c(7, 9, 1, 2))
+
+  expect_equal(normal_form(alpha, optic="t"), c(0, -6, 19, 14, 19, 19, 7))
+  expect_equal(normal_form(alpha, optic="ot"), c(0, 6, 7, 2, 7, 7, 7))
+  expect_equal(normal_form(alpha, optic="pt"), c(0, 6, 13, 20, 25, 25, 25))
+  expect_equal(normal_form(alpha, optic="tc"), c(0, -6, 19, 14, 19, 7))
+  expect_equal(normal_form(alpha, optic="opt"), c(0, 2, 6, 7, 7, 7, 7))
+  expect_equal(normal_form(alpha, optic="otc"), c(0, 6, 7, 2, 7))
+  expect_equal(normal_form(alpha, optic="ptc"), c(0, 6, 13, 20, 25))
+  expect_equal(normal_form(alpha, optic="optc"), c(0, 2, 6, 7))
+
+  expect_equal(normal_form(alpha, optic="i"), c(5, 11, -14, -9, -14, -14, -2))
+  expect_equal(normal_form(alpha, optic="oi"), c(5, 11, 10, 3, 10, 10, 10))
+  expect_equal(normal_form(alpha, optic="pi"), c(-14, -14, -14, -9, -2, 5, 11))
+  expect_equal(normal_form(alpha, optic="ic"), c(5, 11, -14, -9, -14, -2))
+  expect_equal(normal_form(alpha, optic="opi"), c(10, 10, 10, 10, 11, 3, 5))
+  expect_equal(normal_form(alpha, optic="oic"), c(5, 11, 10, 3, 10))
+  expect_equal(normal_form(alpha, optic="pic"), c(-14, -9, -2, 5, 11))
+  expect_equal(normal_form(alpha, optic="opic"), c(10, 11, 3, 5))
+
+  expect_equal(normal_form(alpha, optic="ti"), c(0, 6, -19, -14, -19, -19, -7))
+  expect_equal(normal_form(alpha, optic="oti"), c(0, 6, 5, 10, 5, 5, 5))
+  expect_equal(normal_form(alpha, optic="pti"), c(0, 0, 0, 5, 12, 19, 25))
+  expect_equal(normal_form(alpha, optic="tic"), c(0, 6, -19, -14, -19, -7))
+  expect_equal(normal_form(alpha, optic="opti"), c(0, 0, 0, 0, 1, 5, 7))
+  expect_equal(normal_form(alpha, optic="otic"), c(0, 6, 5, 10, 5))
+  expect_equal(normal_form(alpha, optic="ptic"), c(0, 5, 12, 19, 25))
+  expect_equal(normal_form(alpha, optic="optic"), c(0, 1, 5, 7))
 })
 
 test_that("primeform works", {

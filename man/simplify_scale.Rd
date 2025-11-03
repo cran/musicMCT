@@ -28,10 +28,12 @@ initial is zero? Defaults to \code{TRUE}.}
 
 \item{ineqmat}{Specifies which hyperplane arrangement to consider. By default (or by
 explicitly entering "mct") it supplies the standard "Modal Color Theory" arrangements
-of \code{\link[=getineqmat]{getineqmat()}}, but can be set to "white," "black", "gray", "roth", "pastel," or "rosy",
-giving the \code{ineqmat}s of \code{\link[=make_white_ineqmat]{make_white_ineqmat()}}, \code{\link[=make_black_ineqmat]{make_black_ineqmat()}}, \code{\link[=make_gray_ineqmat]{make_gray_ineqmat()}},
-\code{\link[=make_roth_ineqmat]{make_roth_ineqmat()}}, \code{\link[=make_pastel_ineqmat]{make_pastel_ineqmat()}}, and \code{\link[=make_rosy_ineqmat]{make_rosy_ineqmat()}}. For other
-arrangements, the desired inequality matrix can be entered directly.}
+of \code{\link[=getineqmat]{getineqmat()}}, but can be set to strings "white," "black", "gray", "roth", "infrared",
+"pastel", "rosy", "infrared", or "anaglyph", giving the \code{ineqmat}s of \code{\link[=make_white_ineqmat]{make_white_ineqmat()}},
+\code{\link[=make_black_ineqmat]{make_black_ineqmat()}}, \code{\link[=make_gray_ineqmat]{make_gray_ineqmat()}}, \code{\link[=make_roth_ineqmat]{make_roth_ineqmat()}},
+\code{\link[=make_infrared_ineqmat]{make_infrared_ineqmat()}}, \code{\link[=make_pastel_ineqmat]{make_pastel_ineqmat()}}, \code{\link[=make_rosy_ineqmat]{make_rosy_ineqmat()}},
+\code{\link[=make_infrared_ineqmat]{make_infrared_ineqmat()}}, or \code{\link[=make_anaglyph_ineqmat]{make_anaglyph_ineqmat()}}. For other
+arrangements, this parameter accepts explicit matrices.}
 
 \item{scales}{List of scales representing the faces of your hyperplane
 arrangement. Defaults to \code{NULL} in which case the function looks for
@@ -40,7 +42,10 @@ arrangement. Defaults to \code{NULL} in which case the function looks for
 \item{signvector_list}{A list of signvectors to use as the reference by
 which \code{colornum} assigns a value. Defaults to \code{NULL} and will attempt to
 use \code{representative_signvectors}, which needs to be downloaded and assigned
-separately from the package musicMCT.}
+separately from the package musicMCT. (If a named \code{ineqmat} other than "mct"
+is chosen, the function attempts to replace a \code{NULL} signvector list with
+a corresponding object in the global environment. For instance, if \code{ineqmat="pastel"}
+then the function tries to use \code{pastel_signvectors} for \code{signvector_list}.)}
 
 \item{adjlist}{Adjacency list structured in the same way as \code{color_adjacencies}.
 Defaults to \code{NULL} in which case the function looks for \code{color_adjacencies}
@@ -132,7 +137,7 @@ assumes that, if you don't specify other data, you have those three files
 loaded into your workspace. It can't function without them.
 }
 \examples{
-\dontshow{if (exists("representative_scales") && exists("representative_signvectors") && exists("color_adjacencies")) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
+\dontshow{if (exists("representative_scales") && exists("representative_signvectors") && exists("color_adjacencies")) withAutoprint(\{ # examplesIf}
 # For this example to run, you need the necessary data files loaded.
 # Let's see what happens if we try to simplify the 5-limit just diatonic:
 

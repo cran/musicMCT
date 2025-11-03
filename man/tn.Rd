@@ -7,22 +7,54 @@
 \alias{charm}
 \title{Transposition and Inversion}
 \usage{
-tn(set, n, sorted = TRUE, edo = 12, rounder = 10)
+tn(
+  set,
+  n,
+  sorted = TRUE,
+  octave_equivalence = TRUE,
+  optic = NULL,
+  edo = 12,
+  rounder = 10
+)
 
-tni(set, n, edo = 12, sorted = TRUE)
+tni(
+  set,
+  n = NULL,
+  sorted = TRUE,
+  octave_equivalence = TRUE,
+  optic = NULL,
+  edo = 12,
+  rounder = 10
+)
 
-startzero(set, sorted = TRUE, edo = 12, rounder = 10)
+startzero(
+  set,
+  sorted = TRUE,
+  octave_equivalence = TRUE,
+  optic = NULL,
+  edo = 12,
+  rounder = 10
+)
 
 charm(set, edo = 12, rounder = 10)
 }
 \arguments{
 \item{set}{Numeric vector of pitch-classes in the set}
 
-\item{n}{Numeric value (not necessarily an integer!) representing the
-index of transposition or inversion.}
+\item{n}{Numeric value (not necessarily an integer) representing the
+index of transposition or inversion. For \code{tni()} only, defaults to
+\code{NULL}, in which case \code{n} is chosen automatically to fix the first
+and last entries of \code{set} as common tones.}
 
 \item{sorted}{Do you want the result to be in ascending order? Boolean,
 defaults to \code{TRUE}.}
+
+\item{octave_equivalence}{Do you want to normalize the result so that all values are
+between 0 and \code{edo}? Boolean, defaults to \code{TRUE}.}
+
+\item{optic}{String: the OPTIC symmetries to apply. Defaults to \code{NULL},
+applying symmetries most appropriate to the given function. If specified, overrides
+parameters \code{sorted} and \code{octave_equivalence}.}
 
 \item{edo}{Number of unit steps in an octave. Defaults to \code{12}.}
 
@@ -59,8 +91,12 @@ but NB also vice versa.)
 c_major <- c(0, 4, 7)
 tn(c_major, 2)
 tn(c_major, -10)
-tni(c_major, 7)
-tni(c_major, 7, sorted=FALSE)
+tn(c_major, -10, optic="p") # Equivalent to tn(c_major, -10, octave_equivalence=FALSE)
+tni(c_major, 4)
+tni(c_major, 4, sorted=FALSE)
+# If no index is supplied for tni, n is chosen to fix the first and last entries of the set:
+tni(c_major)
+
 tn(c(0, 1, 6, 7), 6)
 tn(c(0, 1, 6, 7), 6, sorted=FALSE)
 
@@ -74,4 +110,12 @@ isTRUE(all.equal(tnprime(e_maj7), charm(e_maj7))) # True because inversionally s
 ionian <- c(0, 2, 4, 5, 7, 9, 11)
 lydian <- rotate(tn(ionian, 7, sorted=FALSE), 3)
 lydian - ionian
+
+##### Easy to create a 12-tone matrix
+row <- c(9, 10, 6, 8, 5, 7, 1, 2, 3, 11, 0, 4)
+matrix_from_0 <- sapply(row, tni, set=row, optic="o")
+matrix_from_9 <- tn(matrix_from_0, 9, optic="o")
+print(matrix_from_0)
+print(matrix_from_9)
+
 }

@@ -87,7 +87,15 @@ units_mod <- function(edo) which(sapply(1:edo, coprime_to_edo, edo=edo)==TRUE)
 #' @returns A matrix (such as getineqmat() or make_roth_ineqmat() produce)
 #' @noRd
 choose_ineqmat <- function(set, 
-                           x=c("mct", "white", "roth", "pastel", "rosy", "black", "gray")) {
+                           x=c("mct", 
+                               "white", 
+                               "roth", 
+                               "pastel", 
+                               "rosy", 
+                               "black", 
+                               "gray",
+                               "infrared",
+                               "anaglyph")) {
   if (inherits(x, "matrix")) {
     return(x)
   }
@@ -97,6 +105,8 @@ choose_ineqmat <- function(set,
   card <- length(set)
 
   x <- match.arg(x)
+  if (x=="anaglyph") card <- card/2
+
   create_ineqmat <- switch(x,
                            mct = getineqmat,
                            white = make_white_ineqmat,
@@ -104,47 +114,112 @@ choose_ineqmat <- function(set,
                            pastel = make_pastel_ineqmat,
                            rosy = make_rosy_ineqmat,
                            black = make_black_ineqmat,
-                           gray = make_gray_ineqmat)
+                           gray = make_gray_ineqmat,
+                           infrared = make_infrared_ineqmat,
+                           anaglyph = make_anaglyph_ineqmat)
 
   create_ineqmat(card)
 }
 
-#' Look up a scale at Ian Ring's *Exciting Universe of Music Theory*
+#' Process inputs from optic parameter
 #'
-#' Ian Ring's website [*The Exciting Universe 
-#' of Music Theory*](https://ianring.com/musictheory/) is a
-#' comprehensive and useful compilation of information about pitch-class
-#' sets in twelve-tone equal temperament. It tracks many properties that
-#' musicMCT is unlikely to duplicate, so this function opens the corresponding
-#' page for a pc-set in your browser. This only works for sets in 12-edo which
-#' include pitch-class 0.
+#' Some functions like tn() have a parameter "optic" which allows the
+#' user to specify what symmetries they want to consider in a voice-leading
+#' space. This function does some initial processing of the input for that
+#' parameter that can be shared between functions using it.
+#'
+#' Throws a warning if the user's input seems to specify symmetries that aren't defined.
+#'
+#' @param x A string of relevant symmetries (i.e., some substring of "optic")
+#' 
+#' @returns A vector of 5 boolean values, answering "Should X symmetry be assumed?" for
+#'  X = octave, permutation, transposition, inversion, and cardinality, respectively.
+#'
+#' @noRd
+optic_choices <- function(x) {
+  x <- tolower(x)
+  has_o <- grepl("o", x, fixed=TRUE)
+  has_p <- grepl("p", x, fixed=TRUE)
+  has_t <- grepl("t", x, fixed=TRUE)  
+  has_i <- grepl("i", x, fixed=TRUE)
+  has_c <- grepl("c", x, fixed=TRUE)
+
+  should_warn <- grepl("[^ optic]", x, fixed=FALSE)
+  if (should_warn) {
+    warning("You seem to have specified some non-OPTIC symmetry. Check your 'optic' parameter.",
+            call.=FALSE)
+  }
+
+  res <- c(has_o, has_p, has_t, has_i, has_c)
+  names(res) <- c("o", "p", "t", "i", "c")
+
+  res
+}
+
+#' Cardinality Fuse
+#'
+#' Implements cardinality reduction following Hook (2023, 416-8).
 #'
 #' @inheritParams tnprime
 #'
-#' @returns Invisibly, the integer which Ring's site uses to index the
-#'  input `set`. The main purpose of the function is its side effect of
-#'  opening a page of Ring's site in a browser.
-#'
-#' @examples
-#' c_major <- c(0, 2, 4, 5, 7, 9, 11)
-#' c_major_value <- ianring(c_major)
-#' print(c_major_value)
-#' # And indeed you should find information about the major scale
-#' # at https://ianring.com/musictheory/scales/2741
-#'
-#' @examplesIf interactive()
-#' ianring(c(0, 2, 3, 7, 8))
-#'
-#' @export
-ianring <- function(set) {
-  set_as_distro <- sign(set_to_distribution(set, edo=12, rounder=10))
-  weights <- 2^(0:11)
-  value <- as.integer(sum(set_as_distro %*% weights))
+#' @returns Numeric vector with immediate repetitions (up to rounding) removed
+#' 
+#' @noRd
+c_fuse <- function(set, rounder=10) {
+  tiny <- 10^(-1 * rounder)
+  adjacencies <- abs(diff(set))
+  repetitions <- which((adjacencies < tiny) == TRUE) + 1
+  if (length(repetitions)==0) {
+    set 
+  } else {
+    set[-repetitions]
+  }
+}
 
-  if (interactive()) {
-    ring_url <- paste0("https://ianring.com/musictheory/scales/", value)
-    utils::browseURL(ring_url)
+
+#' Difference of multisets
+#'
+#' Calculate the asymmetric difference between two multisets.
+#'
+#' @param set1, set2 The multisets to be compared
+#' @inheritParams tnprime
+#'
+#' @returns Vector of the entries of set1 with any entries of set2 removed
+#'   (counting multiplicities)
+#'
+#' @noRd
+multiset_diff <- function(set1, set2, rounder=10) {
+  set1_uniques <- fpunique(set1, rounder=rounder)
+  set2_uniques <- fpunique(set2, rounder=rounder)
+
+  tiny <- 10^(-1 * rounder)
+  count_instances <- function(val, set) {
+    value_matches <- abs(set - val) < tiny
+    sum(value_matches)
   }
 
-  invisible(value)
+  counts_in_set1 <- sapply(set1_uniques, count_instances, set=set1)
+  counts_in_set2 <- sapply(set1_uniques, count_instances, set=set2)
+  result_counts <- counts_in_set1 - counts_in_set2
+  result_counts[result_counts < 0] <- 0
+  unlist(mapply(rep, set1_uniques, result_counts))  
+}
+
+#' Quasi Modulo Division
+#'
+#' Like normal modulo division but returns the modulus instead of 0
+#' for use with R's 1-indexing.
+#'
+#' @param x the dividend
+#' @param card the modulus
+#'
+#' @returns the residue
+#'
+#' @noRd
+quasimod <- function(x, card) {
+  normal_mod <- x %% card
+  if (normal_mod == 0) {
+    return(card)
+  }
+  normal_mod
 }

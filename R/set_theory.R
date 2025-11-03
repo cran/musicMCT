@@ -85,9 +85,9 @@ compactest_mode <- function(modes, rounder=10) {
       return(modes)
     }
 
-    top <- min(modes[i,])
-    index <- which(abs(modes[i,] - top) < tiny)
-    modes <- modes[,index]
+    top <- min(modes[i, ])
+    index <- which(abs(modes[i, ] - top) < tiny)
+    modes <- modes[, index]
   }
 
   modes
@@ -147,17 +147,28 @@ tnprime <- function(set, edo=12, rounder=10) {
 #' but NB also vice versa.)
 #' 
 #' @inheritParams tnprime
-#' @param n Numeric value (not necessarily an integer!) representing the 
-#'   index of transposition or inversion.
+#' @param n Numeric value (not necessarily an integer) representing the 
+#'   index of transposition or inversion. For `tni()` only, defaults to
+#'   `NULL`, in which case `n` is chosen automatically to fix the first
+#'   and last entries of `set` as common tones.
 #' @param sorted Do you want the result to be in ascending order? Boolean,
 #'   defaults to `TRUE`.
+#' @param octave_equivalence Do you want to normalize the result so that all values are
+#'   between 0 and `edo`? Boolean, defaults to `TRUE`.
+#' @param optic String: the OPTIC symmetries to apply. Defaults to `NULL`,
+#'   applying symmetries most appropriate to the given function. If specified, overrides 
+#'   parameters `sorted` and `octave_equivalence`.
 #' @returns Numeric vector of same length as `set`
 #' @examples
 #' c_major <- c(0, 4, 7)
 #' tn(c_major, 2)
 #' tn(c_major, -10)
-#' tni(c_major, 7)
-#' tni(c_major, 7, sorted=FALSE)
+#' tn(c_major, -10, optic="p") # Equivalent to tn(c_major, -10, octave_equivalence=FALSE)
+#' tni(c_major, 4)
+#' tni(c_major, 4, sorted=FALSE)
+#' # If no index is supplied for tni, n is chosen to fix the first and last entries of the set:
+#' tni(c_major)
+#'
 #' tn(c(0, 1, 6, 7), 6)
 #' tn(c(0, 1, 6, 7), 6, sorted=FALSE)
 #'
@@ -171,37 +182,100 @@ tnprime <- function(set, edo=12, rounder=10) {
 #' ionian <- c(0, 2, 4, 5, 7, 9, 11)
 #' lydian <- rotate(tn(ionian, 7, sorted=FALSE), 3)
 #' lydian - ionian
+#'
+#' ##### Easy to create a 12-tone matrix
+#' row <- c(9, 10, 6, 8, 5, 7, 1, 2, 3, 11, 0, 4)
+#' matrix_from_0 <- sapply(row, tni, set=row, optic="o")
+#' matrix_from_9 <- tn(matrix_from_0, 9, optic="o")
+#' print(matrix_from_0)
+#' print(matrix_from_9)
+#'
 #' @export
-tn <- function(set, n, sorted=TRUE, edo=12, rounder=10) {
+tn <- function(set, n, sorted=TRUE, octave_equivalence=TRUE, optic=NULL, edo=12, rounder=10) {
   tiny <- 10^(-1 * rounder)
-  res <- ((set%%edo) + (n%%edo)) %% edo
-  close_to_edo <- which(abs(res - edo) < tiny)
-  res[close_to_edo] <- 0
-  if (sorted == FALSE) { 
-    return(res)
+
+  if (is.null(optic)) {
+    symmetries <- c(o = octave_equivalence, p = sorted, t = FALSE, i = FALSE, c = FALSE)
+  } else {
+    symmetries <- optic_choices(optic)
   }
-  sort(res)
-}
 
-#' @rdname tn
-#' @export
-tni <- function(set, n, edo=12, sorted=TRUE) {
-  res <- ((n%%edo) - (set%%edo)) %% edo
-  if (sorted == FALSE) { 
-    return(res) 
+  res <- set + n
+  if (symmetries["o"]) res <- fpmod(res, edo=edo, rounder=rounder)
+
+  if (symmetries["p"]) res <- sort(res)
+ 
+  if (symmetries["t"] || symmetries["i"]) {
+    warning("T and I symmetries don't make sense in this context and have not been applied.")
   }
-  sort(res)
+
+  if (symmetries["c"]) {
+    res <- c_fuse(res, rounder=rounder)
+  }
+
+  res
 }
 
 #' @rdname tn
 #' @export
-startzero <- function(set, sorted=TRUE, edo=12, rounder=10) {
-  tn(set, -set[1], sorted=sorted, edo=edo, rounder=rounder)
+tni <- function(set, 
+                n=NULL, 
+                sorted=TRUE, 
+                octave_equivalence=TRUE, 
+                optic=NULL, 
+                edo=12, 
+                rounder=10) {
+  tiny <- 10^(-1 * rounder)
+  card <- length(set)
+
+  if (is.null(n)) n <- set[1] + set[card]
+
+  if (is.null(optic)) {
+    symmetries <- c(o = octave_equivalence, p = sorted, t = FALSE, i = FALSE, c = FALSE)
+  } else {
+    symmetries <- optic_choices(optic)
+  }
+
+  res <- n - set
+ 
+  if (symmetries["o"]) res <- fpmod(res, edo=edo, rounder=rounder)
+
+  if (symmetries["p"]) res <- sort(res)
+ 
+  if (symmetries["t"] || symmetries["i"]) {
+    warning("T and I symmetries don't make sense in this context and have not been applied.")
+  }
+
+  if (symmetries["c"]) {
+    res <- c_fuse(res, rounder=rounder)
+  }
+
+  res
 }
 
 #' @rdname tn
 #' @export
-charm <- function(set, edo=12, rounder=10) tnprime(tni(set, 0, edo), edo, rounder)
+startzero <- function(set, 
+                      sorted=TRUE, 
+                      octave_equivalence=TRUE, 
+                      optic=NULL,
+                      edo=12, 
+                      rounder=10) {
+  res <-  tn(set,
+            -set[1], 
+            sorted=sorted, 
+            octave_equivalence=octave_equivalence,
+            optic=optic,
+            edo=edo, 
+            rounder=rounder)
+  res - res[1]
+}
+
+#' @rdname tn
+#' @export
+charm <- function(set, edo=12, rounder=10) {
+  tnprime(tni(set, 0, edo=edo), edo=edo, rounder=rounder)
+}
 
 #' Apply compactest_mode to both inversions of a set
 #'
@@ -222,6 +296,210 @@ strange_charm_compare <- function(x, y, rounder=10) {
   modes <- compactest_mode(modes, rounder=rounder)
 
   modes[1:card]
+}
+
+#' Find the optimal element for Hook's normal form algorithm
+#'
+#' See Hook (2023 pp. 417-418, ISBN: 9780190246013).
+#'
+#' @param vals Vector of values (notes or intervals) from which to choose the optimal element
+#' @param octave_equivalence Is O symmetry being considered? Defaults to `TRUE`.
+#'
+#' @returns Either the absolutely smallest element or smallest residue mod edo
+#'   depending on the `octave_equivalence` parameter
+#'
+#' @noRd
+hook_optimize <- function(vals, octave_equivalence=TRUE, edo=12, rounder=10) {
+  rounded_vals <- round(vals, digits=rounder)
+  rounded_abs <- abs(rounded_vals)
+  signs <- sign(rounded_vals)
+  tiny <- 10^(-1 * rounder)
+
+  if (octave_equivalence==FALSE) {
+    optimal_val <- min(rounded_abs)
+    indices <- which(rounded_abs==optimal_val)
+    negative_values <- which(signs < 0)
+    positive_indices <- setdiff(indices, negative_values)
+    if (length(positive_indices) < 1) {
+      index <- indices[1]
+    } else {
+      index <- positive_indices[1] 
+    }   
+  } else {
+    modular_vals <- fpmod(rounded_vals, edo=edo, rounder=rounder)
+    min_mod_val <- min(modular_vals)
+    offsets <- modular_vals - min_mod_val
+    indices <- which(abs(offsets) < tiny)
+    index <- indices[1]
+    vals <- modular_vals
+  }
+
+  vals[index]
+}
+
+#' Pack a set to the left
+#'
+#' Like Rahn's algorithm but doesn't apply T-equivalence, so can be used to find
+#' the traditional "normal order" of a pitch-class set.
+#'
+#' @inheritParams tnprime
+#' @param mat An imput matrix whose columns are to be compared
+#' @inheritParams hook_optimize
+#'
+#' @returns Numeric vector which corresponds to once of the columns of `mat`
+#'
+#' @noRd
+pack_left <- function(mat, octave_equivalence=TRUE, edo=12, rounder=10) {
+  card <- dim(mat)[1]
+  tiny <- 10^(-1 * rounder)
+
+  for (i in card:1) {
+    optimal_value <- hook_optimize(mat[i, ], 
+                                   octave_equivalence=octave_equivalence, 
+                                   edo=edo,
+                                   rounder=rounder)
+    indices <- which(abs(mat[i, ] - optimal_value) < tiny)
+    mat <- mat[, indices]
+
+    if (length(indices)==1) {
+      return(mat)
+    }
+  }
+
+  mat[, 1]
+}
+
+
+#' First Note Tiebreaker
+#'
+#' See (2023, 418, ISBN: 9780190246013), step 5.
+#'
+#' @inheritParams pack_left
+#' 
+#' @returns A vector representing the set with optimal starting element
+#'
+#' @noRd
+hook_tiebreak <- function(mat, octave_equivalence=TRUE, edo=12, rounder=10) {
+  card <- dim(mat)[1]
+  reversed_mat <- mat[card:1, ]
+  res <- pack_left(reversed_mat, octave_equivalence=octave_equivalence, edo=edo, rounder=rounder)
+  res[card:1]
+}
+
+#' Hook's OPTIC normal forms
+#'
+#' Following Hook (2023, 416-18, ISBN: 9780190246013), calculates a normal
+#' form for the input `set` using any combination of OPTIC symmetries.
+#'
+#' This function is designed for flexibility in the `optic` parameter, not speed.
+#' In situations where you need to calculate a large number of OPTIC- or OPTC-normal
+#' forms, you should use `primeform()` or `tnprime()` respectively, which are considerably
+#' faster.
+#'
+#' @inheritParams tnprime
+#' @param optic String: the OPTIC symmetries to apply. Defaults to "opc".
+#'
+#' @returns Numeric vector with the desired normal form of `set`
+#'
+#' @examples
+#' # See Exercise 10.4.8 in Hook (2023, 420):
+#' eroica <- c(-25, -13, -6, -3, 0, 3)
+#' normal_form(eroica, optic="pti")
+#' normal_form(eroica, optic="op")
+#'
+#' # See Table 10.4.1 in Hook (2023, 417):
+#' alpha <- c(-5, -11, 14, 9, 14, 14, 2)
+#' num_symmetries <- sample(0:5, 1)
+#' random_symmetries <- sample(c("o", "p", "t", "i", "c"), num_symmetries)
+#' random_symmetries <- paste(random_symmetries, collapse="")
+#' print(random_symmetries)
+#' normal_form(alpha, optic=random_symmetries)
+#'
+#' @seealso [primeform()], [tnprime()], and [startzero()] for faster functions
+#'  dedicated to specific symmetry combinations
+#' @export
+# currently fails for hook's demo set under PI
+normal_form <- function(set, optic="opc", edo=12, rounder=10) {
+  if (length(set) == 0) {
+    return(numeric(0))
+  }
+
+  optic <- tolower(optic)
+  symmetries <- optic_choices(optic)
+  optc_only <- gsub("i", "", optic)
+  opc_only <- gsub("t", "", optc_only) 
+
+  if (symmetries["o"]) set <- fpmod(set, edo=edo, rounder=rounder)
+
+  if (symmetries["p"]) set <- sort(set)
+
+  if (symmetries["c"]) set <- c_fuse(set, rounder=rounder)
+
+  if (length(set)==1) {
+    if (symmetries["t"]) {
+      return(0)
+    }
+    if (symmetries["i"]) {
+      return(abs(set))
+    } else {
+      return(set)
+    }
+  }
+
+  if (symmetries["o"] && symmetries["p"]) {
+    modes <- sim(set, edo=edo, rounder=rounder)
+
+    # octave_equivalence should indeed be false here
+    # because multisets can have an octave span from first to last (not a unison!)
+    ideal_mode <- pack_left(modes, octave_equivalence=FALSE, edo=edo, rounder=rounder)
+    options <- sapply(set, tn, set=ideal_mode, sorted=FALSE, edo=edo, rounder=rounder)
+
+    option_matches <- function(opt, dig=rounder) {
+      length(setdiff(round(opt, digits=dig), round(set, digits=dig))) == 0
+    }
+
+    indices <- apply(options, 2, option_matches)
+    index <- which(indices==TRUE)
+
+    if (length(index) < 1) {
+      indices <- apply(options, 2, option_matches, dig=rounder+1)
+      index <- which(indices==TRUE)
+    }
+
+    set <- options[, index]
+  }
+
+  if (inherits(set, "matrix")) {
+    set <- hook_tiebreak(set, octave_equivalence=symmetries["o"], edo=edo, rounder=rounder)
+  }
+
+  if (symmetries["t"]) {
+    set <- startzero(set, optic=opc_only, edo=edo, rounder=rounder)
+  }
+
+  if (symmetries["i"]) {
+    # Implement most of Step 7
+    charm_set <- tni(set, 0, optic=opc_only, edo=edo, rounder=rounder)
+    charm_set <- normal_form(charm_set, optic=optc_only, edo=edo, rounder=rounder)
+    strange_and_charm <- cbind(set, charm_set)
+    snc_zero <- apply(strange_and_charm, 2, startzero, optic=opc_only, edo=edo, rounder=rounder)
+    packed_quark <- pack_left(snc_zero, octave_equivalence=FALSE, edo=edo, rounder=rounder)
+    matches_packing <- function(vec) isTRUE(all.equal(vec, packed_quark))
+    is_packed <- apply(snc_zero, 2, matches_packing)
+    set <- strange_and_charm[, is_packed]
+    if (inherits(set, "matrix")) {
+      set <- hook_tiebreak(set, octave_equivalence=symmetries["o"], edo=edo, rounder=rounder)
+    }    
+
+    # Implement "... and, if necessary, step 5"
+    if (!symmetries["p"]) {
+      set <- cbind(set, -1 * set)
+      if (symmetries["o"]) set <- fpmod(set, edo=edo, rounder=rounder)
+      set <- hook_tiebreak(set, octave_equivalence=symmetries["o"], edo=edo, rounder=rounder)  
+    }  
+  }
+
+  set
 }
 
 #' Prime form of a set using Rahn's algorithm
@@ -305,10 +583,10 @@ isym <- function(set, return_index=FALSE, edo=12, rounder=10) {
     return(TRUE) 
   }
 
-  setword <- asword(set, edo, rounder)
-  invsetword <- rev(setword)
+  stepword <- asword(set, edo, rounder)
+  invstepword <- rev(stepword)
 
-  test_mode <- function(i) isTRUE(all.equal(rotate(invsetword, i), setword))
+  test_mode <- function(i) isTRUE(all.equal(rotate(invstepword, i), stepword))
   symmetrical_rotations <- sapply(1:card, test_mode)
 
   if (return_index) {
@@ -464,12 +742,12 @@ sc_comp <- function(set, canon=c("tni", "tn"), edo=12, rounder=10) {
 
 #' Transpositional combination & pitch multiplication
 #'
-#' Cohn (1988) <doi:10.2307/745790> defines transpositional
+#' Cohn (1988, \doi{doi:10.2307/745790}) defines transpositional
 #' combination as a procedure that generates a pc-set as the union of two
 #' (or more) transpositions of some smaller set. `tc()` takes the small set
 #' and a vector of transposition levels, returning the larger pc-set that
 #' results. (Pierre Boulez referred to this procedure as pitch "multiplication",
-#' which Amiot (2016) <doi:10.1007/978-3-319-45581-5> shows to be not at
+#' which Amiot (2016, \doi{doi:10.1007/978-3-319-45581-5}) shows to be not at
 #' all fanciful, as a convolution of two pitch-class sets.)
 #'
 #' @inheritParams tnprime
