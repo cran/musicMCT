@@ -61,6 +61,7 @@ rbind(inverted_enharmonic, new_enharmonic)
 
 # Let's plot them:
 demo_scales <- cbind(demo_scales, inverted_enharmonic)
+
 tetra_plot(demo_scales, 
            "Location of 6 Reference Scales in the tc() Plane",
            pch=sapply(1:6, toString)) 
@@ -210,6 +211,7 @@ scalar_colors <- outer(x, y, Vectorize(color_from_point))
 # Create visuals
 color_palette <- c("aliceblue", palette.colors(26, palette="Polychrome 36"))
 oldpar <- par(bg="aliceblue")
+
 image(x, y, z=scalar_colors, col=color_palette,
       xlab="Height of Scale Degree 2", ylab="Height of Scale Degree 3")
 mtext(side=3, "26 Scalar Colors in the tc() Plane", font=2, line=1)
@@ -239,6 +241,7 @@ color_legend <- as.raster(matrix(rev(fig10_palette), ncol=1))
 ymin <- min(evenness_values[!is.na(evenness_values)])
 ymax <- max(evenness_values[!is.na(evenness_values)])
 plot(c(0, 1), c(ymin, ymax), type="n", axes=FALSE, xlab="", ylab="Evenness")
+
 rasterImage(color_legend, 0, ymin, 1, ymax)
 axis(2, at = round(seq(ymin, ymax, length.out=5), 2))
 
@@ -264,6 +267,7 @@ color_legend <- as.raster(matrix(rev(fig11_palette), ncol=1))
 ymin <- min(ratio_values[!is.na(ratio_values)])
 ymax <- max(ratio_values[!is.na(ratio_values)])
 plot(c(0, 1), c(ymin, ymax), type="n", axes=FALSE, xlab="", ylab="Brightness Ratio")
+
 rasterImage(color_legend, 0, ymin, 1, ymax)
 axis(2, at = round(seq(ymin, ymax, length.out=5), 2))
 
@@ -320,6 +324,7 @@ color_legend <- as.raster(matrix(rev(fig11_palette), ncol=1))
 ymin <- min(ratio_values2[!is.na(ratio_values)])
 ymax <- max(ratio_values2[!is.na(ratio_values)])
 plot(c(0, 1), c(ymin, ymax), type="n", axes=FALSE, xlab="", ylab="Brightness Ratio")
+
 rasterImage(color_legend, 0, ymin, 1, ymax)
 axis(2, at = round(seq(ymin, ymax, length.out=5), 2))
 

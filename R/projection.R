@@ -1,3 +1,109 @@
+#' Generate one point on arbitrary combination of hyperplanes
+#'
+#' Given a hyperplane arrangement (specified by `ineqmat`) and a subset
+#' of those hyperplanes (specified numerically as the `rows` of `ineqmat`),
+#' determine some point that lies on the intersection of those hyperplanes.
+#' If the chosen hyperplanes do not all intersect in at least one point,
+#' returns `NA`s and throws a warning. This function exists mostly for the
+#' sake of calculations about a hyperplane arrangement itself, not for
+#' musical applications: its results are often not very scale-like (e.g.,
+#' they often fail [optc_test()]).
+#'
+#' @param rows Integer vector: which rows of `ineqmat` should be taken
+#'   as hyperplanes defining the target flat?
+#' @inheritParams set_from_signvector
+#'
+#' @returns Numeric vector of length `card` which lies on the specified
+#'   hyperplanes. If the intersection of the hyperplanes is empty, 
+#'   throws a warning and returns a vector of `NA`s with length `card`.
+#'
+#' @examples
+#' # Works essentially like an inverse of whichsvzeroes():
+#' test_set <- sc(5, 32)
+#' whichsvzeroes(test_set)
+#' generated_point <- point_on_flat(c(5, 8, 10), card=5)
+#' whichsvzeroes(generated_point)
+#'
+#' # But note that the given point might lie on any face of the flat:
+#' signvector(test_set)
+#' signvector(generated_point)
+#'
+#' # Works for other hyperplane arrangements:
+#' point_on_flat(c(2, 3, 6), card=3, ineqmat="roth")
+#' point_on_flat(c(2, 4), card=4, ineqmat="black")
+#'
+#' # Not all combinations of hyperplanes admit a solution:
+#' try(point_on_flat(c(1, 2, 3), card=3, ineqmat="roth"))
+#'
+#' @seealso [match_flat()] and [populate_flat()] are intended for more 
+#'   concretely musical applications, returning a set on the chosen flat
+#'   which is similar to an input set.
+#' @export
+point_on_flat <- function(rows, card, ineqmat=NULL, edo=12, rounder=10) {
+  num_rows <- length(rows)
+  if (num_rows==0) {
+    return(stats::runif(card, 0, edo))
+  }
+  single_row <- num_rows == 1
+
+  ineqmat <- choose_ineqmat(edoo(card, edo=edo), ineqmat)
+  chosen_matrix <- ineqmat[rows, ]
+  if (single_row) chosen_matrix <- matrix(chosen_matrix, nrow=1)
+
+  flat_matrix <- chosen_matrix[, 1:card]
+  if (single_row) flat_matrix <- matrix(flat_matrix, nrow=1)
+
+  const_matrix <- edo * chosen_matrix[, card+1]
+
+  if (single_row) {
+    ech <- cbind(flat_matrix, const_matrix)
+    first_nonzero <- which(abs(ech) > 10^(-1*rounder))[1]
+    ech <- ech/ech[first_nonzero]
+  } else {
+    ech <- pracma::rref(cbind(flat_matrix, const_matrix))
+  }
+
+  cur_rank <- qr(ech)$rank
+  num_free_vars <- card-cur_rank
+
+  if (num_free_vars > 0) {
+    fixed_var_index <- pivot_columns(ech, rounder=rounder)
+    free_var_index <- setdiff(1:card, fixed_var_index)
+  } else {
+    free_var_index <- integer(0)
+    fixed_var_index <- 1:card
+  }
+
+  if (num_free_vars > 1) {
+    free_vars <- stats::runif(num_free_vars, 0, 1)
+    new_consts <- ech[, free_var_index] %*% free_vars
+    new_consts <- (-1 * ech[, card+1]) - new_consts
+  } else {
+    free_vars <- rep(0, num_free_vars)
+    new_consts <- -1 * ech[, card+1]
+  }
+  new_consts <- new_consts[1:cur_rank]
+
+  inverse_mat <- tryCatch(
+    solve(ech[1:cur_rank, fixed_var_index[1:cur_rank]]),
+    error = function(e) {
+      warning("Intersection of specified hyperplanes is empty.", call.=FALSE)
+      return("No solution")
+    }
+  )
+
+  res <- rep(NA, card)
+  if (!inherits(inverse_mat, "matrix") && inverse_mat == "No solution") {
+    return(res)
+  }
+
+  fixed_vars <- inverse_mat %*% new_consts
+
+  res[fixed_var_index] <- fixed_vars
+  res[free_var_index] <- free_vars
+  res
+}
+
 #' Closest point on a given flat
 #'
 #' Projects a scale onto the nearest point that lies on a target flat
@@ -46,28 +152,35 @@ project_onto <- function(set,
                          start_zero=TRUE,
                          edo=12, 
                          rounder=10) {
-  if (length(target_rows)==0) {
-    return(set)
-  }
-  card <- length(set)
-  ineqmat <- choose_ineqmat(set, ineqmat)
+    if (length(target_rows) == 0) {
+        return(set)
+    }
+    card <- length(set)
+    ineqmat <- choose_ineqmat(set, ineqmat)
 
-  central_set <- coord_to_edo(set, edo=edo)
+    offset_vector <- point_on_flat(rows=target_rows, 
+                                   card=card, 
+                                   ineqmat=ineqmat, 
+                                   edo=edo, 
+                                   rounder=rounder)
+    if (is.na(sum(offset_vector))) {
+      return(offset_vector)
+    }
 
-  A <- t(ineqmat[target_rows, 1:card])
-  if (dim(A)[1] == 1) A <- t(A)
+    displaced_set <- set - offset_vector
 
-  projection_matrix <- solve(t(A) %*% A)
-  projection_matrix <- A %*% projection_matrix %*% t(A)
-  n <- dim(projection_matrix)[1]
-  projection_matrix <- diag(n) - projection_matrix
+    A <- t(ineqmat[target_rows, 1:card])
+    if (dim(A)[1] == 1) 
+        A <- t(A)
+    projection_matrix <- solve(t(A) %*% A)
+    projection_matrix <- A %*% projection_matrix %*% t(A)
+    n <- dim(projection_matrix)[1]
+    projection_matrix <- diag(n) - projection_matrix
+    res <- projection_matrix %*% displaced_set
+    res <- as.vector(res + offset_vector)
 
-  res <- projection_matrix %*% central_set
-  res <- as.numeric(coord_from_edo(res, edo=edo))
-
-  if (start_zero) res <- startzero(res, edo=edo, sorted=FALSE)
-
-  res
+    if (start_zero) res <- startzero(res, edo = edo, optic="")
+    res
 }
 
 #' Find a basis for a flat's orthogonal complement

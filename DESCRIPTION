@@ -1,6 +1,6 @@
 Package: musicMCT
 Title: Analyze the Structure of Musical Scales
-Version: 0.3.0
+Version: 0.4.0
 Authors@R: 
     person("Paul", "Sherrill", , "paul.sherrill@utah.edu", role = c("aut", "cre","cph"), comment = c(ORCID = "0009-0002-3617-016X"))
 Description: Analysis of musical scales (& modes, grooves, etc.) in the vein of
@@ -18,7 +18,7 @@ Encoding: UTF-8
 RoxygenNote: 7.3.3
 Depends: R (>= 3.5)
 LazyData: true
-Imports: igraph, utils, stats, graphics
+Imports: graphics, igraph, pracma, stats, utils,
 Suggests: grDevices, knitr, rmarkdown, testthat (>= 3.0.0), vdiffr,
         withr,
 VignetteBuilder: knitr
@@ -27,9 +27,9 @@ URL: https://satbq.github.io/musicMCT/,
 BugReports: https://github.com/satbq/musicMCT/issues
 Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2025-11-03 02:29:39 UTC; vorns
+Packaged: 2026-02-27 21:37:53 UTC; vorns
 Author: Paul Sherrill [aut, cre, cph] (ORCID:
     <https://orcid.org/0009-0002-3617-016X>)
 Maintainer: Paul Sherrill <paul.sherrill@utah.edu>
 Repository: CRAN
-Date/Publication: 2025-11-03 03:20:08 UTC
+Date/Publication: 2026-02-27 22:10:02 UTC

@@ -1,3 +1,45 @@
+test_that("point_on_flat works with default params", {
+  expect_equal(signvector(point_on_flat(1, 4))[1], 0)
+  expect_equal(signvector(point_on_flat(2, 4))[2], 0)
+  expect_equal(signvector(point_on_flat(3, 4))[3], 0)
+  expect_equal(signvector(point_on_flat(4, 4))[4], 0)
+  expect_equal(signvector(point_on_flat(5, 4))[5], 0)
+  expect_equal(signvector(point_on_flat(6, 4))[6], 0)
+
+  expect_equal(whichsvzeroes(point_on_flat(c(1, 6), 4)),
+               c(1, 6, 8))
+  expect_equal(whichsvzeroes(point_on_flat(c(1, 7), 4)),
+               c(1, 7))
+  expect_equal(whichsvzeroes(point_on_flat(c(2, 7), 4)),
+               c(2, 5, 7, 8))
+
+  expect_equal(startzero(point_on_flat(c(1, 2), 3), optic=""),
+               edoo(3))
+  expect_equal(startzero(point_on_flat(c(1, 2, 3), 3), optic=""),
+               edoo(3))
+})
+
+test_that("point_on_flat works for other ineqmats", {
+  expect_equal(point_on_flat(c(2, 4), card=4, ineqmat="black")[c(2, 4)],
+               c(3, 9))
+  expect_equal(point_on_flat(c(2, 4), card=4, ineqmat="black", edo=16)[c(2, 4)],
+               c(4, 12))
+
+  pastel_trichord <- point_on_flat(4, card=3, ineqmat="pastel")
+  expect_equal(pastel_trichord[2]-pastel_trichord[1], 4)
+
+  roth_trichord <- point_on_flat(c(2, 3), card=3, ineqmat="roth")
+  expect_equal(whichsvzeroes(roth_trichord, ineqmat="roth"), 
+               c(2, 3, 6))
+
+  expect_warning(point_on_flat(c(1, 2, 3), card=3, ineqmat="roth"))
+  expect_equal(suppressWarnings(point_on_flat(c(1, 2, 3), card=3, ineqmat="roth")),
+               rep(NA, 3))
+
+  roth4_327 <- point_on_flat(c(6, 7, 9), card=4, ineqmat="roth")
+  expect_equal(whichsvzeroes(roth4_327, ineqmat="roth"), c(6, 7, 9))
+})
+
 test_that("independent_normals works", {
   expect_equal(independent_normals(integer(0), ineqmats[[3]]), integer(0))
   expect_equal(independent_normals(2, ineqmats[[3]]), 2)
@@ -36,6 +78,15 @@ test_that("project_onto works with default ineqmat", {
 test_that("project_onto works with custom edo", {
   expect_equal(project_onto(c(0, 2, 6, 9), 2, edo=17), c(0, 2.5, 6.5, 9))
   expect_equal(project_onto(c(0, 2, 6, 9), c(2,3), edo=17), c(0, 3.1, 6.2, 9.3))
+})
+
+test_that("project_onto works with named ineqmats", {
+  expect_equal(suppressWarnings(project_onto(c(0, 5, 6), 
+                                             c(1, 2, 3), 
+                                             ineqmat="roth")), 
+               rep(NA, 3))
+
+  expect_equal(project_onto(j(1, 3, 5), 4, ineqmat="pastel")[2], 4)
 })
 
 test_that("match_flat works", {

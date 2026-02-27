@@ -1,3 +1,29 @@
+# musicMCT 0.4.0
+## New functions
+* New `move_to_hyperplane()` finds the point where a chosen line and hyperplane intersect.
+* New `point_on_flat()` generates a concrete point on any given flat of a hyperplane arrangement.
+
+## Updates to function `ineqsym()`
+* The function can now return a permutation matrix rather than a scale, which it does if `set` is `NULL`. 
+  New parameter `card` goes along with this change: it is necessary to specify the size of the permutation
+  matrix if `set` is `NULL`.
+* Default value of parameter `set` is now `NULL`.
+* Change to the way the parameter `a` is interpreted. Essentially it is now the inverse (mod `card`) of the previous
+  implementation of `a`. The new method enhances consistency with other standards and with the
+  permutation-matrix view of the function.
+* Changes to the internal logic of the function, emphasizing the role of permutation matrices in implementing
+  the symmetries of the space.
+
+## Bug fixes and minor functionality updates
+* Fixes for `clampitt_q()`, so that it gives correct results when `set` includes transpositionally symmetrical
+  subsets or doubled notes.
+* `ianring()` gains `is_interactive` parameter which allows explicit control over whether the function
+   opens a browser window (mainly to disable the browser during tests).
+* `project_onto()` now works for hyperplane arrangements that are not central, such as those from
+  `make_roth_ineqmat()` and `make_rosy_ineqmat()`.
+* `scale_palette()` gains an `ineqmat` parameter, which improves completeness of results for arrangements
+  other than the modal color theory arrangement.
+
 # musicMCT 0.3.0
 * `brightness_comparisons()` and `brightnessgraph()` gain a `goal` parameter that allows voice-leading brightness
   relationships between different sets to be studied.
@@ -22,7 +48,7 @@
 * Set theory functions including `tn()`, `tni()`, `startzero()`, and so on gain an `optic` parameter, which allows the
   user to specify the OPTIC symmetries to consider.
 
-## Anaglyph Arrangments
+## Anaglyph Arrangements
 * New `make_anaglyph_ineqmat()` allows construction of a new family of hyperplane arrangements
   (anaglyph arrangements) which study voice leadings between sets of different set classes.
 * New `anazero_fingerprint()` provides granular information about the types of hyperplanes that a 

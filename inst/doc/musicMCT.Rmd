@@ -36,8 +36,8 @@ output of the function. Ignore the `[1]`, which just indicates that you're
 seeing the beginning of the output. The ic-vector is 2 5 4 3 6 1 as we'd expect.
 
 The main purpose of the package, however, is not to reproduce traditional pc-set theory
-but to let us explore the geometry of musical scales described in "Modal Color Theory" 
-(Sherrill 2025, *Journal of Music Theory* 69/1: 1-49). As that article explains, 
+but to let us explore the geometry of musical scales described in my article
+["Modal Color Theory."](https://doi.org/10.1215/00222909-11595194) As the article explains, 
 seven-note scales live in a 6-dimensional geometry populated by 1,824,229 qualitatively 
 distinct scalar structures. I'm happy to calculate an `ivec()` by hand, but we're
 going to need computers to explore such a complicated space!
@@ -151,7 +151,7 @@ round(overtone_scale, digits=0)
 ```
 
 Wait a second, that's not even the acoustic scale! It has two consecutive semitones (6, 7, 8) and
-actually represents sc7-33, the "whole-tone plus one" scale. What's going on here!?
+actually represents sc7-33, the "whole-tone plus one" scale. What's going on here?
 
 [Tymoczko (2013, 130)](https://doi.org/10.1080/17459737.2013.818724) explains that there's really 
 no such thing as *the* quantization of the `overtone_scale`. There are 7 different quantizations. The
@@ -244,8 +244,7 @@ These vectors are the same, so MCT considers the tetrachords to have the same sc
 (0-1-2 and 0-2-4) and then have a larger leap (2-7 and 4-8).
 
 For heptachords, the relevant `ineqmat` has 42 rows, so the space of scale structures is considerably more complicated. Generally 
-you wouldn't learn a lot from trying to read sign vectors directly--musicMCT has more human-readable functions that will help you
-interpret them--but let's take a gander at them for the acoustic and overtone scales:
+you wouldn't learn a lot from trying to read sign vectors directly; musicMCT has more human-readable functions that will help you interpret them. Still, in this case, let's take a look at the sign vectors of the acoustic and overtone scales:
 
 ```{r}
 signvector(acoustic_scale)
@@ -340,7 +339,7 @@ apply(final_quantizations, 2, howfree)
 ```
 
 All of these are much less free to vary than the `overtone_scale`! All but sc7-31 can only vary along their line of saturation ("Modal Color Theory,"
-20), and sc7-31 is only a little bit more flexible. This is a consequence of quantizing to twelve-tone equal temperament, which simply doesn't have
+20), and sc7-31 is just a little bit more flexible. This is a consequence of quantizing to twelve-tone equal temperament, which simply doesn't have
 enough distinct notes to accommodate more flexible heptachords. We can check the degrees of freedom of all 38 heptachordal set classes in 12edo:
 
 ```{r}
@@ -516,6 +515,11 @@ which lets us visualize the voice-leading relationships between a scale's modes 
 Theory," 7-11). Using musicMCT we can make quick mock-ups of brightness graphs with `brightnessgraph()`. First let's take a look at the `acoustic_scale`:
 
 ```{r, fig.width=5, fig.height=5, fig.fullwidth=TRUE}
+#| fig.alt: >
+#|   A graph repesenting relationships between modes of the acoustic scale.
+#|   Each node of the graph represents a mode of the scale. Arrows point from darker
+#|   modes to brighter modes. The graph for the acoustic scale includes many arrows,
+#|   arranged nearly symmetrically in a way that demonstrates the regularity of its construction.
 brightnessgraph(acoustic_scale)
 ```
 
@@ -537,6 +541,11 @@ at the middle, giving the graph a diamond-like shape.
 Let's now take a look at the brightness graph for the `overtone_scale`:
 
 ```{r, fig.width=5, fig.height=5, fig.fullwidth=TRUE}
+#| fig.alt: >
+#|   A brightness graph for the overtone scale, which shows much less regularity
+#|   than the graph for the acoustic scale. The brightest mode is number 7, while
+#|   the other six modes are at random-seeming heights beneath it. The only arrows
+#|   in the graph are ones that point from the darker modes to mode 7.
 brightnessgraph(overtone_scale, numdigits=1, show_sums=FALSE)
 ```
 
@@ -553,6 +562,12 @@ Recall that one of the approximations we tested above was a quantization of the 
 into 30 steps. Let's see what the brightness graph of that approximation looks like:
 
 ```{r, fig.width=5, fig.height=5, fig.fullwidth=TRUE}
+#| fig.alt: >
+#|   A brightness graph for the quantized version of the overtone scale.
+#|   Its geometric layout exactly matches the graph for the overtone scale.
+#|   The only difference between the two graphs is in the specific pitch values
+#|   of the scales: the current brightness graph uses only integers, as a result
+#|   of the quantization that produced the scale.
 brightnessgraph(quantized_overtone_color$set, edo=30, show_sums=FALSE)
 ```
 
@@ -570,6 +585,11 @@ considerable variety from one to the next. This gives a glimpse of the range of 
 change the number `4` in the line of code below to any value from `1` to `7` to check the different scales:
 
 ```{r, fig.width=5, fig.height=5, fig.fullwidth=TRUE}
+#| fig.alt: >
+#|   A brightness graph for the scale 0 3 4 6 8 9 10.
+#|   It has more arrows than the graph for the overtone scale,
+#|   but it arranges them in a less regular pattern than the graph
+#|   for the acoustic scale.
 brightnessgraph(final_quantizations[, 4])
 ```
 
@@ -577,16 +597,21 @@ Finally, let's take a look at the brightness graph for our `best_simple_approxim
 pitch-classes in each mode, since without manual tweaking they overlap to the point of illegibility:
 
 ```{r, fig.width=5, fig.height=5, fig.fullwidth=TRUE}
+#| fig.alt: >
+#|   A brightness graph for the best simple approximation scale.
+#|   It has the same nodes and arrows as the brightness graph for the
+#|   overtone scale, but the 6 dark modes are in a neat line rather than
+#|   being positioned in a haphazard way.
 brightnessgraph(best_simple_approximation, show_pitches=FALSE, show_sums=FALSE)
 ```
 
 This feels right to me. At a glance, it's a lot like the graph for the `overtone_scale` but without all the mess. All the modes beneath VII
 are now neatly lined up on a single row at the bottom. That's the visual equivalent of our search for regularity and color adjacency in the 
-previous section. This is something I like about brightness graphs: they summarize, in a picture or two, ideas that one could spend several
-thousand words developing.
+previous section. This is something I like about brightness graphs: they summarize, in a picture or two, ideas that take several
+thousand words to describe.
 
 
 ---
 
 
-**Last updated:** 28 May 2025
+**Last updated:** 17 November 2025
