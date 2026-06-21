@@ -1,3 +1,14 @@
+# musicMCT 0.5.0
+* New vignette (mct_symmetries.Rmd) explains the use of `ineqsym()` and related functions.
+* `ineqsym()` now returns the correct permutation matrix when `involution=TRUE`. Previously, the
+  `involution` parameter affected returned sets but not returned permutation matrices.
+* `make_infrared_ineqmat()` now defaults to `TRUE` rather than `FALSE` for its `include_wraparound`
+   argument.
+* New `monochrome_vl()` detects instances where the voice leading between two modes of a scale cannot be decomposed
+  by passing through some mode of a given contrasting scale.
+* New `vl_signvector()` is a wrapper for `signvector()` that interprets inputs as voice leadings
+  rather than scales.
+
 # musicMCT 0.4.0
 ## New functions
 * New `move_to_hyperplane()` finds the point where a chosen line and hyperplane intersect.

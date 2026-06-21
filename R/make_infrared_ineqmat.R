@@ -3,9 +3,9 @@
 #' The "infrared" hyperplane arrangements are in some sense 
 #' an extension of the "pastel" arrangements to be more like the
 #' Rothenberg arrangements. (This is the sense of the color-conceit
-#' name for the arrangments: they contain red-like colors that we 
+#' name for the arrangements: they contain red-like colors that we 
 #' don't see in ordinary use of modal color theory.) That is, the
-#' infrared arrangment for a given color contains all the pastel hyperplanes
+#' infrared arrangement for a given color contains all the pastel hyperplanes
 #' (except those filtered out when `include_wraparound=FALSE`),
 #' plus additional ones that make comparisons between generic intervals
 #' of different sizes (as the Rothenberg arrangements do). Unlike the
@@ -22,7 +22,7 @@
 #'
 #' @inheritParams makeineqmat
 #' @param include_wraparound Boolean: should hyperplanes that involve
-#'   intervals that wrap around the octave be included? Defaults to `FALSE`.
+#'   intervals that wrap around the octave be included? Defaults to `TRUE`.
 #'
 #' @returns A matrix with `card+1` columns and `k` rows (where `k` is the
 #'   number of hyperplanes in the arrangement). When `include_wraparound=TRUE`,
@@ -33,7 +33,7 @@
 #' # pastel arrangements:
 #' make_pastel_ineqmat(3)
 #' make_infrared_ineqmat(3)
-#' make_infrared_ineqmat(3, include_wraparound=TRUE)
+#' make_infrared_ineqmat(3, include_wraparound=FALSE)
 #'
 #' # In general, infrared arrangements are more complicated than pastel:
 #' make_pastel_ineqmat(4)
@@ -42,7 +42,7 @@
 #' @seealso [make_pastel_ineqmat()] and [make_roth_ineqmat()]
 #'
 #' @export
-make_infrared_ineqmat <- function(card, include_wraparound=FALSE) {
+make_infrared_ineqmat <- function(card, include_wraparound=TRUE) {
   if (card < 3) {
     return(make_white_ineqmat(1+include_wraparound))
   }

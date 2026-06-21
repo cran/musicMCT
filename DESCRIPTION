@@ -1,6 +1,6 @@
 Package: musicMCT
 Title: Analyze the Structure of Musical Scales
-Version: 0.4.0
+Version: 0.5.0
 Authors@R: 
     person("Paul", "Sherrill", , "paul.sherrill@utah.edu", role = c("aut", "cre","cph"), comment = c(ORCID = "0009-0002-3617-016X"))
 Description: Analysis of musical scales (& modes, grooves, etc.) in the vein of
@@ -27,9 +27,9 @@ URL: https://satbq.github.io/musicMCT/,
 BugReports: https://github.com/satbq/musicMCT/issues
 Config/testthat/edition: 3
 NeedsCompilation: no
-Packaged: 2026-02-27 21:37:53 UTC; vorns
+Packaged: 2026-06-21 06:14:25 UTC; vorns
 Author: Paul Sherrill [aut, cre, cph] (ORCID:
     <https://orcid.org/0009-0002-3617-016X>)
 Maintainer: Paul Sherrill <paul.sherrill@utah.edu>
 Repository: CRAN
-Date/Publication: 2026-02-27 22:10:02 UTC
+Date/Publication: 2026-06-21 06:40:02 UTC

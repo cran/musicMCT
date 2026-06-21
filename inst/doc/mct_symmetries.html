@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Symmetries of Hyperplane Arrangements and ineqsym()</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Symmetries of Hyperplane Arrangements and
+ineqsym()</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(musicMCT)</span></code></pre></div>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>This vignette shows how to use musicMCT to work with the concepts
+introduced in the paper <a href="https://doi.org/10.1007/978-3-032-27827-2_5">“Symmetries of the
+Modal Color Theory Hyperplane Arrangements.”</a> It will introduce
+relevant tools in an order that roughly corresponds to the paper’s
+organization. (Sections are numbered to correspond with the sections of
+the paper, too.) I’ve tried to write it to be accessible for readers
+coming to musicMCT from “Symmetries,” so it introduces some basic
+aspects of R syntax that might be useful for applications of the
+paper.</p>
+<div id="scales-intervals-etc." class="section level2">
+<h2>1.2: Scales, intervals, etc.</h2>
+<p>R is a 1-indexed language, so the “tonic” of a scale is denoted by
+<span class="math inline">\(\hat{1}\)</span> rather than by <span class="math inline">\(\hat{0}\)</span> as in Definition 1 of
+“Symmetries.” This is mathematically inconvenient, but at least it
+aligns well with conventional music theory.</p>
+<p>Working in R, generally we will want to consider an n-note periodic
+<strong>scale</strong> as represented by a tuple in <span class="smallcaps">cpitch</span><span class="math inline">\(^n\)</span>,
+along the lines of Definition 3’s discussion. A scale can be entered
+directly in terms of its pitch content using the following syntax:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>blues <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">10</span>)</span></code></pre></div>
+<p>We will use this six-note blues scale, <span class="math inline">\((C, E\flat, F, F\sharp, G, B\flat)\)</span>, as an
+example throughout this discussion. There are, however, other ways to
+specify a scale, such as from its description in terms of its relative
+step sizes or as a maximally even scale in some cardinality:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>double_harmonic <span class="ot">&lt;-</span> <span class="fu">realize_stepword</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">1</span>))</span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>blackkey_pentatonic <span class="ot">&lt;-</span> <span class="fu">maxeven</span>(<span class="dv">5</span>, <span class="dv">12</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>all_interval_tetrachord <span class="ot">&lt;-</span> <span class="fu">sc</span>(<span class="dv">4</span>, <span class="dv">29</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="fu">print</span>(double_harmonic)</span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a><span class="co">#&gt; [1]  0  1  4  5  7  8 11</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a><span class="fu">print</span>(blackkey_pentatonic)</span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co">#&gt; [1] 0 2 4 7 9</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a><span class="fu">print</span>(all_interval_tetrachord)</span>
+<span id="cb3-10"><a href="#cb3-10" tabindex="-1"></a><span class="co">#&gt; [1] 0 1 3 7</span></span></code></pre></div>
+<p>We can access an individual scale degree of a scale as follows:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>blackkey_pentatonic[<span class="dv">3</span>]</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="co">#&gt; [1] 4</span></span></code></pre></div>
+<p>This tells us that <span class="math inline">\(\hat{3}\)</span> of
+the familiar pentatonic scale is a major third above the tonic.</p>
+<p>The coordinate system denoted by <span class="math inline">\(\Phi_n\)</span> (Definition 4) is realized by
+<code>coord_to_edo()</code>, named because it shifts an input to the
+<strong>coord</strong>inate system where the <strong>e</strong>qual
+<strong>d</strong>ivision of the <strong>o</strong>ctave is the origin.
+Compare Example 3 to the following code block:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a>c_major <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">coord_to_edo</span>(c_major)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co">#&gt; [1]  0.0000000  0.2857143  0.5714286 -0.1428571  0.1428571  0.4285714  0.7142857</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a><span class="fu">coord_to_edo</span>(blues)</span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a><span class="co">#&gt; [1]  0  1  1  0 -1  0</span></span></code></pre></div>
+<p>The inverse function is given by <code>coord_from_edo()</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a>cis_diminished <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="fu">coord_from_edo</span>(cis_diminished)</span>
+<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="co">#&gt; [1] 1 4 7</span></span></code></pre></div>
+<p>The perfectly even scale which serves as the origin for <span class="math inline">\(\Phi_n\)</span> can be created with
+<code>edoo()</code>, whose name stands for “<strong>e</strong>qual
+<strong>d</strong>ivision of the <strong>o</strong>ctave
+<strong>o</strong>rigin”:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>augmented_triad <span class="ot">&lt;-</span> <span class="fu">edoo</span>(<span class="dv">3</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>equiheptatonic_scale <span class="ot">&lt;-</span> <span class="fu">edoo</span>(<span class="dv">7</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fu">print</span>(augmented_triad)</span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a><span class="co">#&gt; [1] 0 4 8</span></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a><span class="fu">print</span>(equiheptatonic_scale)</span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a><span class="co">#&gt; [1]  0.000000  1.714286  3.428571  5.142857  6.857143  8.571429 10.285714</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a><span class="co"># edoo(n) does look like the origin after applying coord_to_edo():</span></span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a><span class="fu">coord_to_edo</span>(equiheptatonic_scale)</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a><span class="co">#&gt; [1] 0 0 0 0 0 0 0</span></span></code></pre></div>
+<p>Given a generic interval <span class="math inline">\(g\)</span> and a
+scale degree <span class="math inline">\(\hat{i}\)</span>, the specific
+interval <span class="math inline">\(g\)</span> scale steps above <span class="math inline">\(\hat{i}\)</span> can be calculated as follows:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>g <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>i <span class="ot">&lt;-</span> <span class="dv">4</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="fu">sim</span>(blues)[g<span class="sc">+</span><span class="dv">1</span>, i]</span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="co">#&gt; [1] 4</span></span></code></pre></div>
+<p>This tells us that interval spanned by two generic steps above scale
+degree <span class="math inline">\(\hat{4}\)</span> in the
+<code>blues</code> scale is 4 semitones large. (Remember that, in R,
+scale degrees start from <span class="math inline">\(\hat{1}\)</span>
+rather than <span class="math inline">\(\hat{0}\)</span>.)</p>
+</div>
+<div id="hyperplane-arrangements" class="section level2">
+<h2>1.3: Hyperplane arrangements</h2>
+<p>For a given <span class="math inline">\(n\)</span>, the hyperplane
+arrangement <span class="math inline">\(\mathcal{M}_n\)</span> described
+by Definition 6 can be accessed in R via the function
+<code>getineqmat()</code>. The “ineqmat” in the function’s name
+abbreviates the phrase <strong>ineq</strong>uality
+<strong>mat</strong>rix. The hyperplanes of <span class="math inline">\(\mathcal{M}_n\)</span> are generally referred to
+as “inequalities” or <code>ineq</code>s in musicMCT because they are
+thought of as representing inequalities in the sizes of scalar
+intervals, as described on pp. 17–19 of “Modal Color Theory.”</p>
+<p>For instance, the tetrachordal arrangement <span class="math inline">\(\mathcal{M}_4\)</span> is defined by the following
+matrix:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>tetrachord_arrangement <span class="ot">&lt;-</span> <span class="fu">getineqmat</span>(<span class="dv">4</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">print</span>(tetrachord_arrangement)</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
+<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#&gt; [1,]   -1    2   -1    0    0</span></span>
+<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#&gt; [2,]   -1    1    1   -1    0</span></span>
+<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#&gt; [3,]    0   -1    2   -1    0</span></span>
+<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#&gt; [4,]   -2    1    0    1   -1</span></span>
+<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#&gt; [5,]   -1   -1    1    1   -1</span></span>
+<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#&gt; [6,]   -1    0   -1    2   -1</span></span>
+<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#&gt; [7,]   -2    0    2    0   -1</span></span>
+<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#&gt; [8,]    0   -2    0    2   -1</span></span></code></pre></div>
+<p>Excluding the last column, each row of the matrix contains the normal
+vector for some hyperplane <span class="math inline">\(H^g_{i,
+j}\)</span>. The final column contains constants that translate the
+hyperplanes so that they intersect at the equal division of the octave.
+(The package musicMCT is designed to take inputs represented as pitch
+sets, not using <span class="math inline">\(\Phi_n\)</span>’s coordinate
+system. The matrix needs its last column to make this work.)</p>
+<p>Here is Example 5 realized in musicMCT:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a>dom7 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">10</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">coord_to_edo</span>(dom7)</span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a>hyperplane_v <span class="ot">&lt;-</span> tetrachord_arrangement[<span class="dv">7</span>, ]</span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="fu">print</span>(hyperplane_v)</span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#&gt; [1] -2  0  2  0 -1</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co"># Let&#39;s leave off the last column:</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a>hyperplane_v <span class="ot">&lt;-</span> hyperplane_v[<span class="sc">-</span><span class="dv">5</span>]</span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="fu">print</span>(hyperplane_v)</span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#&gt; [1] -2  0  2  0</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co"># Now we can take the dot product of v and x as in the example:</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a>hyperplane_v <span class="sc">%*%</span> x</span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#&gt;      [,1]</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#&gt; [1,]    2</span></span></code></pre></div>
+<p>Although this is not discussed in “Symmetries,” musicMCT has a
+function that performs calculations like Example 5, comparing an input
+set to all the hyperplanes in <span class="math inline">\(\mathcal{M}_n\)</span>. This function,
+<code>signvector()</code> returns only signs (<code>-1</code>,
+<code>0</code>, and <code>1</code>) rather than specific values (like
+the value 2 in Example 2). This is because we generally only care about
+the relative position of a set to a hyperplane, not its absolute
+distance. The sign vector for the chord in Example 5 is:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a><span class="fu">signvector</span>(dom7)</span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a><span class="co">#&gt; [1] 1 1 0 1 1 1 1 0</span></span></code></pre></div>
+<p>The seventh value in the above sign vector is positive, corresponding
+to our observation above that <span class="math inline">\(\vec{v} \cdot
+\vec{x} &gt; 0\)</span>. We look at the seventh position in the sign
+vector because <code>hyperplane_v</code> happens to be given as the
+seventh row in <code>tetrachord_arrangement</code>’s arbitrary ordering
+of the hyperplanes.</p>
+<p>In Example 4, the hyperplane <span class="math inline">\(H^2_{0,
+3}\)</span> happens to be the twenty-third row in the matrix for <span class="math inline">\(\mathcal{M}_7\)</span>. Thus we can confirm the
+result <span class="math inline">\(\vec{v} \cdot \vec{x} = 0\)</span>
+from Example 4 for the major scale by:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">signvector</span>(c_major)[<span class="dv">23</span>]</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+</div>
+</div>
+<div id="symmetries-of-mct-arrangements" class="section level1">
+<h1>2: Symmetries of MCT Arrangements</h1>
+<p>The symmetries of <span class="math inline">\(\mathcal{M}_n\)</span>
+described in this section are realized by the function
+<code>ineqsym()</code>. The function’s name is an abbreviation of
+<strong>ineq</strong>uality-matrix <strong>sym</strong>metry.</p>
+<p>For given <span class="math inline">\(a\)</span>, <span class="math inline">\(b\)</span>, and <span class="math inline">\(n\)</span>, we can use <code>ineqsym()</code> to
+realize the linear transformations defined in Definition 8. The value
+<span class="math inline">\(n\)</span> is specified for
+<code>ineqsym()</code> by the argument <code>card</code>, since it
+determines the <strong>card</strong>inality of the scales to be
+considered. Given inputs for its arguments <code>a</code>,
+<code>b</code>, and <code>card</code>, <code>ineqsym()</code> will
+return the permutation matrix <span class="math inline">\(P_{\pi}\)</span> corresponding to the linear
+transformation <span class="math inline">\(\Pi\)</span>. For instance,
+here are the permutation matrices from Example 6:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="co"># P_theta:</span></span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a><span class="fu">ineqsym</span>(<span class="at">a=</span><span class="dv">2</span>, <span class="at">b=</span><span class="dv">0</span>, <span class="at">card=</span><span class="dv">5</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
+<span id="cb13-4"><a href="#cb13-4" tabindex="-1"></a><span class="co">#&gt; [1,]    1    0    0    0    0</span></span>
+<span id="cb13-5"><a href="#cb13-5" tabindex="-1"></a><span class="co">#&gt; [2,]    0    0    0    1    0</span></span>
+<span id="cb13-6"><a href="#cb13-6" tabindex="-1"></a><span class="co">#&gt; [3,]    0    1    0    0    0</span></span>
+<span id="cb13-7"><a href="#cb13-7" tabindex="-1"></a><span class="co">#&gt; [4,]    0    0    0    0    1</span></span>
+<span id="cb13-8"><a href="#cb13-8" tabindex="-1"></a><span class="co">#&gt; [5,]    0    0    1    0    0</span></span>
+<span id="cb13-9"><a href="#cb13-9" tabindex="-1"></a></span>
+<span id="cb13-10"><a href="#cb13-10" tabindex="-1"></a><span class="co"># P_psi:</span></span>
+<span id="cb13-11"><a href="#cb13-11" tabindex="-1"></a><span class="fu">ineqsym</span>(<span class="at">a=</span><span class="dv">2</span>, <span class="at">b=</span><span class="dv">1</span>, <span class="at">card=</span><span class="dv">5</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
+<span id="cb13-13"><a href="#cb13-13" tabindex="-1"></a><span class="co">#&gt; [1,]    0    0    1    0    0</span></span>
+<span id="cb13-14"><a href="#cb13-14" tabindex="-1"></a><span class="co">#&gt; [2,]    1    0    0    0    0</span></span>
+<span id="cb13-15"><a href="#cb13-15" tabindex="-1"></a><span class="co">#&gt; [3,]    0    0    0    1    0</span></span>
+<span id="cb13-16"><a href="#cb13-16" tabindex="-1"></a><span class="co">#&gt; [4,]    0    1    0    0    0</span></span>
+<span id="cb13-17"><a href="#cb13-17" tabindex="-1"></a><span class="co">#&gt; [5,]    0    0    0    0    1</span></span></code></pre></div>
+<p>In general, we do not need to work directly with such matrices in R.
+<code>ineqsym()</code> can also take a scale directly as an input, with
+the argument <code>set</code>, returning the image of the scale under
+<span class="math inline">\(\Pi\)</span>. For instance, here are the
+transformations of the pentatonic scale from Example 6:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="co"># Using the transformation Theta:</span></span>
+<span id="cb14-2"><a href="#cb14-2" tabindex="-1"></a><span class="fu">ineqsym</span>(<span class="at">set=</span>blackkey_pentatonic, <span class="at">a=</span><span class="dv">2</span>, <span class="at">b=</span><span class="dv">0</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" tabindex="-1"></a><span class="co">#&gt; [1] 0.0 2.2 4.4 6.6 8.8</span></span>
+<span id="cb14-4"><a href="#cb14-4" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" tabindex="-1"></a><span class="co"># Using the transformation Psi:</span></span>
+<span id="cb14-6"><a href="#cb14-6" tabindex="-1"></a><span class="fu">ineqsym</span>(<span class="at">set=</span>blackkey_pentatonic, <span class="at">a=</span><span class="dv">2</span>, <span class="at">b=</span><span class="dv">1</span>)</span>
+<span id="cb14-7"><a href="#cb14-7" tabindex="-1"></a><span class="co">#&gt; [1] -0.8  2.4  4.6  6.8  9.0</span></span></code></pre></div>
+<p>If arguments are not explicitly named, <code>ineqsym()</code> assumes
+that they are intended as <code>set</code>, <code>a</code>, and
+<code>b</code> in that order:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>image_of_blues <span class="ot">&lt;-</span> <span class="fu">ineqsym</span>(blues, <span class="dv">5</span>, <span class="dv">0</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" tabindex="-1"></a><span class="fu">print</span>(image_of_blues)</span>
+<span id="cb15-4"><a href="#cb15-4" tabindex="-1"></a><span class="co">#&gt; [1]  0  2  3  6  9 11</span></span>
+<span id="cb15-5"><a href="#cb15-5" tabindex="-1"></a><span class="fu">fortenum</span>(image_of_blues)</span>
+<span id="cb15-6"><a href="#cb15-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;6-27&quot;</span></span></code></pre></div>
+<p>Thus the blues scale (Forte set class 6-47) becomes, under the
+operation of <span class="math inline">\(\sigma_{5, 0}\)</span>, an
+instance of set class 6-27.</p>
+<p>As suggested by Corollary 2 and its discussion, the linear
+transformations created by <code>ineqsym()</code> are
+structure-preserving symmetries of <span class="math inline">\(\mathcal{M}_n\)</span>. This means that they
+preserve many properties of musical scales. One such property is given
+by the function <code>spectrumcount()</code>, which determines how many
+distinct sizes each generic interval takes within a scale. For instance,
+a scale with “Myhill’s Property” has two specific sizes for each generic
+interval. The usual pentatonic and diatonic are two such scales:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="fu">spectrumcount</span>(blackkey_pentatonic)</span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a><span class="co">#&gt; [1] 2 2 2 2</span></span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a><span class="fu">spectrumcount</span>(c_major)</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a><span class="co">#&gt; [1] 2 2 2 2 2 2</span></span></code></pre></div>
+<p>The list of values returned by <code>spectrumcount()</code> is
+preserved, up to reordering, by the action of <code>ineqsym()</code>. We
+can see this in the following examples:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="fu">spectrumcount</span>(blackkey_pentatonic)</span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="co">#&gt; [1] 2 2 2 2</span></span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a><span class="fu">spectrumcount</span>(<span class="fu">ineqsym</span>(blackkey_pentatonic, <span class="dv">2</span>, <span class="dv">0</span>))</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a><span class="co">#&gt; [1] 2 2 2 2</span></span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a><span class="fu">spectrumcount</span>(blues)</span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a><span class="co">#&gt; [1] 3 4 5 4 3</span></span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a><span class="fu">spectrumcount</span>(image_of_blues)</span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a><span class="co">#&gt; [1] 3 4 5 4 3</span></span></code></pre></div>
+<p>By luck, even the <em>order</em> of the values in the above examples
+are preserved by the transformation. For an instance where a scale’s
+spectrum count is reordered by the transformation, we can use the
+melodic minor scale:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" tabindex="-1"></a>melodic_minor <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">11</span>)</span>
+<span id="cb18-2"><a href="#cb18-2" tabindex="-1"></a>melmin_image <span class="ot">&lt;-</span> <span class="fu">ineqsym</span>(melodic_minor, <span class="dv">2</span>, <span class="dv">0</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" tabindex="-1"></a><span class="fu">spectrumcount</span>(melodic_minor)</span>
+<span id="cb18-5"><a href="#cb18-5" tabindex="-1"></a><span class="co">#&gt; [1] 2 2 3 3 2 2</span></span>
+<span id="cb18-6"><a href="#cb18-6" tabindex="-1"></a><span class="fu">spectrumcount</span>(melmin_image)</span>
+<span id="cb18-7"><a href="#cb18-7" tabindex="-1"></a><span class="co">#&gt; [1] 3 2 2 2 2 3</span></span></code></pre></div>
+<p>The melodic minor scale has only 2 sizes of generic second and third
+(and their inversions: sixths and sevenths), but 3 sizes of fourth and
+fifth. Its image under the permutation <span class="math inline">\(\sigma_{2,0}\)</span> similarly has mostly 2
+specific sizes for each generic interval, except in this case for its
+seconds (and sevenths), which come in 3 sizes.</p>
+<p>That <code>ineqsym()</code> preserves the values of
+<code>spectrumcount()</code> is a consequence of the paper’s observation
+that the symmetries in <span class="math inline">\(\mathcal{P}_n\)</span> always map every instance
+of generic interval <span class="math inline">\(g\)</span> to an
+instance of generic interval <span class="math inline">\(ag\)</span>. As
+described in “Symmetries,” the symbol <span class="math inline">\(\mathcal{H}^k_n\)</span> denotes the
+subarrangement of <span class="math inline">\(\mathcal{M}_n\)</span>
+consisting of only the hyperplanes associated with the generic interval
+<span class="math inline">\(k\)</span>. The function
+<code>get_relevant_rows()</code> allows us to define these
+subarrangements. The example below demonstrates this for <span class="math inline">\(n=4\)</span> and <span class="math inline">\(k=2\)</span>, i.e. for generic skips in
+tetrachordal scales:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" tabindex="-1"></a>k <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb19-2"><a href="#cb19-2" tabindex="-1"></a>rows_with_skips <span class="ot">&lt;-</span> <span class="fu">get_relevant_rows</span>(k, tetrachord_arrangement)</span>
+<span id="cb19-3"><a href="#cb19-3" tabindex="-1"></a><span class="fu">print</span>(rows_with_skips)</span>
+<span id="cb19-4"><a href="#cb19-4" tabindex="-1"></a><span class="co">#&gt; [1] 2 5 7 8</span></span>
+<span id="cb19-5"><a href="#cb19-5" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" tabindex="-1"></a>skip_subarrangement <span class="ot">&lt;-</span> tetrachord_arrangement[rows_with_skips, ]</span>
+<span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="fu">print</span>(skip_subarrangement)</span>
+<span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
+<span id="cb19-9"><a href="#cb19-9" tabindex="-1"></a><span class="co">#&gt; [1,]   -1    1    1   -1    0</span></span>
+<span id="cb19-10"><a href="#cb19-10" tabindex="-1"></a><span class="co">#&gt; [2,]   -1   -1    1    1   -1</span></span>
+<span id="cb19-11"><a href="#cb19-11" tabindex="-1"></a><span class="co">#&gt; [3,]   -2    0    2    0   -1</span></span>
+<span id="cb19-12"><a href="#cb19-12" tabindex="-1"></a><span class="co">#&gt; [4,]    0   -2    0    2   -1</span></span></code></pre></div>
+<p>Finally, at the end of <span class="math inline">\(\S 2\)</span>, the
+operation of scalar involution is mentioned. This, too, can be realized
+by <code>ineqsym()</code> using the <code>involution</code> argument.
+For instance, the matrix <span class="math inline">\(-I_5\)</span> for
+involutions of pentachords can be gotten by:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="fu">ineqsym</span>(<span class="at">card=</span><span class="dv">5</span>, <span class="at">a=</span><span class="dv">1</span>, <span class="at">b=</span><span class="dv">0</span>, <span class="at">involution=</span><span class="cn">TRUE</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
+<span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co">#&gt; [1,]   -1    0    0    0    0</span></span>
+<span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co">#&gt; [2,]    0   -1    0    0    0</span></span>
+<span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="co">#&gt; [3,]    0    0   -1    0    0</span></span>
+<span id="cb20-6"><a href="#cb20-6" tabindex="-1"></a><span class="co">#&gt; [4,]    0    0    0   -1    0</span></span>
+<span id="cb20-7"><a href="#cb20-7" tabindex="-1"></a><span class="co">#&gt; [5,]    0    0    0    0   -1</span></span></code></pre></div>
+<p>Similarly, sets can be directly involuted:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a>blues_involution <span class="ot">&lt;-</span> <span class="fu">ineqsym</span>(blues, <span class="at">involution=</span><span class="cn">TRUE</span>)</span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="fu">print</span>(blues_involution)</span>
+<span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="co">#&gt; [1]  0  1  3  6  9 10</span></span>
+<span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a></span>
+<span id="cb21-5"><a href="#cb21-5" tabindex="-1"></a><span class="fu">fortenum</span>(blues_involution)</span>
+<span id="cb21-6"><a href="#cb21-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;6-27&quot;</span></span>
+<span id="cb21-7"><a href="#cb21-7" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="#cb21-8" tabindex="-1"></a><span class="fu">normal_form</span>(blues_involution, <span class="at">optic=</span><span class="st">&quot;optc&quot;</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" tabindex="-1"></a><span class="co">#&gt; [1] 0 1 3 4 6 9</span></span>
+<span id="cb21-10"><a href="#cb21-10" tabindex="-1"></a><span class="fu">normal_form</span>(image_of_blues, <span class="at">optic=</span><span class="st">&quot;optc&quot;</span>)</span>
+<span id="cb21-11"><a href="#cb21-11" tabindex="-1"></a><span class="co">#&gt; [1] 0 2 3 5 6 9</span></span></code></pre></div>
+<p>This shows that the scalar involution of the <code>blues</code> scale
+belongs to the same set class, 6-27, as the <code>image_of_blues</code>
+under <span class="math inline">\(\sigma_{5,0}\)</span> from above.
+However, the two have different OPTC-normal forms (after Hook 2023,
+416–18), so they must be related by some <span class="math inline">\(T_nI\)</span> inversion.</p>
+</div>
+<div id="orbits-as-equivalence-classes-of-scale-structure" class="section level1">
+<h1>3: Orbits as equivalence classes of scale structure</h1>
+<div id="brightness-graphs" class="section level2">
+<h2>3.1: Brightness Graphs</h2>
+<p>The brightness graph of a scale can be sketched in musicMCT using the
+function <code>brightnessgraph()</code>. The diagram produced by this
+function is a <em>reduced</em> brightness graph, to be contrasted with
+the <em>unreduced</em> brightness graph of Definition 10. The former are
+a transitive reduction of the latter, removing arrows between nodes when
+a directed path between the nodes can be composed from other arrows in
+the graph.</p>
+<p>We can demonstrate the brightness graphs, and their preservation
+under <code>ineqsym()</code>, with the examples from Example 7:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a>tetrachord_F <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">7</span>)</span>
+<span id="cb22-2"><a href="#cb22-2" tabindex="-1"></a>tetrachord_G <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">8</span>)</span>
+<span id="cb22-3"><a href="#cb22-3" tabindex="-1"></a></span>
+<span id="cb22-4"><a href="#cb22-4" tabindex="-1"></a><span class="fu">brightnessgraph</span>(tetrachord_F)</span></code></pre></div>
+<p><img role="img" aria-label="A graph repesenting relationships between modes of the tetrachord F. Each node of the graph represents a mode of the scale. Arrows point from darker modes to brighter modes. The graph for tetrachord F has a node labeled one as its lowest node. Node one is connected by an arrow to node four, above it. It is also connected by a separate arrow to node two, which is connected by a final arrow to node 3." src="data:image/png;base64,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" alt="A graph repesenting relationships between modes of the tetrachord F. Each node of the graph represents a mode of the scale. Arrows point from darker modes to brighter modes. The graph for tetrachord F has a node labeled one as its lowest node. Node one is connected by an arrow to node four, above it. It is also connected by a separate arrow to node two, which is connected by a final arrow to node 3." /></p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" tabindex="-1"></a><span class="fu">brightnessgraph</span>(tetrachord_G)</span></code></pre></div>
+<p><img role="img" aria-label="A graph representing relationships between modes of tetrachord G. The overall arrangement of arrows matches that of the graph for tetrachord F, but the nodes are labeled differently. Node four is in the middle, not node two." src="data:image/png;base64,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" alt="A graph representing relationships between modes of tetrachord G. The overall arrangement of arrows matches that of the graph for tetrachord F, but the nodes are labeled differently. Node four is in the middle, not node two." /></p>
+<p>These graphs contain extra information about the scale, as described
+in “Modal Color Theory,” pp. 7–11. To see just the mathematical graphs
+themselves, closer in appearance to Example 7 of “Symmetries,” we can
+use arguments to <code>brightnessgraph()</code> as follows:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="fu">brightnessgraph</span>(tetrachord_F, <span class="at">show_sums=</span><span class="cn">FALSE</span>, <span class="at">show_pitches=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img role="img" aria-label="Another image of the brightness graph for tetrachord F, which does not include numbers listing the notes of each mode." src="data:image/png;base64,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" alt="Another image of the brightness graph for tetrachord F, which does not include numbers listing the notes of each mode." /></p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="fu">brightnessgraph</span>(tetrachord_G, <span class="at">show_sums=</span><span class="cn">FALSE</span>, <span class="at">show_pitches=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img role="img" aria-label="Another image of the brightness graph for tetrachord G, which does not include numbers listing the notes of each mode." src="data:image/png;base64,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" alt="Another image of the brightness graph for tetrachord G, which does not include numbers listing the notes of each mode." /></p>
+<p>Note that the source node at the bottom of each graph is labeled with
+the roman numeral for 1, rather than 0 as in Example 7, again because of
+R’s 1-indexing. Additionally, the horizontal placement of the graph’s
+nodes is arbitrary, so the output of <code>brightnessgraph()</code> does
+not exactly match the graphs in Example 7 visually. It is easy to check,
+however, that they are isomorphic as graphs.</p>
+<p>The voice leadings discussed at the end of the example can be
+computed in musicMCT as well:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="fu">vlsig</span>(tetrachord_F, <span class="at">index=</span><span class="dv">2</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" tabindex="-1"></a><span class="co">#&gt; $vl</span></span>
+<span id="cb26-3"><a href="#cb26-3" tabindex="-1"></a><span class="co">#&gt; [1] 0 0 1 3</span></span>
+<span id="cb26-4"><a href="#cb26-4" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb26-5"><a href="#cb26-5" tabindex="-1"></a><span class="co">#&gt; $tn</span></span>
+<span id="cb26-6"><a href="#cb26-6" tabindex="-1"></a><span class="co">#&gt; [1] 10</span></span>
+<span id="cb26-7"><a href="#cb26-7" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb26-8"><a href="#cb26-8" tabindex="-1"></a><span class="co">#&gt; $rotation</span></span>
+<span id="cb26-9"><a href="#cb26-9" tabindex="-1"></a><span class="co">#&gt; [1] 3</span></span>
+<span id="cb26-10"><a href="#cb26-10" tabindex="-1"></a><span class="fu">vlsig</span>(tetrachord_G, <span class="at">index=</span><span class="dv">1</span>)</span>
+<span id="cb26-11"><a href="#cb26-11" tabindex="-1"></a><span class="co">#&gt; $vl</span></span>
+<span id="cb26-12"><a href="#cb26-12" tabindex="-1"></a><span class="co">#&gt; [1] 0 3 1 0</span></span>
+<span id="cb26-13"><a href="#cb26-13" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb26-14"><a href="#cb26-14" tabindex="-1"></a><span class="co">#&gt; $tn</span></span>
+<span id="cb26-15"><a href="#cb26-15" tabindex="-1"></a><span class="co">#&gt; [1] 4</span></span>
+<span id="cb26-16"><a href="#cb26-16" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb26-17"><a href="#cb26-17" tabindex="-1"></a><span class="co">#&gt; $rotation</span></span>
+<span id="cb26-18"><a href="#cb26-18" tabindex="-1"></a><span class="co">#&gt; [1] 1</span></span></code></pre></div>
+<p>##3.2: Well-Formedness</p>
+<p>We can begin by testing Proposition 5 for the pentatonic scale and
+its images, from Example 5 above:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" tabindex="-1"></a><span class="fu">iswellformed</span>(blackkey_pentatonic)</span>
+<span id="cb27-2"><a href="#cb27-2" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb27-3"><a href="#cb27-3" tabindex="-1"></a><span class="fu">iswellformed</span>(<span class="fu">ineqsym</span>(<span class="at">set=</span>blackkey_pentatonic, <span class="at">a=</span><span class="dv">2</span>, <span class="at">b=</span><span class="dv">0</span>))</span>
+<span id="cb27-4"><a href="#cb27-4" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb27-5"><a href="#cb27-5" tabindex="-1"></a><span class="fu">iswellformed</span>(<span class="fu">ineqsym</span>(<span class="at">set=</span>blackkey_pentatonic, <span class="at">a=</span><span class="dv">2</span>, <span class="at">b=</span><span class="dv">1</span>))</span>
+<span id="cb27-6"><a href="#cb27-6" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>Functions composed this way can be annoying to read, so sometimes you
+might find R’s “pipe” syntax (see <code>|&gt;()</code>) convenient:</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" tabindex="-1"></a>blackkey_pentatonic <span class="sc">|&gt;</span> <span class="fu">ineqsym</span>(<span class="at">a=</span><span class="dv">2</span>, <span class="at">b=</span><span class="dv">0</span>) <span class="sc">|&gt;</span> <span class="fu">iswellformed</span>()</span>
+<span id="cb28-2"><a href="#cb28-2" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span></code></pre></div>
+<p>The diatonic scale in 5-limit just intonation is not well-formed, but
+it is <strong>pairwise well-formed</strong> (PWF). musicMCT
+characterizes pairwise well-formedness as part of a broader family it
+calls “generalized well-formedness” (GWF for short) with 2 degrees of
+freedom (see “Modal Color Theory,” pp. 26–7):</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" tabindex="-1"></a>just_diatonic <span class="ot">&lt;-</span> <span class="fu">j</span>(dia) <span class="co"># Defined in footnote 7 of &quot;Symmetries&quot;</span></span>
+<span id="cb29-2"><a href="#cb29-2" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" tabindex="-1"></a><span class="fu">iswellformed</span>(just_diatonic)</span>
+<span id="cb29-4"><a href="#cb29-4" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb29-5"><a href="#cb29-5" tabindex="-1"></a></span>
+<span id="cb29-6"><a href="#cb29-6" tabindex="-1"></a><span class="fu">isgwf</span>(just_diatonic)</span>
+<span id="cb29-7"><a href="#cb29-7" tabindex="-1"></a><span class="co">#&gt; [1] TRUE</span></span>
+<span id="cb29-8"><a href="#cb29-8" tabindex="-1"></a><span class="fu">howfree</span>(just_diatonic)</span>
+<span id="cb29-9"><a href="#cb29-9" tabindex="-1"></a><span class="co">#&gt; [1] 2</span></span>
+<span id="cb29-10"><a href="#cb29-10" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" tabindex="-1"></a><span class="co"># Thus it is pairwise well-formed.</span></span>
+<span id="cb29-12"><a href="#cb29-12" tabindex="-1"></a><span class="co"># Like all PWF scales, it is trivalent:</span></span>
+<span id="cb29-13"><a href="#cb29-13" tabindex="-1"></a></span>
+<span id="cb29-14"><a href="#cb29-14" tabindex="-1"></a><span class="fu">spectrumcount</span>(just_diatonic)</span>
+<span id="cb29-15"><a href="#cb29-15" tabindex="-1"></a><span class="co">#&gt; [1] 3 3 3 3 3 3</span></span></code></pre></div>
+<p>As <span class="math inline">\(\S 3.2\)</span> shows, the values of
+<code>iswellformed(set)</code> and
+<code>isgwf(set) &amp;&amp; howfree(set)==2</code> are preserved under
+<code>ineqsym()</code>.</p>
+<p>Example 8 demonstrates that two PWF scales need not have isomorphic
+brightness graphs:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" tabindex="-1"></a>pentachord_F <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">6</span>, <span class="dv">9</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" tabindex="-1"></a>pentachord_G <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" tabindex="-1"></a><span class="fu">brightnessgraph</span>(pentachord_F, <span class="at">show_sums=</span><span class="cn">FALSE</span>, <span class="at">show_pitches=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img role="img" aria-label="A brightness graph for pentachord F. Modes one, two, three, and five form a diamond. Mode four is connected to mode five, adding an extra line coming off the diamond." src="data:image/png;base64,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" alt="A brightness graph for pentachord F. Modes one, two, three, and five form a diamond. Mode four is connected to mode five, adding an extra line coming off the diamond." /></p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" tabindex="-1"></a><span class="fu">brightnessgraph</span>(pentachord_G, <span class="at">show_sums=</span><span class="cn">FALSE</span>, <span class="at">show_pitches=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img role="img" aria-label="A brightness graph for pentachord G, whose overall appearance is somewhat like a five-pointed star. More technically, it is a bipartite graph in which modes one and two belong to its bottom row and the other three modes belong to its top row." src="data:image/png;base64,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1uOQAFe1XP35+lW3dTMC5/AdD3zu/YW657KZDkQm8Z0E+O11uvOqWQ5UAXy43rwm4Cy+Q4GfTqfTh9c/nkfwPlsORQJc09efP1/+GLVgrYeq0vhOAzyqxkMZAFeVFjiP7w8P3HQsI5EvwC0HMwCuLClwJl+AG45mAFzbHMBH3+2m8gX4pWPvhgCu7eZI1sgOAefynelY9MAOvN9N5gvwufr3QwCnrBo4my/Al2rfEAGctbod5nS+AL8FsHo1b4ny+QL8vf1d5oS+AF+1u0sFcO72gDP6Anzdzj4VwOnb3KlK6QvwTQCrt7FXldMX4LtWf+sm9QX4vrVXZYBFWgHO6gvwQ+XfuwDrVHpdTusL8GMAq/f4wpzXF+BS90/cxL4AlwJYvduX5sy+AJe7eeoCLNgVbWpfgFcCWD2Bt8CvASwewOIBvNoMH2y1B/B6E3w03R7A6wEsHsDiASwewOIBLB7A4gEsHsDacSSLEgSweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4AIsHsHgAiweweACLB7B4/wfOJBTAMIITPQAAAABJRU5ErkJggg==" alt="A brightness graph for pentachord G, whose overall appearance is somewhat like a five-pointed star. More technically, it is a bipartite graph in which modes one and two belong to its bottom row and the other three modes belong to its top row." /></p>
+<p>However, two scales related by a transformation in <span class="math inline">\(\mathcal{P}_n\)</span> do have isomorphic
+brightness graphs. For instance:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" tabindex="-1"></a><span class="fu">brightnessgraph</span>(blues)</span></code></pre></div>
+<p><img role="img" aria-label="A brightness graph for the blues scale, arranged in three rows with modes two and three on the bottom; modes one, four and six in the middle; and mode five on the top." src="data:image/png;base64,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" alt="A brightness graph for the blues scale, arranged in three rows with modes two and three on the bottom; modes one, four and six in the middle; and mode five on the top." /></p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" tabindex="-1"></a><span class="fu">brightnessgraph</span>(image_of_blues)</span></code></pre></div>
+<p><img role="img" aria-label="A brightness graph for the image of blues scale. Its overall shape matches the grpah for the blues scale, but its modes are labeled differently. For instance, mode three rather than mode five is at the top." src="data:image/png;base64,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" alt="A brightness graph for the image of blues scale. Its overall shape matches the grpah for the blues scale, but its modes are labeled differently. For instance, mode three rather than mode five is at the top." /></p>
+<p>This is not discussed in the paper, but scalar involution sends the
+brightness graph of a scale is sent to its <em>reverse</em> or
+<em>transpose</em> graph. (The reverse of a directed graph is one in
+which all the edges and vertices are preserved, but the arrows point in
+the opposite directions.) We can see this in:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" tabindex="-1"></a><span class="fu">brightnessgraph</span>(blues_involution)</span></code></pre></div>
+<p><img role="img" aria-label="A brightness graph for the blues involution scale. Its shape is the same as the blues graph, but turned upside-down. Instead of being at the top, mode five is at the bottom, and so on." src="data:image/png;base64,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" alt="A brightness graph for the blues involution scale. Its shape is the same as the blues graph, but turned upside-down. Instead of being at the top, mode five is at the bottom, and so on." /></p>
+<p>Where the blues scale has a unique maximal node in its brightness
+graph, the <code>blues_involution</code> scale has a unique minimal
+node, and so on. A proof that involution corresponds to graph reversal
+follows straightforwardly from the definitions of involution and
+brightness graphs.</p>
+</div>
+<div id="orbits-are-called-scale-palettes" class="section level2">
+<h2>Orbits are called “Scale Palettes”</h2>
+<p>The main premise of <span class="math inline">\(\S 3\)</span> is that
+orbits under <span class="math inline">\(\mathcal{P}_n\)</span> are
+meaningful equivalence classes of scale structure. It is nice,
+therefore, to be able to do computations on the full orbit of an scale
+under <code>ineqsym()</code>. This is given by the function
+<code>scale_palette()</code>, whose name draws on the metaphorical
+conceit that each scale structure is a “color,” and therefore a
+collection of mutually consistent colors could be called a color
+“palette.”</p>
+<p>We can compute, for instance, the orbit of the black-key pentatonic
+scale. This orbit includes 20 distinct scales: 5 modes of 4 distinct
+well-formed pentatonic structures. Each scale is represented below as a
+column in a <span class="math inline">\(5\times 20\)</span> matrix.</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" tabindex="-1"></a>pentatonic_palette <span class="ot">&lt;-</span> <span class="fu">scale_palette</span>(blackkey_pentatonic)</span>
+<span id="cb35-2"><a href="#cb35-2" tabindex="-1"></a><span class="fu">print</span>(pentatonic_palette)</span>
+<span id="cb35-3"><a href="#cb35-3" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14]</span></span>
+<span id="cb35-4"><a href="#cb35-4" tabindex="-1"></a><span class="co">#&gt; [1,]    0    0    0    0    0  0.0  0.0  0.0  0.0   0.0   0.0   0.0   0.0   0.0</span></span>
+<span id="cb35-5"><a href="#cb35-5" tabindex="-1"></a><span class="co">#&gt; [2,]    2    2    3    2    3  2.2  2.2  2.2  2.2   3.2   1.6   2.6   2.6   2.6</span></span>
+<span id="cb35-6"><a href="#cb35-6" tabindex="-1"></a><span class="co">#&gt; [3,]    4    5    5    5    5  4.4  4.4  4.4  5.4   5.4   4.2   5.2   5.2   5.2</span></span>
+<span id="cb35-7"><a href="#cb35-7" tabindex="-1"></a><span class="co">#&gt; [4,]    7    7    8    7    7  6.6  6.6  7.6  7.6   7.6   6.8   7.8   7.8   6.8</span></span>
+<span id="cb35-8"><a href="#cb35-8" tabindex="-1"></a><span class="co">#&gt; [5,]    9   10   10    9   10  8.8  9.8  9.8  9.8   9.8   9.4  10.4   9.4   9.4</span></span>
+<span id="cb35-9"><a href="#cb35-9" tabindex="-1"></a><span class="co">#&gt;      [,15] [,16] [,17] [,18] [,19] [,20]</span></span>
+<span id="cb35-10"><a href="#cb35-10" tabindex="-1"></a><span class="co">#&gt; [1,]   0.0   0.0   0.0   0.0   0.0   0.0</span></span>
+<span id="cb35-11"><a href="#cb35-11" tabindex="-1"></a><span class="co">#&gt; [2,]   2.6   1.8   2.8   1.8   2.8   2.8</span></span>
+<span id="cb35-12"><a href="#cb35-12" tabindex="-1"></a><span class="co">#&gt; [3,]   4.2   4.6   4.6   4.6   5.6   4.6</span></span>
+<span id="cb35-13"><a href="#cb35-13" tabindex="-1"></a><span class="co">#&gt; [4,]   6.8   6.4   7.4   7.4   7.4   7.4</span></span>
+<span id="cb35-14"><a href="#cb35-14" tabindex="-1"></a><span class="co">#&gt; [5,]   9.4   9.2  10.2   9.2  10.2   9.2</span></span>
+<span id="cb35-15"><a href="#cb35-15" tabindex="-1"></a></span>
+<span id="cb35-16"><a href="#cb35-16" tabindex="-1"></a><span class="fu">apply</span>(pentatonic_palette, <span class="dv">2</span>, iswellformed)</span>
+<span id="cb35-17"><a href="#cb35-17" tabindex="-1"></a><span class="co">#&gt;  [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE</span></span>
+<span id="cb35-18"><a href="#cb35-18" tabindex="-1"></a><span class="co">#&gt; [16] TRUE TRUE TRUE TRUE TRUE</span></span></code></pre></div>
+<p>The last computation above shows that all 20 scales in this orbit are
+indeed well-formed, as we would expect. Of course, the symmetries of the
+space preserve many other properties too, like the
+<code>evenness()</code> of a scale (defined to be its Euclidean distance
+from the perfectly even scale):</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" tabindex="-1"></a><span class="fu">apply</span>(pentatonic_palette, <span class="dv">2</span>, evenness) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="at">digits=</span><span class="dv">5</span>)</span>
+<span id="cb36-2"><a href="#cb36-2" tabindex="-1"></a><span class="co">#&gt;  [1] 0.63246 0.63246 0.63246 0.63246 0.63246 0.63246 0.63246 0.63246 0.63246</span></span>
+<span id="cb36-3"><a href="#cb36-3" tabindex="-1"></a><span class="co">#&gt; [10] 0.63246 0.63246 0.63246 0.63246 0.63246 0.63246 0.63246 0.63246 0.63246</span></span>
+<span id="cb36-4"><a href="#cb36-4" tabindex="-1"></a><span class="co">#&gt; [19] 0.63246 0.63246</span></span></code></pre></div>
+<p>By default, <code>scale_palette()</code> includes scalar involution
+in the transformations that define the orbit. To restrict our
+consideration to just the symmetries of <span class="math inline">\(\mathcal{P}_n\)</span>, we can set the argument
+<code>include_involution</code> to <code>FALSE</code>. For the
+well-formed pentatonic scales just tested, this makes no difference,
+because they are symmetrical under inversion (a topic for <span class="math inline">\(\S 4\)</span>). As an example of a scale where
+involution does make a difference, we return to the blues scale:</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" tabindex="-1"></a>blues_palette <span class="ot">&lt;-</span> <span class="fu">scale_palette</span>(blues, <span class="at">include_involution=</span><span class="cn">FALSE</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" tabindex="-1"></a><span class="fu">print</span>(blues_palette)</span>
+<span id="cb37-3"><a href="#cb37-3" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]</span></span>
+<span id="cb37-4"><a href="#cb37-4" tabindex="-1"></a><span class="co">#&gt; [1,]    0    0    0    0    0    0    0    0    0     0     0     0</span></span>
+<span id="cb37-5"><a href="#cb37-5" tabindex="-1"></a><span class="co">#&gt; [2,]    3    2    1    1    3    2    2    1    3     3     2     1</span></span>
+<span id="cb37-6"><a href="#cb37-6" tabindex="-1"></a><span class="co">#&gt; [3,]    5    3    2    4    5    5    3    4    6     5     3     3</span></span>
+<span id="cb37-7"><a href="#cb37-7" tabindex="-1"></a><span class="co">#&gt; [4,]    6    4    5    6    8    7    6    7    8     6     5     4</span></span>
+<span id="cb37-8"><a href="#cb37-8" tabindex="-1"></a><span class="co">#&gt; [5,]    7    7    7    9   10    8    9    9    9     8     6     7</span></span>
+<span id="cb37-9"><a href="#cb37-9" tabindex="-1"></a><span class="co">#&gt; [6,]   10    9   10   11   11    9   11   10   11     9     9    10</span></span></code></pre></div>
+<p>Because 6 is a highly composite number, <span class="math inline">\(\mathcal{P}_6\)</span> includes relatively few
+symmetries: just the six modes corresponding to the possible values of
+<span class="math inline">\(b\)</span> in <span class="math inline">\(\sigma_{1, b}\)</span> and the six modes of <span class="math inline">\(\sigma_{5, b}\)</span>. Therefore the palette
+above includes only 12 scales, representing only two <span class="math inline">\(T_n\)</span>-types (OPTC-normal forms):</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" tabindex="-1"></a><span class="fu">apply</span>(blues_palette, <span class="dv">2</span>, normal_form, <span class="at">optic=</span><span class="st">&quot;optc&quot;</span>)</span>
+<span id="cb38-2"><a href="#cb38-2" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]</span></span>
+<span id="cb38-3"><a href="#cb38-3" tabindex="-1"></a><span class="co">#&gt; [1,]    0    0    0    0    0    0    0    0    0     0     0     0</span></span>
+<span id="cb38-4"><a href="#cb38-4" tabindex="-1"></a><span class="co">#&gt; [2,]    2    2    2    2    2    2    2    2    2     2     2     2</span></span>
+<span id="cb38-5"><a href="#cb38-5" tabindex="-1"></a><span class="co">#&gt; [3,]    3    3    3    3    3    3    3    3    3     3     3     3</span></span>
+<span id="cb38-6"><a href="#cb38-6" tabindex="-1"></a><span class="co">#&gt; [4,]    4    4    4    4    4    4    5    5    5     5     5     5</span></span>
+<span id="cb38-7"><a href="#cb38-7" tabindex="-1"></a><span class="co">#&gt; [5,]    7    7    7    7    7    7    6    6    6     6     6     6</span></span>
+<span id="cb38-8"><a href="#cb38-8" tabindex="-1"></a><span class="co">#&gt; [6,]    9    9    9    9    9    9    9    9    9     9     9     9</span></span></code></pre></div>
+<p>We can double the number of scales in the palette if we include
+involution:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" tabindex="-1"></a>more_blues <span class="ot">&lt;-</span> <span class="fu">scale_palette</span>(blues, <span class="at">include_involution=</span><span class="cn">TRUE</span>)</span>
+<span id="cb39-2"><a href="#cb39-2" tabindex="-1"></a><span class="fu">print</span>(more_blues)</span>
+<span id="cb39-3"><a href="#cb39-3" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14]</span></span>
+<span id="cb39-4"><a href="#cb39-4" tabindex="-1"></a><span class="co">#&gt; [1,]    0    0    0    0    0    0    0    0    0     0     0     0     0     0</span></span>
+<span id="cb39-5"><a href="#cb39-5" tabindex="-1"></a><span class="co">#&gt; [2,]    3    2    1    1    3    2    2    1    3     3     2     1     1     2</span></span>
+<span id="cb39-6"><a href="#cb39-6" tabindex="-1"></a><span class="co">#&gt; [3,]    5    3    2    4    5    5    3    4    6     5     3     3     3     5</span></span>
+<span id="cb39-7"><a href="#cb39-7" tabindex="-1"></a><span class="co">#&gt; [4,]    6    4    5    6    8    7    6    7    8     6     5     4     6     8</span></span>
+<span id="cb39-8"><a href="#cb39-8" tabindex="-1"></a><span class="co">#&gt; [5,]    7    7    7    9   10    8    9    9    9     8     6     7     9     9</span></span>
+<span id="cb39-9"><a href="#cb39-9" tabindex="-1"></a><span class="co">#&gt; [6,]   10    9   10   11   11    9   11   10   11     9     9    10    10    11</span></span>
+<span id="cb39-10"><a href="#cb39-10" tabindex="-1"></a><span class="co">#&gt;      [,15] [,16] [,17] [,18] [,19] [,20] [,21] [,22] [,23] [,24]</span></span>
+<span id="cb39-11"><a href="#cb39-11" tabindex="-1"></a><span class="co">#&gt; [1,]     0     0     0     0     0     0     0     0     0     0</span></span>
+<span id="cb39-12"><a href="#cb39-12" tabindex="-1"></a><span class="co">#&gt; [2,]     3     3     1     2     2     3     1     1     2     3</span></span>
+<span id="cb39-13"><a href="#cb39-13" tabindex="-1"></a><span class="co">#&gt; [3,]     6     4     3     3     5     4     2     3     5     5</span></span>
+<span id="cb39-14"><a href="#cb39-14" tabindex="-1"></a><span class="co">#&gt; [4,]     7     6     4     5     6     5     4     6     7     8</span></span>
+<span id="cb39-15"><a href="#cb39-15" tabindex="-1"></a><span class="co">#&gt; [5,]     9     7     6     8     7     7     7     8    10     9</span></span>
+<span id="cb39-16"><a href="#cb39-16" tabindex="-1"></a><span class="co">#&gt; [6,]    10     9     9    11     9    10     9    11    11    10</span></span></code></pre></div>
+</div>
+</div>
+<div id="symmetrical-scales" class="section level1">
+<h1>4: Symmetrical Scales</h1>
+<p>We start by defining the scale from Example 9 and testing that it is
+fixed by <span class="math inline">\(\sigma_{4, 3}\)</span>.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" tabindex="-1"></a>golomb_ruler <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">11</span>)</span>
+<span id="cb40-2"><a href="#cb40-2" tabindex="-1"></a>golomb_scale <span class="ot">&lt;-</span> <span class="fu">convert</span>(golomb_ruler, <span class="dv">15</span>, <span class="dv">12</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" tabindex="-1"></a></span>
+<span id="cb40-4"><a href="#cb40-4" tabindex="-1"></a><span class="fu">coord_to_edo</span>(golomb_scale) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="at">digits=</span><span class="dv">3</span>)</span>
+<span id="cb40-5"><a href="#cb40-5" tabindex="-1"></a><span class="co">#&gt; [1]  0.0 -1.6 -1.6  0.0 -0.8</span></span>
+<span id="cb40-6"><a href="#cb40-6" tabindex="-1"></a>golomb_scale</span>
+<span id="cb40-7"><a href="#cb40-7" tabindex="-1"></a><span class="co">#&gt; [1] 0.0 0.8 3.2 7.2 8.8</span></span>
+<span id="cb40-8"><a href="#cb40-8" tabindex="-1"></a><span class="fu">ineqsym</span>(golomb_scale, <span class="at">a=</span><span class="dv">4</span>, <span class="at">b=</span><span class="dv">3</span>) <span class="sc">|&gt;</span> <span class="fu">round</span>(<span class="at">digits=</span><span class="dv">3</span>)</span>
+<span id="cb40-9"><a href="#cb40-9" tabindex="-1"></a><span class="co">#&gt; [1] 0.0 0.8 3.2 7.2 8.8</span></span>
+<span id="cb40-10"><a href="#cb40-10" tabindex="-1"></a></span>
+<span id="cb40-11"><a href="#cb40-11" tabindex="-1"></a><span class="co"># This computation could also be done in 15-tone equal temperament,</span></span>
+<span id="cb40-12"><a href="#cb40-12" tabindex="-1"></a><span class="co"># working directly with golomb_ruler and using the &quot;edo&quot; parameter:</span></span>
+<span id="cb40-13"><a href="#cb40-13" tabindex="-1"></a></span>
+<span id="cb40-14"><a href="#cb40-14" tabindex="-1"></a><span class="fu">coord_to_edo</span>(golomb_ruler, <span class="at">edo=</span><span class="dv">15</span>)</span>
+<span id="cb40-15"><a href="#cb40-15" tabindex="-1"></a><span class="co">#&gt; [1]  0 -2 -2  0 -1</span></span>
+<span id="cb40-16"><a href="#cb40-16" tabindex="-1"></a><span class="fu">ineqsym</span>(golomb_ruler, <span class="at">a=</span><span class="dv">4</span>, <span class="at">b=</span><span class="dv">3</span>, <span class="at">edo=</span><span class="dv">15</span>)</span>
+<span id="cb40-17"><a href="#cb40-17" tabindex="-1"></a><span class="co">#&gt; [1]  0  1  4  9 11</span></span></code></pre></div>
+<p>As mentioned in the discussion of this example, we can explore the
+scales which are fixed by a given symmetry by finding the eigenvectors
+of the linear map. R makes this easy. We will call the matrix <span class="math inline">\(P_{\pi}\)</span> from Example 9 simply
+<code>P</code> in the following code block:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">ineqsym</span>(<span class="at">card=</span><span class="dv">5</span>, <span class="at">a=</span><span class="dv">4</span>, <span class="at">b=</span><span class="dv">3</span>)</span>
+<span id="cb41-2"><a href="#cb41-2" tabindex="-1"></a><span class="fu">print</span>(P)</span>
+<span id="cb41-3"><a href="#cb41-3" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5]</span></span>
+<span id="cb41-4"><a href="#cb41-4" tabindex="-1"></a><span class="co">#&gt; [1,]    0    0    0    1    0</span></span>
+<span id="cb41-5"><a href="#cb41-5" tabindex="-1"></a><span class="co">#&gt; [2,]    0    0    1    0    0</span></span>
+<span id="cb41-6"><a href="#cb41-6" tabindex="-1"></a><span class="co">#&gt; [3,]    0    1    0    0    0</span></span>
+<span id="cb41-7"><a href="#cb41-7" tabindex="-1"></a><span class="co">#&gt; [4,]    1    0    0    0    0</span></span>
+<span id="cb41-8"><a href="#cb41-8" tabindex="-1"></a><span class="co">#&gt; [5,]    0    0    0    0    1</span></span>
+<span id="cb41-9"><a href="#cb41-9" tabindex="-1"></a></span>
+<span id="cb41-10"><a href="#cb41-10" tabindex="-1"></a><span class="fu">eigen</span>(P)</span>
+<span id="cb41-11"><a href="#cb41-11" tabindex="-1"></a><span class="co">#&gt; eigen() decomposition</span></span>
+<span id="cb41-12"><a href="#cb41-12" tabindex="-1"></a><span class="co">#&gt; $values</span></span>
+<span id="cb41-13"><a href="#cb41-13" tabindex="-1"></a><span class="co">#&gt; [1]  1  1  1 -1 -1</span></span>
+<span id="cb41-14"><a href="#cb41-14" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb41-15"><a href="#cb41-15" tabindex="-1"></a><span class="co">#&gt; $vectors</span></span>
+<span id="cb41-16"><a href="#cb41-16" tabindex="-1"></a><span class="co">#&gt;      [,1]       [,2]       [,3]       [,4]       [,5]</span></span>
+<span id="cb41-17"><a href="#cb41-17" tabindex="-1"></a><span class="co">#&gt; [1,]    0  0.0000000 -0.7071068  0.0000000  0.7071068</span></span>
+<span id="cb41-18"><a href="#cb41-18" tabindex="-1"></a><span class="co">#&gt; [2,]    0 -0.7071068  0.0000000 -0.7071068  0.0000000</span></span>
+<span id="cb41-19"><a href="#cb41-19" tabindex="-1"></a><span class="co">#&gt; [3,]    0 -0.7071068  0.0000000  0.7071068  0.0000000</span></span>
+<span id="cb41-20"><a href="#cb41-20" tabindex="-1"></a><span class="co">#&gt; [4,]    0  0.0000000 -0.7071068  0.0000000 -0.7071068</span></span>
+<span id="cb41-21"><a href="#cb41-21" tabindex="-1"></a><span class="co">#&gt; [5,]    1  0.0000000  0.0000000  0.0000000  0.0000000</span></span></code></pre></div>
+<p>The first three column vectors above correspond to the eigenvalue
+<code>1</code>, so any scale which is some linear combination of them
+will be fixed by <span class="math inline">\(P_{\pi}\)</span>.</p>
+<p>Similarly, the last two column vectors correspond to the eigenvalue
+<code>-1</code>. Thus we can define a scale that is sent to its scalar
+involution by this transformation with any linear combination of
+them:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" tabindex="-1"></a>eigenvector_y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb42-2"><a href="#cb42-2" tabindex="-1"></a>eigenvector_z <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" tabindex="-1"></a>eigenscale <span class="ot">&lt;-</span> <span class="fu">coord_from_edo</span>(eigenvector_y <span class="sc">+</span> eigenvector_z)</span>
+<span id="cb42-5"><a href="#cb42-5" tabindex="-1"></a>eigenscale_involution <span class="ot">&lt;-</span> <span class="fu">coord_from_edo</span>(<span class="sc">-</span><span class="dv">1</span> <span class="sc">*</span> (eigenvector_y <span class="sc">+</span> eigenvector_z))</span>
+<span id="cb42-6"><a href="#cb42-6" tabindex="-1"></a></span>
+<span id="cb42-7"><a href="#cb42-7" tabindex="-1"></a><span class="fu">print</span>(eigenscale)</span>
+<span id="cb42-8"><a href="#cb42-8" tabindex="-1"></a><span class="co">#&gt; [1] 1.0 1.4 5.8 6.2 9.6</span></span>
+<span id="cb42-9"><a href="#cb42-9" tabindex="-1"></a><span class="fu">print</span>(eigenscale_involution)</span>
+<span id="cb42-10"><a href="#cb42-10" tabindex="-1"></a><span class="co">#&gt; [1] -1.0  3.4  3.8  8.2  9.6</span></span>
+<span id="cb42-11"><a href="#cb42-11" tabindex="-1"></a></span>
+<span id="cb42-12"><a href="#cb42-12" tabindex="-1"></a><span class="fu">ineqsym</span>(eigenscale, <span class="at">a=</span><span class="dv">4</span>, <span class="at">b=</span><span class="dv">3</span>)</span>
+<span id="cb42-13"><a href="#cb42-13" tabindex="-1"></a><span class="co">#&gt; [1] -1.0  3.4  3.8  8.2  9.6</span></span></code></pre></div>
+<p>Above, the <code>eigenscale_involution</code> was defined by
+multiplying <code>eigenscale</code>’s coordinate vector (from the <span class="math inline">\(\Phi_5\)</span> origin) by <code>-1</code>. The
+involution of a scale can also be derived using the
+<code>saturate()</code> function, on which see “Modal Color Theory,”
+pp. 20–1.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" tabindex="-1"></a>eigenscale_involution</span>
+<span id="cb43-2"><a href="#cb43-2" tabindex="-1"></a><span class="co">#&gt; [1] -1.0  3.4  3.8  8.2  9.6</span></span>
+<span id="cb43-3"><a href="#cb43-3" tabindex="-1"></a></span>
+<span id="cb43-4"><a href="#cb43-4" tabindex="-1"></a><span class="fu">saturate</span>(<span class="sc">-</span><span class="dv">1</span>, eigenscale)</span>
+<span id="cb43-5"><a href="#cb43-5" tabindex="-1"></a><span class="co">#&gt; [1] -1.0  3.4  3.8  8.2  9.6</span></span></code></pre></div>
+<p>As <span class="math inline">\(\S 4\)</span> discusses, traditional
+pitch-class inversion is realizable as a combination of scalar
+involution and some element of <span class="math inline">\(\mathcal{P}_n\)</span>. We can demonstrate this
+for the dorian scale, as in Example 10:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" tabindex="-1"></a>dorian <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">9</span>, <span class="dv">10</span>)</span>
+<span id="cb44-2"><a href="#cb44-2" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" tabindex="-1"></a>sigma_6_0 <span class="ot">&lt;-</span> <span class="fu">ineqsym</span>(<span class="at">card=</span><span class="dv">7</span>, <span class="at">a=</span><span class="dv">6</span>, <span class="at">b=</span><span class="dv">0</span>)</span>
+<span id="cb44-4"><a href="#cb44-4" tabindex="-1"></a>inversion <span class="ot">&lt;-</span> <span class="sc">-</span><span class="dv">1</span> <span class="sc">*</span> sigma_6_0</span>
+<span id="cb44-5"><a href="#cb44-5" tabindex="-1"></a></span>
+<span id="cb44-6"><a href="#cb44-6" tabindex="-1"></a>inversion <span class="sc">%*%</span> <span class="fu">coord_to_edo</span>(dorian) <span class="sc">|&gt;</span> <span class="fu">coord_from_edo</span>() <span class="sc">|&gt;</span> <span class="fu">t</span>() <span class="sc">|&gt;</span> <span class="fu">as.numeric</span>()</span>
+<span id="cb44-7"><a href="#cb44-7" tabindex="-1"></a><span class="co">#&gt; [1]  0  2  3  5  7  9 10</span></span></code></pre></div>
+<p>This simply returns the dorian scale, reflecting dorian’s inversional
+symmetry about its tonic. We could apply this to achieve <span class="math inline">\(T_0I\)</span> of a set not fixed by that
+inversion. For instance, <span class="math inline">\(T_0I\)</span>
+should turn a C phrygian scale into C ionian:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" tabindex="-1"></a>phrygian <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">10</span>)</span>
+<span id="cb45-2"><a href="#cb45-2" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" tabindex="-1"></a>inversion <span class="sc">%*%</span> <span class="fu">coord_to_edo</span>(phrygian) <span class="sc">|&gt;</span> <span class="fu">coord_from_edo</span>() <span class="sc">|&gt;</span> <span class="fu">t</span>() <span class="sc">|&gt;</span> <span class="fu">as.numeric</span>()</span>
+<span id="cb45-4"><a href="#cb45-4" tabindex="-1"></a><span class="co">#&gt; [1]  0  2  4  5  7  9 11</span></span></code></pre></div>
+<p>Note that these examples both use <code>coord_to_edo()</code> and
+<code>coord_from_edo()</code> to switch between coordinate systems.
+Another option, which avoids changing coordinates, is to use
+<code>ineqsym()</code> and <code>saturate()</code> directly on a set.
+For instance, we can invert the <code>blues</code> scale (which is not
+inversionally symmetrical) as follows:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" tabindex="-1"></a>inverted_blues <span class="ot">&lt;-</span> <span class="fu">ineqsym</span>(blues, <span class="at">a=</span><span class="dv">5</span>, <span class="at">b=</span><span class="dv">0</span>) <span class="sc">|&gt;</span> <span class="fu">saturate</span>(<span class="at">r=</span><span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" tabindex="-1"></a><span class="fu">print</span>(inverted_blues)</span>
+<span id="cb46-3"><a href="#cb46-3" tabindex="-1"></a><span class="co">#&gt; [1] 0 2 5 6 7 9</span></span>
+<span id="cb46-4"><a href="#cb46-4" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="#cb46-5" tabindex="-1"></a><span class="fu">clockface</span>(blues)</span></code></pre></div>
+<p><img role="img" aria-label="A so-called clockface diagram for the blues scale. A circle is labeled with twelve numbers, from 0 to 11, along its rim like an analog clock. The numbers that correspond to notes in the blues scale are circled." src="data:image/png;base64,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" alt="A so-called clockface diagram for the blues scale. A circle is labeled with twelve numbers, from 0 to 11, along its rim like an analog clock. The numbers that correspond to notes in the blues scale are circled." /></p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" tabindex="-1"></a><span class="fu">clockface</span>(inverted_blues)</span></code></pre></div>
+<p><img role="img" aria-label="A clockface diagram for the inversion of the blues scale." src="data:image/png;base64,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" alt="A clockface diagram for the inversion of the blues scale." /></p>
+<p>Of course, the point of this exercise is to prove that <span class="math inline">\(T_nI\)</span> transformations belong to a larger
+family of scalar transformations. If we simply want to invert a set in
+musicMCT, there is an easier way:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" tabindex="-1"></a><span class="fu">tni</span>(blues, <span class="dv">0</span>)</span>
+<span id="cb48-2"><a href="#cb48-2" tabindex="-1"></a><span class="co">#&gt; [1] 0 2 5 6 7 9</span></span></code></pre></div>
+<p>We all know that some sets are inversionally symmetrical. It’s more
+surprising to learn that a set can be <em>involutionally</em>
+symmetrical. One example is the “forza del destino” tetrachord <span class="math inline">\((0, 2, 3, 7)\)</span>:</p>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" tabindex="-1"></a>forza <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">7</span>)</span>
+<span id="cb49-2"><a href="#cb49-2" tabindex="-1"></a>destino <span class="ot">&lt;-</span> <span class="fu">ineqsym</span>(forza, <span class="at">a=</span><span class="dv">1</span>, <span class="at">b=</span><span class="dv">2</span>, <span class="at">involution=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p>The symmetry applied above sets <span class="math inline">\(a=1\)</span>, which does not permute generic
+intervals, and <span class="math inline">\(b=2\)</span> which will shift
+to a new mode of the set. It also sets <code>involution=TRUE</code>,
+taking the scalar involution of the <code>forza</code> tetrachord. What
+set does this produce?</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" tabindex="-1"></a><span class="fu">print</span>(destino)</span>
+<span id="cb50-2"><a href="#cb50-2" tabindex="-1"></a><span class="co">#&gt; [1]  3  5  6 10</span></span>
+<span id="cb50-3"><a href="#cb50-3" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" tabindex="-1"></a><span class="fu">tn</span>(forza, <span class="dv">3</span>)</span>
+<span id="cb50-5"><a href="#cb50-5" tabindex="-1"></a><span class="co">#&gt; [1]  3  5  6 10</span></span></code></pre></div>
+<p>That is, <span class="math inline">\(destino = T_3(forza)\)</span>!
+For this set, involution combines with a mode change to create a
+chromatic transposition.</p>
+<p>As a consequence, the <code>forza</code> tetrachord can also be
+inverted without involution:</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" tabindex="-1"></a><span class="fu">ineqsym</span>(forza, <span class="at">a=</span><span class="dv">3</span>, <span class="at">b=</span><span class="dv">0</span>, <span class="at">involution=</span><span class="cn">FALSE</span>)</span>
+<span id="cb51-2"><a href="#cb51-2" tabindex="-1"></a><span class="co">#&gt; [1] 0 1 3 8</span></span>
+<span id="cb51-3"><a href="#cb51-3" tabindex="-1"></a><span class="fu">tni</span>(forza, <span class="dv">3</span>)</span>
+<span id="cb51-4"><a href="#cb51-4" tabindex="-1"></a><span class="co">#&gt; [1] 0 1 3 8</span></span></code></pre></div>
+<p>From the perspective of classical pc-set theory, <span class="math inline">\((0, 2, 3, 7)\)</span> seems pretty asymmetrical,
+so I think it’s highly neat that it does turn out to have some
+symmetry.</p>
+<div id="looking-for-symmetries-of-a-set" class="section level2">
+<h2>Looking for symmetries of a set</h2>
+<p>How does one discover something like <span class="math inline">\((0,
+2, 3, 7)\)</span>’s symmetry? An easy way is to consider the size of a
+scale’s orbit. If a scale’s orbit is smaller than the order of <span class="math inline">\(\mathcal{P}_n\)</span>, it must have some
+symmetry.</p>
+<p>For instance, among tetrachords, <span class="math inline">\(\mathcal{P}_4\)</span> has 8 elements: four values
+corresponding to <span class="math inline">\(a=1\)</span> and four for
+<span class="math inline">\(a=3\)</span>. The size of the orbit doubles
+to 16 if involution is included. Thus a tetrachord with no symmetries
+should have 16 “colors” in its “palette,” as does the scale below:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" tabindex="-1"></a>ait <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">6</span>)</span>
+<span id="cb52-2"><a href="#cb52-2" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" tabindex="-1"></a><span class="fu">scale_palette</span>(ait, <span class="at">include_involution=</span><span class="cn">TRUE</span>)</span>
+<span id="cb52-4"><a href="#cb52-4" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12] [,13] [,14]</span></span>
+<span id="cb52-5"><a href="#cb52-5" tabindex="-1"></a><span class="co">#&gt; [1,]    0    0    0    0    0    0    0    0    0     0     0     0     0     0</span></span>
+<span id="cb52-6"><a href="#cb52-6" tabindex="-1"></a><span class="co">#&gt; [2,]    1    3    2    6    0    4    3    5    5     3     4     0     6     2</span></span>
+<span id="cb52-7"><a href="#cb52-7" tabindex="-1"></a><span class="co">#&gt; [3,]    4    5    8    7    4    7    8    5    8     7     4     5     8     5</span></span>
+<span id="cb52-8"><a href="#cb52-8" tabindex="-1"></a><span class="co">#&gt; [4,]    6   11    9   10    7   12    8    9   12     7     9     8    11     6</span></span>
+<span id="cb52-9"><a href="#cb52-9" tabindex="-1"></a><span class="co">#&gt;      [,15] [,16]</span></span>
+<span id="cb52-10"><a href="#cb52-10" tabindex="-1"></a><span class="co">#&gt; [1,]     0     0</span></span>
+<span id="cb52-11"><a href="#cb52-11" tabindex="-1"></a><span class="co">#&gt; [2,]     3     1</span></span>
+<span id="cb52-12"><a href="#cb52-12" tabindex="-1"></a><span class="co">#&gt; [3,]     4     7</span></span>
+<span id="cb52-13"><a href="#cb52-13" tabindex="-1"></a><span class="co">#&gt; [4,]    10     9</span></span></code></pre></div>
+<p>This result has 16 columns, representing 16 distinct scalar “colors,”
+as expected.</p>
+<p>By contrast, the <code>forza</code> tetrachord has only 8 scales in
+its orbit:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" tabindex="-1"></a><span class="fu">scale_palette</span>(forza, <span class="at">include_involution=</span><span class="cn">TRUE</span>)</span>
+<span id="cb53-2"><a href="#cb53-2" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]</span></span>
+<span id="cb53-3"><a href="#cb53-3" tabindex="-1"></a><span class="co">#&gt; [1,]    0    0    0    0    0    0    0    0</span></span>
+<span id="cb53-4"><a href="#cb53-4" tabindex="-1"></a><span class="co">#&gt; [2,]    2    1    4    5    1    2    5    4</span></span>
+<span id="cb53-5"><a href="#cb53-5" tabindex="-1"></a><span class="co">#&gt; [3,]    3    5    9    7    3    7    9    5</span></span>
+<span id="cb53-6"><a href="#cb53-6" tabindex="-1"></a><span class="co">#&gt; [4,]    7   10   11    8    8   11   10    7</span></span></code></pre></div>
+<p>For an example among hexachords, first recall from above that the
+<code>blues</code> scale (which has no symmetries under <span class="math inline">\(\mathcal{P}_6\)</span>) has an orbit of size 24.
+Any scale with a smaller orbit must by symmetrical somehow. We’ll
+consider the case of set class 6-Z44, to which the “Schoenberg
+signature” hexachord belongs:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" tabindex="-1"></a>schbeg <span class="ot">&lt;-</span> <span class="fu">sc</span>(<span class="dv">6</span>, <span class="dv">44</span>)</span>
+<span id="cb54-2"><a href="#cb54-2" tabindex="-1"></a><span class="fu">scale_palette</span>(schbeg) <span class="co"># Only 12 entries</span></span>
+<span id="cb54-3"><a href="#cb54-3" tabindex="-1"></a><span class="co">#&gt;      [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10] [,11] [,12]</span></span>
+<span id="cb54-4"><a href="#cb54-4" tabindex="-1"></a><span class="co">#&gt; [1,]    0    0    0    0    0    0    0    0    0     0     0     0</span></span>
+<span id="cb54-5"><a href="#cb54-5" tabindex="-1"></a><span class="co">#&gt; [2,]    1    1    3    1    3    3    3    3    1     3     1     1</span></span>
+<span id="cb54-6"><a href="#cb54-6" tabindex="-1"></a><span class="co">#&gt; [3,]    2    4    4    4    6    4    6    4    4     4     2     4</span></span>
+<span id="cb54-7"><a href="#cb54-7" tabindex="-1"></a><span class="co">#&gt; [4,]    5    5    7    7    7    5    7    7    5     5     5     7</span></span>
+<span id="cb54-8"><a href="#cb54-8" tabindex="-1"></a><span class="co">#&gt; [5,]    6    8   10    8    8    8   10    8    6     8     8     8</span></span>
+<span id="cb54-9"><a href="#cb54-9" tabindex="-1"></a><span class="co">#&gt; [6,]    9   11   11    9   11    9   11    9    9    11     9    11</span></span>
+<span id="cb54-10"><a href="#cb54-10" tabindex="-1"></a></span>
+<span id="cb54-11"><a href="#cb54-11" tabindex="-1"></a><span class="fu">isym</span>(schbeg) <span class="co"># Not inversionally symmetrical</span></span>
+<span id="cb54-12"><a href="#cb54-12" tabindex="-1"></a><span class="co">#&gt; [1] FALSE</span></span>
+<span id="cb54-13"><a href="#cb54-13" tabindex="-1"></a><span class="fu">ineqsym</span>(schbeg, <span class="at">a=</span><span class="dv">5</span>, <span class="at">b=</span><span class="dv">0</span>) <span class="co"># Is symmetrical under this transformation</span></span>
+<span id="cb54-14"><a href="#cb54-14" tabindex="-1"></a><span class="co">#&gt; [1] 0 1 2 5 6 9</span></span></code></pre></div>
+<p>This is a different kind of symmetry from that of <code>forza</code>:
+recall that <code>forza</code> was fixed by involution, whereas
+<code>schbeg</code> is fixed by <span class="math inline">\(\sigma_{5,
+0}\)</span>.</p>
+</div>
+</div>
+<div id="postscript-on-m_5-and-m_7" class="section level1">
+<h1>Postscript on <span class="math inline">\(M_5\)</span> and <span class="math inline">\(M_7\)</span></h1>
+<p>This discussion may lead you to wonder whether our exploration of
+<span class="math inline">\(\mathcal{P}_n\)</span> hasn’t simply been a
+roundabout rediscovery of the pitch-class multiplication operators <span class="math inline">\(M_5\)</span> and <span class="math inline">\(M_7\)</span>. In a sense, those transformations
+<em>are</em> of interest here, because they belong to the symmetry group
+<span class="math inline">\(\mathcal{P}_{12}\)</span> of the hyperplane
+arrangement for 12-note scales. Typically, their use in music theory has
+been as operations that trivially fix the equally tempered chromatic
+scale (as the “center” of <span class="math inline">\(\mathcal{M_{12}}\)</span>), letting us pay
+attention to what happens to its subsets.</p>
+<p>The perspective offered by the symmetry groups <span class="math inline">\(\mathcal{P}_n\)</span> is broader, since it
+applies directly to scale without treating it as a subset of a larger
+collection. For instance, the <span class="math inline">\(T_nI\)</span>
+equivalence class of <span class="math inline">\((0, 1, 4, 8)\)</span>
+is fixed under <span class="math inline">\(M_5\)</span> and <span class="math inline">\(M_7\)</span>, but transformations in <span class="math inline">\(\mathcal{P}_4\)</span> can turn it into a
+completely different set class:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" tabindex="-1"></a>set <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">8</span>)</span>
+<span id="cb55-2"><a href="#cb55-2" tabindex="-1"></a><span class="fu">fortenum</span>(set)</span>
+<span id="cb55-3"><a href="#cb55-3" tabindex="-1"></a><span class="co">#&gt; [1] &quot;4-19&quot;</span></span>
+<span id="cb55-4"><a href="#cb55-4" tabindex="-1"></a></span>
+<span id="cb55-5"><a href="#cb55-5" tabindex="-1"></a>(set <span class="sc">*</span> <span class="dv">5</span>) <span class="sc">%%</span> <span class="dv">12</span> <span class="sc">|&gt;</span> <span class="fu">fortenum</span>()</span>
+<span id="cb55-6"><a href="#cb55-6" tabindex="-1"></a><span class="co">#&gt; [1] &quot;4-19&quot;</span></span>
+<span id="cb55-7"><a href="#cb55-7" tabindex="-1"></a>(set <span class="sc">*</span> <span class="dv">7</span>) <span class="sc">%%</span> <span class="dv">12</span> <span class="sc">|&gt;</span> <span class="fu">fortenum</span>()</span>
+<span id="cb55-8"><a href="#cb55-8" tabindex="-1"></a><span class="co">#&gt; [1] &quot;4-19&quot;</span></span>
+<span id="cb55-9"><a href="#cb55-9" tabindex="-1"></a></span>
+<span id="cb55-10"><a href="#cb55-10" tabindex="-1"></a>set_image <span class="ot">&lt;-</span> <span class="fu">ineqsym</span>(set, <span class="at">a=</span><span class="dv">3</span>, <span class="at">b=</span><span class="dv">0</span>)</span>
+<span id="cb55-11"><a href="#cb55-11" tabindex="-1"></a><span class="fu">print</span>(set_image)</span>
+<span id="cb55-12"><a href="#cb55-12" tabindex="-1"></a><span class="co">#&gt; [1] 0 2 4 7</span></span>
+<span id="cb55-13"><a href="#cb55-13" tabindex="-1"></a><span class="fu">fortenum</span>(set_image)</span>
+<span id="cb55-14"><a href="#cb55-14" tabindex="-1"></a><span class="co">#&gt; [1] &quot;4-22&quot;</span></span></code></pre></div>
+<p>To get a sense of what <span class="math inline">\(M_5\)</span> means
+from this paper’s perspective, realize that it can apply to any tuning
+of the 12-note chromatic scale, not just the equal-tempered one. For
+instance, we could define a tuning of a keyboard’s 12 notes using
+5-limit just intonation ratios:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" tabindex="-1"></a>just_chromatic_scale <span class="ot">&lt;-</span> <span class="fu">j</span>(<span class="dv">1</span>, m2, <span class="dv">2</span>, m3, <span class="dv">3</span>, <span class="dv">4</span>, jtt, <span class="dv">5</span>, m6, <span class="dv">6</span>, m7, <span class="dv">7</span>)</span>
+<span id="cb56-2"><a href="#cb56-2" tabindex="-1"></a><span class="fu">print</span>(just_chromatic_scale)</span>
+<span id="cb56-3"><a href="#cb56-3" tabindex="-1"></a><span class="co">#&gt;  [1]  0.000000  1.117313  2.039100  3.156413  3.863137  4.980450  5.902237</span></span>
+<span id="cb56-4"><a href="#cb56-4" tabindex="-1"></a><span class="co">#&gt;  [8]  7.019550  8.136863  8.843587 10.175963 10.882687</span></span></code></pre></div>
+<p>Now we can apply <span class="math inline">\(M_5\)</span> to
+this—which in the language of “Symmetries” we could call the linear
+transformation induced by <span class="math inline">\(\sigma_{5,
+0}\)</span>:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb57-1"><a href="#cb57-1" tabindex="-1"></a>adjusted_chromatic_scale <span class="ot">&lt;-</span> <span class="fu">ineqsym</span>(just_chromatic_scale, <span class="at">a=</span><span class="dv">5</span>, <span class="at">b=</span><span class="dv">0</span>)</span>
+<span id="cb57-2"><a href="#cb57-2" tabindex="-1"></a><span class="fu">print</span>(adjusted_chromatic_scale)</span>
+<span id="cb57-3"><a href="#cb57-3" tabindex="-1"></a><span class="co">#&gt;  [1]  0.000000  0.980450  2.175963  3.156413  4.136863  5.117313  5.902237</span></span>
+<span id="cb57-4"><a href="#cb57-4" tabindex="-1"></a><span class="co">#&gt;  [8]  6.882687  7.863137  8.843587 10.039100 11.019550</span></span></code></pre></div>
+<p>We can see that these scales are different set classes by calculating
+their prime forms</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" tabindex="-1"></a><span class="fu">primeform</span>(just_chromatic_scale)</span>
+<span id="cb58-2"><a href="#cb58-2" tabindex="-1"></a><span class="co">#&gt;  [1]  0.0000000  0.7067243  1.8240371  2.9413500  3.8631371  4.9804500</span></span>
+<span id="cb58-3"><a href="#cb58-3" tabindex="-1"></a><span class="co">#&gt;  [7]  5.6871743  6.8044871  7.7262743  8.8435871  9.9609000 10.6676243</span></span>
+<span id="cb58-4"><a href="#cb58-4" tabindex="-1"></a><span class="fu">primeform</span>(adjusted_chromatic_scale)</span>
+<span id="cb58-5"><a href="#cb58-5" tabindex="-1"></a><span class="co">#&gt;  [1]  0.000000  0.980450  1.960900  2.941350  3.726274  4.706724  5.687174</span></span>
+<span id="cb58-6"><a href="#cb58-6" tabindex="-1"></a><span class="co">#&gt;  [8]  6.667624  7.863137  8.843587  9.824037 10.804487</span></span></code></pre></div>
+<p>or by evaluating their interval spectra:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" tabindex="-1"></a><span class="fu">spectrumcount</span>(just_chromatic_scale)</span>
+<span id="cb59-2"><a href="#cb59-2" tabindex="-1"></a><span class="co">#&gt;  [1] 4 3 3 2 3 4 3 2 3 3 4</span></span>
+<span id="cb59-3"><a href="#cb59-3" tabindex="-1"></a><span class="fu">spectrumcount</span>(adjusted_chromatic_scale)</span>
+<span id="cb59-4"><a href="#cb59-4" tabindex="-1"></a><span class="co">#&gt;  [1] 3 3 3 2 4 4 4 2 3 3 3</span></span></code></pre></div>
+<p>This shows, for instance, that the <code>just_chromatic_scale</code>
+has four distinct sizes of semitone (i.e., four generic step sizes)
+whereas the <code>adjusted_chromatic_scale</code> has only three.</p>
+<p>Isn’t that something? It’s easy to assume that <span class="math inline">\(M_5\)</span> and <span class="math inline">\(M_7\)</span> are intrinsically bound to the system
+of twelve-tone equal temperament. It’s hard to imagine that they could
+have any meaning in a continuous pitch space. And yet, they do!</p>
+<p>Subsuming the <span class="math inline">\(M\)</span> transformations
+under <span class="math inline">\(\mathcal{P}_{12}\)</span> suggests
+that it’s wrong to think of <span class="math inline">\(M_5\)</span> and
+<span class="math inline">\(M_7\)</span> as operating on pitch classes
+<em>per se</em>. That is, these operations are not actions applied to
+continuous pitch-class space directly (or a special subset of it), like
+transpositions <span class="math inline">\(T_n\)</span> are. Instead,
+they act on the <em>scale degrees</em> of the chromatic scale. That is,
+if we represent a set as <span class="math inline">\((x_0, x_1, \ldots,
+x_n)\)</span>, the <span class="math inline">\(M\)</span> operations act
+not on the values <span class="math inline">\(x_i\)</span> but on the
+indices <span class="math inline">\(i\)</span>. It has been easy to
+confuse the two because, for the chromatic scale, <span class="math inline">\(x_i = i\)</span> given the way we measure specific
+intervals in terms of semitones.</p>
+<hr />
+<p><strong>Last updated:</strong> 10 May 2026</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

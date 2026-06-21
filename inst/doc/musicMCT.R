@@ -27,7 +27,7 @@ minimize_vl(c_major, sim(melodic_minor)[, 4])
 ## -----------------------------------------------------------------------------
 overtones <- 7:13
 frequency_ratios <- overtones / 7
-semitone_values <- 12 * log2(frequency_ratios)
+semitone_values <- z(frequency_ratios)
 overtone_scale <- sim(semitone_values)[, 2]
 print(overtone_scale)
 
@@ -156,7 +156,7 @@ brightnessgraph(overtone_scale, numdigits=1, show_sums=FALSE)
 brightnessgraph(quantized_overtone_color$set, edo=30, show_sums=FALSE)
 
 ## ----fig.width=5, fig.height=5, fig.fullwidth=TRUE----------------------------
-brightnessgraph(final_quantizations[, 4])
+brightnessgraph(final_quantizations[, 4], show_sums=FALSE)
 
 ## ----fig.width=5, fig.height=5, fig.fullwidth=TRUE----------------------------
 brightnessgraph(best_simple_approximation, show_pitches=FALSE, show_sums=FALSE)

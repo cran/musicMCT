@@ -4,13 +4,13 @@
 \alias{make_infrared_ineqmat}
 \title{Define hyperplanes for infrared arrangements}
 \usage{
-make_infrared_ineqmat(card, include_wraparound = FALSE)
+make_infrared_ineqmat(card, include_wraparound = TRUE)
 }
 \arguments{
 \item{card}{The cardinality of the scale(s) to be studied}
 
 \item{include_wraparound}{Boolean: should hyperplanes that involve
-intervals that wrap around the octave be included? Defaults to \code{FALSE}.}
+intervals that wrap around the octave be included? Defaults to \code{TRUE}.}
 }
 \value{
 A matrix with \code{card+1} columns and \code{k} rows (where \code{k} is the
@@ -21,9 +21,9 @@ number of hyperplanes in the arrangement). When \code{include_wraparound=TRUE},
 The "infrared" hyperplane arrangements are in some sense
 an extension of the "pastel" arrangements to be more like the
 Rothenberg arrangements. (This is the sense of the color-conceit
-name for the arrangments: they contain red-like colors that we
+name for the arrangements: they contain red-like colors that we
 don't see in ordinary use of modal color theory.) That is, the
-infrared arrangment for a given color contains all the pastel hyperplanes
+infrared arrangement for a given color contains all the pastel hyperplanes
 (except those filtered out when \code{include_wraparound=FALSE}),
 plus additional ones that make comparisons between generic intervals
 of different sizes (as the Rothenberg arrangements do). Unlike the
@@ -44,7 +44,7 @@ between settings for \code{include_wraparound}.
 # pastel arrangements:
 make_pastel_ineqmat(3)
 make_infrared_ineqmat(3)
-make_infrared_ineqmat(3, include_wraparound=TRUE)
+make_infrared_ineqmat(3, include_wraparound=FALSE)
 
 # In general, infrared arrangements are more complicated than pastel:
 make_pastel_ineqmat(4)
